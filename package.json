@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Kierosu/ITP211-Cheapo/issues"
   },
-  "homepage": "https://github.com/Kierosu/ITP211-Cheapo#readme"
+  "homepage": "https://github.com/Kierosu/ITP211-Cheapo#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
 }
