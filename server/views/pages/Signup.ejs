@@ -8,6 +8,41 @@
     </head>
     <body>
         <% include ../partials/header %>
+
+        <div class="warningmsg">
+           <% if (message.length > 0) { %>
+            <div class="alert alert-warning" role="alert">
+                <strong>Oops!</strong> <%= message %>
+            </div>
+            <% } %> 
+        </div>
+        
+
+        <form class="form-signin form-horizontal" action="/signup" method="post">
+            <h2 class="form-signin-heading">Sign Up</h2>
+            <label for="username" class="control-label col-sm-2">Username:</label>
+            <div class="col-sm-10">
+                <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+            </div>
+            <label for="email" class="control-label col-sm-2">Email Address:</label>
+            <div class="col-sm-10">
+                <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" required>
+            </div>
+            <label for="password" class="control-label col-sm-2">Password:</label>
+            <div class="col-sm-10">
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+            </div>
+            <label for="repeatPassword" class="control-label col-sm-2">Repeat Password:</label>
+            <div class="col-sm-10">
+                <input type="password" id="repeatPassword" name="repeatPassword" class="form-control" placeholder="Repeat Password" required>
+            </div>
+            <div class="col-sm-10" id = "tos">
+                <input type="checkbox" name="agreeTOS" id="agreeTOS"/> 
+                <label for="agreeTOS">I have read and agree to the Terms and Conditions and Privacy Policy</label>
+            </div>
+            <button class="btn btn-primary" type="submit" id="createProfile">Sign Up</button>
+        </form>
+
         
         <% include ../partials/footer %>
     </body>

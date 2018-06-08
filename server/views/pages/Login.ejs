@@ -8,6 +8,17 @@
     </head>
     <body>
         <% include ../partials/header %>
+
+        <% if (message.length > 0) { %>
+            <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <strong>WOAH!</strong> <%= message %>
+            </div>
+	    <% } %>
+        
+
         <form class="form-signin form-horizontal" action="/login" method="post">
             <h2 class="form-signin-heading">Welcome, Sign in</h2>
             <label for="username" class="control-label col-sm-2">Username</label>
@@ -19,8 +30,10 @@
                 <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
             </div>
             
-            <button class="btn btn-primary" type="submit" id="loginButton">Sign in</button>
+            <button class="btn btn-primary" type="submit" id="loginButton">Log in</button>
         </form>
+        <p id = "p">Don't have an account? <span style="font-weight: bold;">Sign up now!</span></p>
+        <button class="btn btn-primary" id="signupButton" onclick="window.location='/signup'">Sign Up</button>
         <% include ../partials/footer %>
     </body>
 </html>
