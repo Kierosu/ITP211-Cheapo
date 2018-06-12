@@ -8,10 +8,16 @@
 </head>
 <body>
     <% include ../partials/header %>
-    <img class="card-img-top" src="<%= avatar %>" alt="Image Avatar">
-    <p><%= user.username %></p>
-    <p><%= user.email %></p>
-
+    <div class="body">
+        <img src="<%= avatar %>" alt="Profile Picture" width="350px" height="350px" style="border-radius: 50%"><br>
+        <strong><%= username %></strong><br>
+        <p><strong>Email</strong>: <%= email %><br></p>
+        <p><strong>User ID</strong>: <%= userID %></p>
+        <p><strong>Date Joined</strong>: <%= dateJoined %></p>
+        <p><strong>Type (Member/Admin)</strong>: <%= type %></p>
+        <p><strong>Membership Rank</strong>: <%= membership %></p>
+    </div>
+    <a href="/logout" class="btn btn-default">Logout</a>
     <% include ../partials/footer %>
 </body>  
 </html>

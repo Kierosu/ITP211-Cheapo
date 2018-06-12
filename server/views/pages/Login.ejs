@@ -8,15 +8,17 @@
     </head>
     <body>
         <% include ../partials/header %>
-
-        <% if (message.length > 0) { %>
+        <div class="warningmsg">
+            <% if (message.length > 0) { %>
             <div class="alert alert-warning alert-dismissible fade in" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <strong>WOAH!</strong> <%= message %>
             </div>
-	    <% } %>
+	        <% } %>
+        </div>
+        
         
 
         <form class="form-signin form-horizontal" action="/login" method="post">

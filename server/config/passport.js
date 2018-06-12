@@ -34,25 +34,35 @@ module.exports = function (passport) {
                 User.findOne({ where: { username: username } }).then((user) => {
                     // check Username
                     if (user) {
-                        return done(null, false, req.flash('signupMessage', 'Woah! This username is already taken.'));
-                    } else {
-                        // create the user
-                        var userData = {
-                            username: username,
-                            email: req.body.email,
-                            password: password
-                        }
-
-                        // save data
-                        User.create(userData).then((newUser, created) => {
-                            if (!newUser) {
-                                return done(null, false);
+                        return done(null, false, req.flash('signupMessage', 'This username is already taken.'));
+                    }
+                    else
+                    {
+                        User.findOne({ where: { password: password } }).then((password) => {
+                            if (password) {
+                                return done(null, false, req.flash('signupMessage', 'This password is already taken.'));
                             }
-                            if (newUser) {
-                                return done(null, newUser);
+                            else {
+                                // create the user
+                                var userData = {
+                                    username: req.body.username,
+                                    email: req.body.email,
+                                    password: req.body.password
+                                }
+        
+                                // save data
+                                User.create(userData).then((newUser, created) => {
+                                    if (!newUser) {
+                                        return done(null, false);
+                                    }
+                                    if (newUser) {
+                                        return done(null, newUser);
+                                    }
+                                })
                             }
                         })
                     }
+                    
                 }).catch((err) => {
                     console.log("Error:", err);
                     return done(err, false, req.flash('signupMessage', 'Error!'))
