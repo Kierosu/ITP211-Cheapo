@@ -10,7 +10,7 @@ var httpServer = require('http').Server(app);
 var stripe = require('stripe')('sk_test_PdG9Jw0lx0FPCqhtlT123siy');
 var bodyparser = require('body-parser');
 var multer = require('multer');
-
+ 
 
 //Database
 var myDatabase = require('./public/js/database')
@@ -152,12 +152,12 @@ app.use(bodyparser.urlencoded({extended: false}));
 app.set('view engine', 'ejs');
 
 // Shopping Cart
-app.get('/shopping-cart', products.list, auth.isLoggedIn);
+app.get('/shopping-cart', products.list);
 app.delete('/shopping-cart/:ProductID', products.delete);
 
 // Checkout 
-app.get('/checkout', checkout.show, auth.isLoggedIn);
-app.post("/checkout/userIdHere", checkout.insert)
+app.get('/checkout', auth.isLoggedIn, checkout.show);
+app.post("/checkout/:userID", checkout.insert)
   
 app.post('/charge', function(req,res){
     //Stripe 
@@ -184,22 +184,23 @@ app.post('/charge', function(req,res){
 
 
 //Confirmations
-app.get('/confirmation', confirmation.show, auth.isLoggedIn);
+app.get('/confirmation', auth.isLoggedIn, confirmation.show);
 
 //Items descrip
-app.get('/item', itemDes.show, auth.isLoggedIn);
-app.post("/item/macbook",itemDes.insert);
-app.post("/add",itemDes.add);
+app.get('/item', auth.isLoggedIn, itemDes.show);
+app.post("/item/macbook", auth.isLoggedIn, itemDes.insert);
+app.post("/add", auth.isLoggedIn, itemDes.add);
 
 //Done
-app.get('/done', done.show, auth.isLoggedIn);
+app.get('/done', auth.isLoggedIn, done.show);
+
 
 //Wish List
-app.get('/wishlist', wishList.show, auth.isLoggedIn)
-app.delete('/wishlist/:ProductID', wishList.delete);
+app.get('/wishlist', auth.isLoggedIn, wishList.show)
+app.delete('/wishlist/:ProductID', auth.isLoggedIn, wishList.delete);
 
 //Order Tracking
-app.get('/order-tracking', orderTracking.show, auth.isLoggedIn)
+app.get('/order-tracking', auth.isLoggedIn, orderTracking.show)
 
 
 app.get('/', auth.test)

@@ -15,6 +15,7 @@ exports.insert = function (req, res) {
 
     var cardDetails = {
         cardName: req.body.cardName,
+        userID: req.body.userID,
         cardNumber: req.body.cardNumber,
         expiryDate: req.body.expiryDate,
         verification: req.body.verification,
@@ -32,8 +33,8 @@ exports.insert = function (req, res) {
 }
 exports.show = function (req, res){
     //List all the products
-    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage from products p", {model: Product}).then((products) => { 
-        //Calculating product total value
+    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID, {model: Product}).then((products) => {   
+    //Calculating product total value
         var totalPrice = 0;
         var shippingFee = 0;
         var stripeTotal = 0;

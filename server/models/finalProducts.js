@@ -22,6 +22,9 @@ const finalProducts = sequelize.define('finalProducts', {
         type: Sequelize.STRING,
         defaultValue: ""
     },
+    userID: {
+        type: Sequelize.INTEGER
+    },
     createdAt: {
         type: Sequelize.DATE,
         field: 'createdAt',

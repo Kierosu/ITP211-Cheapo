@@ -171,8 +171,9 @@
 	<script>
 	//Inserting Data with ajax
 	function addDetails() {
-		var url = "<%=hostPath%>/checkout/userIdHere"; //Edit when database is added
+		var url = "<%=hostPath%>/checkout/<%= userID%>"; //Edit when database is added
 		var cardDetails = {
+			userID: "<%= userID %>",
 			cardName: $("#cardholder").val(),
 			cardNumber: $("#cardNumber").val(),
 			expiryDate: $("#date").val(),

@@ -30,8 +30,8 @@ let transporter = nodemailer.createTransport({
 // Copy data from products to finalProducts
 exports.show = function (req, res){
     //List all the products
-    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage from products p", {model: Product}).then((products) => { 
-        // Password generator
+    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID, {model: Product}).then((products) => { 
+    // Password generator
         var array = [];
         var randomstring = Math.random().toString(36).slice(-8);
         array.push(randomstring);

@@ -11,12 +11,12 @@ var UserModel = require('../models/user');
 exports.show = function (req, res){
     //List all the products
     console.log('Copying tables')
-    sequelize.query('SET IDENTITY_INSERT finalProducts ON INSERT INTO finalProducts (finalProductID, finalProductName, finalProductDescription, finalProductPrice, finalProductImage, createdAt, updatedAt) SELECT ProductID, ProductName, ProductDescription, ProductPrice, ProductImage, createdAt, updatedAt FROM products')
+    sequelize.query('SET IDENTITY_INSERT finalProducts ON INSERT INTO finalProducts (finalProductID, finalProductName, finalProductDescription, finalProductPrice, finalProductImage, userID, createdAt, updatedAt) SELECT ProductID, ProductName, ProductDescription, ProductPrice, ProductImage, UserId, createdAt, updatedAt FROM products')
 
     console.log('Dropping Product Table')
-    sequelize.query('DELETE FROM products');
-    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage from products p", {model: Product}).then((products) => { 
-        //Calculating product total value
+    sequelize.query("DELETE p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID);
+    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID, {model: Product}).then((products) => { 
+    //Calculating product total value
         var totalPrice = 0;
         products.forEach(function(rayson) {
             totalPrice += rayson.ProductPrice;

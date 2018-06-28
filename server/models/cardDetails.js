@@ -9,6 +9,9 @@ const cardDetails = sequelize.define('cardDetails', {
         autoIncrement: true,
         primaryKey: true
     },
+    userID: {
+        type: Sequelize.INTEGER
+    },
     cardName: {
         type: Sequelize.STRING
     },
