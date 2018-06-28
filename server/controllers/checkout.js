@@ -59,7 +59,8 @@ exports.show = function (req, res){
                 subtotal: subtotal,
                 gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro'}, true),
                 hostPath: req.protocol + "://" + req.get("host"),
-                urlPath: req.protocol + "://" + req.get('host') + req.url
+                urlPath: req.protocol + "://" + req.get('host') + req.url,
+                req: req
         })
         } else {
             console.log('Cart Empty!')

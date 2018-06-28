@@ -77,7 +77,8 @@ exports.show = function (req, res){
             subtotal: subtotal,
             gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro'}, true),
             urlPath: req.protocol + "://" + req.get('host') + req.url,
-            hostPath: req.protocol + "://" + req.get("host")
+            hostPath: req.protocol + "://" + req.get("host"),
+            req: req
         })
     }).catch((err)=>{
         return res.status(400).send({

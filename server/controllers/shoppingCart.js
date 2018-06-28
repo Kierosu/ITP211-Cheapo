@@ -38,7 +38,8 @@ exports.list = function (req, res){
             shippingFee: shippingFee,
             subtotal: subtotal,
             gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro'}, true),
-            urlPath: req.protocol + "://" + req.get('host') + req.url
+            urlPath: req.protocol + "://" + req.get('host') + req.url,
+            req: req
         })
     }).catch((err)=>{
         return res.status(400).send({

@@ -5,11 +5,8 @@ var bodyParser = require("body-parser");
 var express = require('express');
 var app = express();
 var path = require("path");
-const ejsLint = require('ejs-lint');
 var serverPort = 3000;
 var httpServer = require('http').Server(app);
-const keyPublishable = 'pk_test_xaN8YLYB6jMqtqfguHvjft8f';
-const keySecret = process.env.sk_test_PdG9Jw0lx0FPCqhtlT123siy;
 var stripe = require('stripe')('sk_test_PdG9Jw0lx0FPCqhtlT123siy');
 var bodyparser = require('body-parser');
 var multer = require('multer');
@@ -123,11 +120,6 @@ const storage = multer.diskStorage({
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
 });
-
-//Init upload 
-const upload = multer({
-    storage: storage
-}).single('myImage');
 
 //import shoppingCart controllers
 var products = require('./server/controllers/shoppingCart');

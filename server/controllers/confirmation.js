@@ -70,7 +70,8 @@ exports.show = function (req, res){
             onePassword: array,
             total: totalPrice,
             gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro'}, true),
-            urlPath: req.protocol + "://" + req.get('host') + req.url
+            urlPath: req.protocol + "://" + req.get('host') + req.url,
+            req: req
         })
     }).catch((err)=>{
         return res.status(400).send({
