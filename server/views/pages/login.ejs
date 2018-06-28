@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Cheapo - login</title>
+	<!-- css -->
+	<% include ../partials/stylesheet %>
+</head>
+
+<body>
+	<!-- header -->
+	<% include ../partials/header %>
+			<div class="container" style="display: flex;">
+				<div style="margin:auto;height: 350px;width: 400px;">
+					<div class="row">
+						<div class="col-md-6 mx-auto">
+							<div class="card card-body">
+								<img class="logo" src="/img/logo.png">
+								<h3 class="text-center">Account Login</h3>
+								<form action="/login" method="POST">
+									<div class="form-group">
+										<label for="email">Email</label>
+										<input type="email" class="form-control" name="email" required>
+									</div>
+									<div class="form-group">
+										<label for="password">Password</label>
+										<input type="password" class="form-control" name="password" required>
+									</div>
+									<button type="submit" class="btn btn-primary">Submit</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	<% include ../partials/footer %>
+	<!-- jQuery Plugins -->
+	<% include ../partials/javascript %>
+</body>
+
+</html>

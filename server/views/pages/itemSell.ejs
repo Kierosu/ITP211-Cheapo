@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        Cheapo
+    </title>
+    <!-- css -->
+    <% include ../partials/stylesheet %>
+</head>
+
+<body>
+    <!-- header -->
+    <% include ../partials/header %>
+        <div class="container">
+            <div class="card card-body">
+                <h3 style="text-align: center">
+                    Selling Items
+                </h3>
+                <form action="/items/add" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="title">name</label>
+                        <input type="text" name="itemName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="details">Details</label>
+                        <textarea name="itemDetails" class="form-control" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            <input onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" type="number" name="itemPrice" min="0" step=".01" class="form-control currency" id="c2" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Product image</label>
+                        <div class="input-group">
+                                <input required name="myImage" type="file" class="form-control-file">
+                        </div>
+                    </div>
+                    <div style="height: 80px;width: 100%;">
+                        <a href="/items" class="btn btn-primary btn-lg" style="float: left;">Back</a>
+                        <button type="submit" class="btn btn-primary btn-lg" style="float: right;">Submit</button>
+                    </div>                   
+                </form>
+            </div>
+        </div>
+    <% include ../partials/footer %>
+    <!-- jQuery Plugins -->
+    <% include ../partials/javascript %>
+</body>
+
+</html>
