@@ -152,11 +152,11 @@ app.use(bodyparser.urlencoded({extended: false}));
 app.set('view engine', 'ejs');
 
 // Shopping Cart
-app.get('/shopping-cart', products.list);
+app.get('/shopping-cart', products.list, auth.isLoggedIn);
 app.delete('/shopping-cart/:ProductID', products.delete);
 
 // Checkout 
-app.get('/checkout', checkout.show);
+app.get('/checkout', checkout.show, auth.isLoggedIn);
 app.post("/checkout/userIdHere", checkout.insert)
   
 app.post('/charge', function(req,res){
@@ -184,10 +184,10 @@ app.post('/charge', function(req,res){
 
 
 //Confirmations
-app.get('/confirmation', confirmation.show );
+app.get('/confirmation', confirmation.show, auth.isLoggedIn);
 
 //Items descrip
-app.get('/item', itemDes.show);
+app.get('/item', itemDes.show, auth.isLoggedIn);
 app.post("/item/macbook",itemDes.insert);
 app.post("/add",itemDes.add);
 
@@ -195,11 +195,11 @@ app.post("/add",itemDes.add);
 app.get('/done', done.show);
 
 //Wish List
-app.get('/wishlist', wishList.show)
+app.get('/wishlist', wishList.show, auth.isLoggedIn)
 app.delete('/wishlist/:ProductID', wishList.delete);
 
 //Order Tracking
-app.get('/order-tracking', orderTracking.show)
+app.get('/order-tracking', orderTracking.show, auth.isLoggedIn)
 
 
 app.get('/', auth.test)

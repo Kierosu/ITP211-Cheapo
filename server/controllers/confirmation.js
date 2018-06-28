@@ -1,6 +1,9 @@
 //get gravatar icon from email
 var gravatar = require('gravatar');
 //get comments model
+var passport = require('passport');
+var fs = require('fs');
+var UserModel = require('../models/user');
 var Product = require('../models/products');
 var finalProducts = require('../models/finalProducts');
 var myDatabase = require('./database');
@@ -25,11 +28,9 @@ let transporter = nodemailer.createTransport({
 });
 // SET IDENTITY_INSERT finalProducts ON
 // Copy data from products to finalProducts
-
-//List Comments
 exports.show = function (req, res){
-    //List all products and sort by date
-    sequelize.query('select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage from products p', { model: Product}).then((products) => {
+    //List all the products
+    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage from products p", {model: Product}).then((products) => { 
         // Password generator
         var array = [];
         var randomstring = Math.random().toString(36).slice(-8);
@@ -51,31 +52,55 @@ exports.show = function (req, res){
             console.log(info);
             }
         });
-
         //Calculating product total value
         var totalPrice = 0;
         var shippingFee = 0;
+        var stripeTotal = 0;
         products.forEach(function(rayson) {
             totalPrice += rayson.ProductPrice;
         });
         if (totalPrice >50){
             subtotal = totalPrice;
+            stripeTotal = totalPrice;
         } else{
             subtotal = totalPrice;
             totalPrice += 5.00;
+            shippingFee = 5.00;
+            stripeTotal = totalPrice;
         }
-        res.render('confirmation', {
-            title: 'Cheapo - Confirm Your Payment',
-            products: products,
-            onePassword: array,
-            total: totalPrice,
-            gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro'}, true),
-            urlPath: req.protocol + "://" + req.get('host') + req.url,
-            req: req
-        })
-    }).catch((err)=>{
-        return res.status(400).send({
-            message: err
-        });
+        if (subtotal != 0 )
+        {
+            var id = req.params.userID;
+            UserModel.findById(id).then(function() {
+                res.render('confirmation', {
+                    title: 'Cheapo - Confirmation',
+                    avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
+                    username : req.user.username,
+                    email: req.user.email,
+                    userID: req.user.userID,
+                    dateJoined: req.user.joinDate,
+                    type: req.user.userType,
+                    membership: req.user.membership,
+                    req: req,
+                    products: products,
+                    total: totalPrice,
+                    onePassword: array,
+                    stripeTotal: stripeTotal * 100,
+                    shippingFee: shippingFee,
+                    subtotal: subtotal,
+                    gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro'}, true),
+                    hostPath: req.protocol + "://" + req.get("host"),
+                    urlPath: req.protocol + "://" + req.get('host') + req.url
+                });
+            }).catch((err) => {
+                return res.status(400).send({
+                    message: err
+                });
+            });
+        }
+        else
+        {
+            res.redirect("/shopping-cart");
+        }
     });
 };

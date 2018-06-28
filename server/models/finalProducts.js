@@ -1,5 +1,5 @@
 // models/comments.js
-var myDatabase = require('../../public/js/database');
+var myDatabase = require('../controllers/database');
 var sequelize = myDatabase.sequelize;
 var Sequelize = myDatabase.Sequelize;
 

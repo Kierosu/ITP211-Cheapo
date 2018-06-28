@@ -6,11 +6,9 @@ var wishList = require('../models/wishList');
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
 var parseDecimalNumber = require('parse-decimal-number');
+var passport = require('passport');
 var fs = require('fs');
-var mime = require('mime');
-var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
-
-//Image upload
+var UserModel = require('../models/user');
 
 // Insert data into shopping cart
 exports.insert = function (req, res){
@@ -46,12 +44,9 @@ exports.add = function (req, res){
         res.redirect("/wishlist")
     });
 };
-
-//List Comments
 exports.show = function (req, res){
-    //List all products and sort by date
-    sequelize.query('select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage from products p', { model: Product}).then((products) => {
-        
+    //List all the products
+    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage from products p", {model: Product}).then((products) => { 
         //Calculating product total value
         var totalPrice = 0;
         var shippingFee = 0;
@@ -68,21 +63,31 @@ exports.show = function (req, res){
             shippingFee = 5.00;
             stripeTotal = totalPrice;
         }
-        res.render('itemDescrip', {
-            title: 'Cheapo - Item Name',
-            products: products,
-            total: totalPrice,
-            stripeTotal: stripeTotal * 100,
-            shippingFee: shippingFee,
-            subtotal: subtotal,
-            gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro'}, true),
-            urlPath: req.protocol + "://" + req.get('host') + req.url,
-            hostPath: req.protocol + "://" + req.get("host"),
-            req: req
-        })
-    }).catch((err)=>{
-        return res.status(400).send({
-            message: err
+        var id = req.params.userID;
+        UserModel.findById(id).then(function() {
+            res.render('itemDescrip', {
+                title: 'Cheapo - <Item Name Here>',
+                avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
+                username : req.user.username,
+                email: req.user.email,
+                userID: req.user.userID,
+                dateJoined: req.user.joinDate,
+                type: req.user.userType,
+                membership: req.user.membership,
+                req: req,
+                products: products,
+                total: totalPrice,
+                stripeTotal: stripeTotal * 100,
+                shippingFee: shippingFee,
+                subtotal: subtotal,
+                gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro'}, true),
+                hostPath: req.protocol + "://" + req.get("host"),
+                urlPath: req.protocol + "://" + req.get('host') + req.url
+            });
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
         });
     });
 };

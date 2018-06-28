@@ -5,12 +5,15 @@ var Product = require('../models/products');
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
 var geoip = require('geoip-lite');
+var passport = require('passport');
+var fs = require('fs');
+var UserModel = require('../models/user');
 
-//List Comments
 exports.show = function (req, res){
-    //List all products and sort by date
-    sequelize.query('select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage from products p', { model: Product}).then((products) => {
+    //List all the products
+    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage from products p", {model: Product}).then((products) => { 
         
+        //Ip to lon and lat
         var ip = "183.90.37.120";
         var geo = geoip.lookup(ip);
         geoip.startWatchingDataUpdate();
@@ -36,23 +39,34 @@ exports.show = function (req, res){
             shippingFee = 5.00;
             stripeTotal = totalPrice;
         }
-        res.render('orderTracking', {
-            title: 'Cheapo - Track Your Orders',
-            products: products,
-            total: totalPrice,
-            myCity: myCity,
-            myLatitude: myLatitude,
-            myLongitude: myLongitude,
-            stripeTotal: stripeTotal * 100,
-            shippingFee: shippingFee,
-            subtotal: subtotal,
-            gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro'}, true),
-            urlPath: req.protocol + "://" + req.get('host') + req.url,
-            req: req
-        })
-     }).catch((err)=>{
-        return res.status(400).send({
-            message: err
+        var id = req.params.userID;
+        UserModel.findById(id).then(function() {
+            res.render('orderTracking', {
+                title: 'Cheapo - Track Your Orders',
+                avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
+                username : req.user.username,
+                email: req.user.email,
+                userID: req.user.userID,
+                dateJoined: req.user.joinDate,
+                type: req.user.userType,
+                membership: req.user.membership,
+                req: req,
+                myCity: myCity,
+                myLatitude: myLatitude,
+                myLongitude: myLongitude,
+                products: products,
+                total: totalPrice,
+                stripeTotal: stripeTotal * 100,
+                shippingFee: shippingFee,
+                subtotal: subtotal,
+                gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro'}, true),
+                hostPath: req.protocol + "://" + req.get("host"),
+                urlPath: req.protocol + "://" + req.get('host') + req.url
+            });
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
         });
     });
 };
