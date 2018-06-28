@@ -3,7 +3,7 @@ var gravatar = require('gravatar');
 //get comments model
 var Product = require('../models/products');
 var wishList = require('../models/wishList');
-var myDatabase = require('../../public/js/database');
+var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
 var parseDecimalNumber = require('parse-decimal-number');
 var fs = require('fs');

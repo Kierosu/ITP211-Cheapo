@@ -3,7 +3,7 @@ var gravatar = require('gravatar');
 //get comments model
 var wishList = require('../models/wishList');
 var Product = require('../models/products');
-var myDatabase = require('../../public/js/database');
+var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
 
 //Destroy wish list items
