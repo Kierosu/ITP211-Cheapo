@@ -84,3 +84,17 @@ exports.show = function (req, res){
         }
     });
 };
+
+// check if user is logged in
+exports.isLoggedIn = function(req, res, next) {
+    if (req.isAuthenticated()){
+        return next();
+    }    
+    res.redirect('/login');
+};
+exports.isLoggedInV2 = function(req,res,next) {
+    if (!req.isAuthenticated()){
+        return next();    
+    }
+    res.redirect('/profile');
+};

@@ -192,7 +192,7 @@ app.post("/item/macbook",itemDes.insert);
 app.post("/add",itemDes.add);
 
 //Done
-app.get('/done', done.show);
+app.get('/done', done.show, auth.isLoggedIn);
 
 //Wish List
 app.get('/wishlist', wishList.show, auth.isLoggedIn)

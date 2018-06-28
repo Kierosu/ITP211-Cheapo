@@ -13,6 +13,7 @@ var UserModel = require('../models/user');
 // Insert data into shopping cart
 exports.insert = function (req, res){
     var products = {
+        UserId: req.body.UserId,
         ProductName: req.body.ProductName,
         ProductPrice: parseDecimalNumber(req.body.ProductPrice),
         ProductDescription: req.body.ProductDescription,

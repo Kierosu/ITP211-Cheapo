@@ -131,6 +131,7 @@
         function addToData() {
             var url = "<%=hostPath%>/item/macbook"; //Edit when database is implemented\
             var products = {
+                UserId: '<%=userID%>',
                 ProductName: $("#macbookName").val(),
                 ProductPrice: $("#macbookPrice").val(),
                 ProductDescription: "",

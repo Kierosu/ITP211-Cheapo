@@ -9,6 +9,9 @@ const products = sequelize.define('products', {
         autoIncrement: true,
         primaryKey: true
     },
+    UserId: {
+        type: Sequelize.INTEGER
+    },
     ProductName: {
         type: Sequelize.STRING
     },

@@ -14,7 +14,7 @@ var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png']
 
 exports.list = function (req, res){
     //List all the products
-    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage from products p", {model: Product}).then((products) => { 
+    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p inner join Users on p.UserId = Users.userID", {model: Product}).then((products) => { 
         //Calculating product total value
         var totalPrice = 0;
         var shippingFee = 0;
