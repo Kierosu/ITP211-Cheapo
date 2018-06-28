@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title><%= title %></title>
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet" />
+    <!-- PayPal API -->
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" />
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="/css/slick.css" />
+    <link type="text/css" rel="stylesheet" href="/css/slick-theme.css" />
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="/css/nouislider.min.css" />
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <!-- Custom stylesheet -->
+    <link type="text/css" rel="stylesheet" href="/css/raysonStyle.css" />
+</head>
+
+<body>
+    <% include ../partials/header %>
+    
+    <!-- BREADCRUMB -->
+    <div id="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Home</a>
+                </li>
+                <li class="active">Shopping Cart</li>
+            </ul>
+        </div>
+    </div>
+    <!-- /BREADCRUMB -->
+    <!-- section -->
+    <center>
+        <div class="section">
+                <div class="container">
+                    <h2>Panel Heading</h2>
+                    <div class="checkout-panel">
+                            <div class="panel-body">
+                                <div class="bar">
+                                    <div class="step"></div>
+                                    <div class="step"></div>
+                                    <div class="step"></div>
+                                    <div class="step"></div>
+                                </div>
+                            </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                                <div class="#">
+                                        <div class="heading cf">
+                                            <h1>My Cart</h1>
+                                            <a href="#" class="continue">Continue Shopping</a>
+                                        </div>
+                                    </div>
+                        </div>
+                        <div class="panel-body">
+                                <div class="cart">
+                                        <ul class="tableHead">
+                                            <li class="prodHeader">Product</li>
+                                            <li>Quantity</li>
+                                            <li>Total</li>
+                                            <li>Remove</li>
+                                        </ul>
+                                        <% products.forEach(function(products){ %>
+                                            <ul class="cartWrap">
+                                                <li class="items even" data-id="<%= products.ProductID %>">
+                                                    <div class="infoWrap">
+                                                        <div class="cartSection">
+                                                            <img src="<%= products.ProductImage %>" alt="" class="itemImg" />
+                                                            <p class="itemNumber">#QUE-007544-002</p>
+                                                            <h3>
+                                                                <%= products.ProductName %>
+                                                            </h3>
+                                                            <p>
+                                                                <%= products.ProductDescription %>
+                                                            </p>
+                                                            <p class="stockStatus"> In Stock</p>
+                                                        </div>
+                                                        <div class="prodTotal cartSection">
+                                                            <p>$<%= products.ProductPrice %>
+                                                            </p>
+                                                        </div>
+                                                        <div class="cartSection removeWrap">
+                                                            <a href="#" class="remove" data-id="<%= products.ProductID %>">x</a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <% }); %>
+                                    </div>
+                        </div>
+                        <br><br>
+                        <div class="panel-footer">
+                                <div class="promoCode">
+                                        <label for="promo">Have A Promo Code?</label>
+                                        <input type="text" name="promo" placholder="Enter Code" />
+                                        <a href="#" class="btn"></a>
+                                    </div>
+                                    <div class="subtotal cf">
+                                        <ul>
+                                                            <li class="totalRow">
+                                                                <span class="label">Subtotal</span>
+                                                                <span class="value">$<%= subtotal %></span>
+                                                            </li>
+                                                            <li class="totalRow">
+                                                                <span class="label">Shipping</span>
+                                                                <span class="value">$<%= shippingFee %></span>
+                                                            </li>
+                                                            <li class="totalRow">
+                                                                <span class="label">Tax</span>
+                                                                <span class="value">$4.00</span>
+                                                            </li>
+                                                            <li class="totalRow final">
+                                                                <span class="label">Total:</span>
+                                                                <span>
+                                                                    <p class="value" id="money">$<%= total %></p>
+                                                                </span>
+                                                            </li>
+                                                            <li class="totalRow">
+                                                                <a href="/confirmation" class="btn continue">Checkout</a>
+                                                            </li>
+                                        </ul>
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </center>
+    <!-- section -->
+    <% include ../partials/footer %>
+    <!-- jQuery Plugins -->
+    <script src="/js/checkout.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/slick.min.js"></script>
+    <script src="/ss/nouislider.min.js"></script>
+    <script src="/js/jquery.zoom.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script>
+        $('.remove').click(function () {
+            var ProductID = $(this).data("id");
+            $.ajax({
+                url: '<%-urlPath%>' + '/' + ProductID,
+                type: 'DELETE',
+                success: function (result) {
+                    console.log(result.message);
+                    var itemToRemove = '.items even[data-id=' + ProductID + ']';
+                    $(itemToRemove).remove();
+                    location.reload(true);
+                },
+                error: function (result) {
+                    alert("Unable to delete Product.");
+                    console.log(result.message);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

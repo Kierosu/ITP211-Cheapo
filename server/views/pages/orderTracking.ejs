@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title><%= title %></title>
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="../dist/css/map-icons.css">
+	<script type="text/javascript" src="../dist/js/map-icons.js"></script> -->
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="css/slick.css" />
+	<link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
+
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
+
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+
+	<!-- Custom stylesheet -->
+	<link type="text/css" rel="stylesheet" href="css/raysonStyle.css" />
+
+ <style>
+     #map{
+         height:400px;
+         width:100%
+     }
+ </style>
+</head>
+
+<body>
+	<% include ../partials/header %>
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href="#">Home</a></li>
+				<li class="active">Confirmation</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+
+	<!-- section -->
+	<center>
+	<div class="section">
+			<div class="checkout-panel">
+					<div class="panel-body">
+					  <h2 class="title">Order Tracking</h2>
+                        <div class="row">
+                            <div id="map"></div>
+                        </div>
+						<div class="row">
+							<div class="col-sm-12 text-center">
+								<button id="orderTracking" class="btn">Order Tracking</button>
+								<button id="backToShopping"class="btn">Back To Shopping</button>
+							</div>
+						</div>
+				  </div>
+				
+	</div>
+</center>
+	<!-- /section -->
+
+	<!-- jQuery Plugins -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/slick.min.js"></script>
+	<script src="js/nouislider.min.js"></script>
+	<script src="js/jquery.zoom.min.js"></script>
+	<script src="js/main.js"></script>
+<script>
+	
+	google.maps.visualRefresh = true;
+
+    function initMap(){
+		var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+
+		var c = function(pos){
+			var lat = pos.coords.latitude,
+				long = pos.coords.longitude,
+				coords = lat + " , " + long;
+	
+		var p1 = {
+			lat: parseFloat('<%= myLatitude %>'),
+			lng: parseFloat('<%= myLongitude %>')
+		}
+
+		var p2 = {
+			lat: lat,
+			lng: long
+		}
+		var rad = function(x) {
+			return x * Math.PI / 180;
+		};
+
+		var getDistance = function(p1, p2) {
+			var R = 6378137; // Earth’s mean radius in meter
+			var dLat = rad(p2.lat - p1.lat);
+			var dLong = rad(p2.lng - p1.lng);
+			var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+				Math.cos(rad(p1.lat)) * Math.cos(rad(p2.lat)) *
+				Math.sin(dLong / 2) * Math.sin(dLong / 2);
+			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+			var d = (parseFloat(R * c));
+			
+			console.log(d);
+			return d; // returns the distance in meter
+		};
+		
+		//Home marker
+		addMarker({
+			coords:{lat: lat, lng: long},
+			content: '<h3>Current Location</h3>'
+		});
+
+		//Delivery van marker
+		addMarker({
+			coords:{lat: parseFloat('<%= myLatitude %>'), lng: parseFloat('<%= myLongitude %>')},
+			iconImage: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+			content: '<h3>Delivery Van Location</h3><br><p>Delivery Van is ' + Math.round(getDistance(p1,p2))  + 'm Away from you.'
+		});
+
+		//Add marker function
+		function addMarker(props){
+			var marker = new google.maps.Marker({
+				position: props.coords,
+				map:map,
+				icon: props.iconImage
+			});
+
+			//Check for customicon
+			if(props.iconImage){
+				marker.setIcon(props.iconImage);
+			}
+
+			//Check content
+			if(props.content){
+				var infoWindow = new google.maps.InfoWindow({
+					content: props.content
+				});
+
+				marker.addListener('click', function(){
+					infoWindow.open(map,marker);
+				})
+			}
+		}
+		}
+		
+		var e = function(error) {
+			if (error.code === 1) {
+				alert('Unable to get location!');
+			}
+		}
+
+		navigator.geolocation.getCurrentPosition(c, e);
+
+		//Map options
+        var options = {
+            zoom: 11,
+            center: {lat: 1.3521, lng:103.8198}
+        }
+
+        var map = new google.maps.Map(document.getElementById('map'), options);
+	}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSG_1ZKHdkjPhREhtUba47ZqCUMCzw61U&callback=initMap"
+async defer>
+</script>
+<% include ../partials/footer %>
+</body>
+
+</html>

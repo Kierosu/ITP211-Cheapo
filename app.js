@@ -2,6 +2,26 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
+var express = require('express');
+var app = express();
+var path = require("path");
+const ejsLint = require('ejs-lint');
+var serverPort = 3000;
+var httpServer = require('http').Server(app);
+const keyPublishable = 'pk_test_xaN8YLYB6jMqtqfguHvjft8f';
+const keySecret = process.env.sk_test_PdG9Jw0lx0FPCqhtlT123siy;
+var stripe = require('stripe')('sk_test_PdG9Jw0lx0FPCqhtlT123siy');
+var bodyparser = require('body-parser');
+var multer = require('multer');
+
+
+//Database
+var myDatabase = require('./public/js/database')
+var expressSession = require('express-session');
+var SessionStore = require('express-session-sequelize')(expressSession.Store);
+var sequelizeSessionStore = new SessionStore({
+    db: myDatabase.sequelize,
+});
 
 //Import multer
 var multer = require('multer');
@@ -84,6 +104,111 @@ app.post('/updatePicture', auth.saveChanges);
 //forget password
 app.get('/forgetpass', auth.isLoggedInV2, auth.forgetPass);
 app.post('/forgetpass', auth.checkUserEmail)
+
+
+//Rayson's code
+
+// secret for session
+app.use(expressSession({
+    secret: 'sometextgohere',
+    store: sequelizeSessionStore,
+    resave: false,
+    saveUninitialized: false,
+}));
+
+// Set Storage Engine
+const storage = multer.diskStorage({
+    destination: './public/uploads',
+    filesname: function(req, file, cb){
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+//Init upload 
+const upload = multer({
+    storage: storage
+}).single('myImage');
+
+//import shoppingCart controllers
+var products = require('./server/controllers/shoppingCart');
+
+//import shoppingCart controllers
+var checkout = require('./server/controllers/checkout');
+
+//import confirmation controllers
+var confirmation = require('./server/controllers/confirmation');
+
+//import Item Description controllers
+var itemDes = require('./server/controllers/itemDescrip');
+
+//import done 
+var done = require('./server/controllers/done');
+
+//import wishlist
+var wishList = require('./server/controllers/wishList');
+
+//import order tracking
+var orderTracking = require('./server/controllers/orderTracking');
+
+// Ejs directory
+app.set("views", path.resolve(__dirname, "server/views/pages"));
+app.use(express.static(__dirname + '/public'));
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended: false}));
+
+// set the view engine to ejs
+app.set('view engine', 'ejs');
+
+// Shopping Cart
+app.get('/shopping-cart', products.list);
+app.delete('/shopping-cart/:ProductID', products.delete);
+
+// Checkout 
+app.get('/checkout', checkout.show);
+app.post("/checkout/userIdHere", checkout.insert)
+  
+app.post('/charge', function(req,res){
+    //Stripe 
+    let amount = req.body.chargeAmount;
+
+    stripe.customers.create({
+        email: req.body.nameCard + "@gmail.com", 
+        card: "tok_visa"
+    })
+    .then(customer =>
+        stripe.charges.create({
+        amount,
+        description: "Purchases from Cheapo",
+        currency: "sgd",
+        customer: customer.id
+        }))
+    .then(charge => res.send(charge))
+    .catch(err => {
+        console.log("Error:", err);
+        res.status(500).send({error: "Purchase Failed"});
+    });
+    res.redirect("/done")
+});
+
+
+//Confirmations
+app.get('/confirmation', confirmation.show );
+
+//Items descrip
+app.get('/item', itemDes.show);
+app.post("/item/macbook",itemDes.insert);
+app.post("/add",itemDes.add);
+
+//Done
+app.get('/done', done.show);
+
+//Wish List
+app.get('/wishlist', wishList.show)
+app.delete('/wishlist/:ProductID', wishList.delete);
+
+//Order Tracking
+app.get('/order-tracking', orderTracking.show)
+
 
 app.get('/', auth.test)
 
