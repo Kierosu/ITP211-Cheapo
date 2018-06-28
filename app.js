@@ -10,7 +10,7 @@ var httpServer = require('http').Server(app);
 var stripe = require('stripe')('sk_test_PdG9Jw0lx0FPCqhtlT123siy');
 var bodyparser = require('body-parser');
 var multer = require('multer');
- 
+var payform = require('payform'); 
 
 //Database
 var myDatabase = require('./public/js/database')
@@ -159,7 +159,7 @@ app.delete('/shopping-cart/:ProductID', products.delete);
 app.get('/checkout', auth.isLoggedIn, checkout.show);
 app.post("/checkout/:userID", checkout.insert)
   
-app.post('/charge', function(req,res){
+app.post('/charge', function(req,res){ //Need to be stopped when credit card input failed
     //Stripe 
     let amount = req.body.chargeAmount;
 
@@ -181,7 +181,6 @@ app.post('/charge', function(req,res){
     });
     res.redirect("/done")
 });
-
 
 //Confirmations
 app.get('/confirmation', auth.isLoggedIn, confirmation.show);

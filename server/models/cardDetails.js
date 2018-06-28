@@ -27,6 +27,9 @@ const cardDetails = sequelize.define('cardDetails', {
     shippingAddress: {
         type: Sequelize.STRING
     },
+    cardType: {
+        type: Sequelize.STRING
+    },
     blockUnit: {
         type: Sequelize.STRING,
         defaultValue: ""

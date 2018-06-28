@@ -8,28 +8,54 @@ var Product = require('../models/products');
 var CardDetails = require('../models/cardDetails');
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
+var payform = require('payform'); 
 
 
 //Insert Card Data Into database
 exports.insert = function (req, res) {
-
-    var cardDetails = {
-        cardName: req.body.cardName,
-        userID: req.body.userID,
-        cardNumber: req.body.cardNumber,
-        expiryDate: req.body.expiryDate,
-        verification: req.body.verification,
-        shippingAddress: req.body.shippingAddress,
-        blockUnit: req.body.blockUnit
-    }
-    CardDetails.create(cardDetails).then((newRecord, created) => {
-        if (!newRecord) {
-            return res.send (400, {
-                message: "error"
-            });
+    var cardNoValidation = payform.validateCardNumber(req.body.cardNumber);
+    var date = req.body.expiryDate;
+    var month = date[0] + date[1];
+    var year = date[3] + date[4];
+    var cardValidateExpiry = payform.validateCardExpiry(month, year);
+    var cvcValidation = payform.validateCardCVC(req.body.verification);
+    if (cardNoValidation == true && cardValidateExpiry == true && cvcValidation == true)
+    {
+        var cardDetails = {
+            cardName: req.body.cardName,
+            userID: req.body.userID,
+            cardNumber: req.body.cardNumber,
+            expiryDate: req.body.expiryDate,
+            verification: req.body.verification,
+            shippingAddress: req.body.shippingAddress,
+            cardType: payform.parseCardType(req.body.cardNumber),
+            blockUnit: req.body.blockUnit
         }
-        res.status(200).send({ message: "Uploaded Card Details" + newRecord });
-    })
+        console.log(cardDetails);
+        CardDetails.create(cardDetails).then((newRecord, created) => {
+            if (!newRecord) {
+                return res.send (400, {
+                    message: "error"
+                });
+            }
+            res.status(200).send({ message: "Uploaded Card Details" + newRecord });
+        })
+    }
+    else if (cardNoValidation == false)
+    {
+        console.log("Wrong card number")
+        res.redirect("/checkout")
+    }
+    else if (cardValidateExpiry == false)
+    {
+        console.log("Wrong Expiry Date Enetered!")
+        res.redirect("/checkout")
+    }
+    else if (cvcValidation == false)
+    {
+        console.log("Wrong CVC entered!")
+        res.redirect("/checkout")
+    }
 }
 exports.show = function (req, res){
     //List all the products
