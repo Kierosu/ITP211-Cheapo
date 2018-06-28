@@ -3,6 +3,10 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 
+//Import multer
+var multer = require('multer');
+var upload = multer({dest: './public/uploads/', limits: {fileSize: 1000000, files:1} });
+
 var auth = require('./server/controllers/profile');
 
 // Modules to store session
@@ -56,7 +60,7 @@ app.get('/logout', auth.logout);
 app.get('/login', auth.isLoggedInV2, auth.signin);
 app.post('/login',passport.authenticate('local-login', {
     //Success go to Profile Page / Fail go to login page
-    successRedirect: '/profile',
+    successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: true
 })
@@ -72,6 +76,15 @@ app.post('/signup', passport.authenticate('local-signup', {
 
 app.get('/profile', auth.isLoggedIn, auth.profilepage);
 
+//edit profile info
+app.get('/edit' + '/profilepicture', auth.isLoggedIn, auth.editProfile);
+app.post('/uploadImage', upload.single('image'), auth.uploadImage);
+app.post('/updatePicture', auth.saveChanges);
 
+//forget password
+app.get('/forgetpass', auth.isLoggedInV2, auth.forgetPass);
+app.post('/forgetpass', auth.checkUserEmail)
+
+app.get('/', auth.test)
 
 app.listen(3000);

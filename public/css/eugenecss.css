@@ -1,0 +1,129 @@
+/*Login Page*/
+#head{
+  text-align: center;
+}
+#forget{
+  position: relative;
+  left: 38.2%;
+  margin: 20px 0 0 0;
+  font-size: 20px;
+}
+.warningmsg{
+    font-size: 26px;
+    text-align: center;
+}
+#warningmsg{
+  font-size: 26px;
+  text-align: center;
+  display: none;
+}
+.form-signin-heading{
+  text-align: center;
+}
+#loginButton, #createProfile, #signupButton, #resetPass{
+  font-size: 20px;
+  width: 23%;
+  position: relative;
+  left: 38.4%;
+  padding: 10px 50px;
+  background-color:#F8694A;
+  border-color:#F8694A;
+  color: white;
+}
+#resetPass{
+  margin: 25px 0 25px 0;
+}
+#back{
+  background-color:#d9534f;
+  border-color:#d9534f;
+  color: white;
+  padding: 10px 153px;
+  font-size: 20px;
+  margin: 0 0 100px 0;
+  position: relative;
+  left: 38.4%;
+}
+#editprofile, #uploadBtn{
+  background-color:#F8694A;
+  border-color:#F8694A;
+  color: white;
+  font-size: 18px;
+}
+#saveChanges{
+  background-color:#5cb85c;
+  border-color:#5cb85c;
+  color: white;
+  padding: 6px 500px;
+  font-size: 20px;
+  margin: 0 0 20px 0;
+  position: relative;
+  left:250px;
+}
+#cancel{
+  background-color:#d9534f;
+  border-color:#d9534f;
+  color: white;
+  padding: 6px 500px;
+  font-size: 20px;
+  margin: 0 0 100px 0;
+  position: relative;
+  left:250px;
+}
+#signupButton{
+  margin: 5px 0 100px 0;
+}
+#loginButton{
+  margin: 22px 0 15px 0;
+}
+#createProfile{
+  margin: 25px 0 25px 0;
+}
+#signupButton:hover, #loginButton:hover, #createProfile:hover, #editprofile:hover, #uploadBtn:hover, #saveChanges:hover, #cancel:hover,
+#resetPass:hover, #back:hover{
+  background-color: white;
+  color: black;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  -webkit-transition-duration:0.4s;
+  transition-duration: 0.4s;
+}
+.form-control{
+  width: 50%;
+  position: relative;
+  left: 17%;
+  font-size: 18px;
+  margin: 22px 0 0 0;
+  height:50px;
+  
+}
+.control-label {
+  position: relative;
+  margin: 33px 0 0 0;
+  left: 14.3%;
+  font-size: 18px;
+  height: 18px;
+  text-align: right;
+}
+#p{
+  position: relative;
+  left: 36.5%;
+  font-size: 25px;
+}
+  
+#tos{
+  font-size: 19px;
+  position: relative;
+  left: 31.5%;
+  padding: 12px 0 0 0;
+}
+#uploadImageDiv{
+  position: relative;
+  top: 15px;
+  left: 33.7%; 
+}
+#imglist li{
+  display: inline-block;
+}
+#message{
+  display: none;
+  text-align: center;
+}

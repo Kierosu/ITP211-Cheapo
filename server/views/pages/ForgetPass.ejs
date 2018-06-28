@@ -1,0 +1,81 @@
+<!doctype HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <% include ../partials/javascript %>
+    <% include ../partials/stylesheet %>
+    <% include ../partials/eugenecss %>
+    <title><%= title %></title>
+</head>
+<body>
+    <% include ../partials/header %>
+    <div id="head">
+        <h1>Password Reset</h1>
+        <h3>Please enter your username and email </h3>
+    </div>
+    <div class="warningmsg" id = "warningmsg">
+        <div class="alert alert-warning alert-dismissible fade in">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>WOAH! </strong><p id="errmsg"></p>
+        </div>
+    </div>
+
+    <div id = "body">
+        <form class="form-signin" action="" method="post">
+        <label for="username" class="control-label col-sm-2">Username:</label>
+        <div class="col-sm-10">
+            <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+        </div>
+        <label for="email" class="control-label col-sm-2">Email Address:</label>
+        <div class="col-sm-10">
+            <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" required>
+        </div>
+        <button class="btn" type="submit" id="resetPass">Reset Password</button>
+        </form>
+    </div>
+
+    <div id="message">
+        <h3>A new password has been set and sent to your email.</h3>
+        <h4 style = "font-size: 22px; margin-bottom: 25px;">Please change your email immediately after logging in!</h4>
+    </div>
+
+    <button class="btn" id="back">Back</button>
+
+
+    <% include ../partials/footer %>
+
+    <script>
+    $('#back').click(()=>{
+            location.href = "/login";
+    })
+    $('#resetPass').click((e)=>{
+        e.preventDefault();
+        var getData = {
+            username: $('#username').val(),
+            email: $('#email').val()
+        }
+        $.ajax({
+            url: '/forgetpass',
+            type: "post",
+            data: getData,
+            data: JSON.stringify(getData),
+            dataType: "json",
+            contentType: "application/json",
+            success: function(msg){
+                $('#body').css('display', 'none');
+                $('#head').css('display', 'none'); 
+                $('#message').css({'display': 'initial','margin-bottom': '20px'});
+            },
+            error: function(err){
+                $('#warningmsg').css('display', 'inline');
+                $('#errmsg').css('display', 'inline');
+                $('#errmsg').html(err.responseText);
+            }
+            
+        })
+    })
+    </script>
+</body>
+</html>

@@ -46,7 +46,7 @@ User.sync({force: false, logging: console.log}).then(()=>{
     console.log("User table synced");
     User.upsert({
         userID: 1,
-        username: "(Admin)Shafie",
+        username: "Shafie",
         email: "shafie@gmail.com",
         password: "shafieMemeLord",
         userType: "Admin",
@@ -54,7 +54,7 @@ User.sync({force: false, logging: console.log}).then(()=>{
     });
     User.upsert({
         userID: 2,
-        username: "(Admin)Matthew",
+        username: "Matthew",
         email: "matthew@gmail.com",
         password: "matthewMemeLord",
         userType: "Admin",
@@ -62,7 +62,7 @@ User.sync({force: false, logging: console.log}).then(()=>{
     });
     User.upsert({
         userID: 3,
-        username: "(Admin)Rayson",
+        username: "Rayson",
         email: "rayson@gmail.com",
         password: "raysonMemeLord",
         userType: "Admin",
@@ -70,7 +70,7 @@ User.sync({force: false, logging: console.log}).then(()=>{
     });
     User.upsert({
         userID: 4,
-        username: "(Admin)Kierosu",
+        username: "Kierosu",
         email: "eugenetan9134@gmail.com",
         password: "WowWee123",
         profilePic: "ayaya.png",
@@ -79,7 +79,7 @@ User.sync({force: false, logging: console.log}).then(()=>{
     });
     User.upsert({
         userID: 5,
-        username: "(Admin)Teh Yang",
+        username: "Teh Yang",
         email: "tehyang@gmail.com",
         password: "tehyangMemeLord",
         userType: "Admin",

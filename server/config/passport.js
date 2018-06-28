@@ -87,20 +87,20 @@ module.exports = function (passport) {
         }
         // process asynchronous
         process.nextTick(function () {
-                User.findOne({ where: { username: username } }).then((user) => {
-                // check errors and bring the mess  ages
-                    if (!user)
-                        return done(null, false, req.flash('loginMessage', 'Username not found!'));
-                    if (!isValidPassword(user.password, password))
-                        return done(null, false, req.flash('loginMessage', 'Wrong password!'));
-                    // everything ok, get user
-                    else {
-                        return done(null, user.get());
-                    }
-                }).catch((err) => {
-                    console.log("Error:", err);
-                    return done(err, false, req.flash('loginMessage', 'Error!'))
-                });
+            User.findOne({ where: { username: username } }).then((user) => {
+            // check errors and bring the mess  ages
+                if (!user)
+                    return done(null, false, req.flash('loginMessage', 'Username not found!'));
+                if (!isValidPassword(user.password, password))
+                    return done(null, false, req.flash('loginMessage', 'Wrong password!'));
+                // everything ok, get user
+                else {
+                    return done(null, user.get());
+                }
+            }).catch((err) => {
+                console.log("Error:", err);
+                return done(err, false, req.flash('loginMessage', 'Error!'))
             });
-        }));
+        });
+    }));
 }

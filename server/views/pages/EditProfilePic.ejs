@@ -1,0 +1,85 @@
+<!doctype HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <% include ../partials/javascript %>
+    <% include ../partials/stylesheet %>
+    <% include ../partials/eugenecss %>
+    <title><%= title %></title>
+</head>
+<body>
+    <% include ../partials/header %>
+    <div class="body">
+
+        <form class="form-signin form-horizontal" action="/update" method="post" enctype="multipart/form-data">
+            <h2 class="form-signin-heading">Edit Profile Picture</h2>
+            <div id="uploadImageDiv">
+                <ul id="imglist">
+                <li><img src= "<%= avatarTemp %>" id="ImgTemp" alt="Profile Picture" width="184px" height="184px" style="border: 1px solid black;"></li>
+                </ul>
+                <label class="file">
+                  <input type="file" id="uploadImg" name="uploadImg" accept="image/*"/><br>
+                  <button class="btn" id="uploadBtn" style="width: 85px; height: 40px;">Upload</button>
+                </label>   
+            </div>
+            <br><br>
+            <button class="btn" type="submit" id="saveChanges">Save</button>
+            </form>
+            <button class="btn" id = "cancel"type="button">Cancel</button>
+    </div>
+    <% include ../partials/footer %>
+    <script>
+        $("#uploadBtn").click(function(e) {
+            e.preventDefault();
+            var formData = new FormData();
+            var fileData = $("#uploadImg").prop("files")[0]; 
+            formData.append('image', fileData);
+            $.ajax({
+                type: 'post',
+                url: '/uploadImage',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    alert('Image is uploaded');
+                    var path = $("#uploadImg").val();
+                    var filename = path.replace(/^.*\\/, "");
+                    $('#ImgTemp').attr('src', '<%=hostPath%>/img/' + filename);
+                },
+                error: function(result){
+                    alert('There is an error uploading');
+                }
+            });
+        });
+        $('#saveChanges').click((e)=>{
+            e.preventDefault();
+            var imgsrc = $("#uploadImg").val();
+            var imagename = imgsrc.replace(/^.*\\/, "");
+            if (imagename == '' || imagename == null){
+                location.href = "/profile";
+            }
+            else{
+                var newData = {
+                    profilePic: imagename
+                }
+                $.ajax({
+                    url: "/updatePicture",
+                    type: "post",
+                    data: JSON.stringify(newData),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function(){
+                        alert("Your profile picture have been updated!");
+                        location.href = "/profile"
+                    },
+                    error: function(result){
+                        alert("Oops! There is an error updating your profile picture");
+                    }
+                })  
+            }
+        })
+        $('#cancel').click(()=>{
+            location.href = "/profile";
+        })
+    </script>
+</body>

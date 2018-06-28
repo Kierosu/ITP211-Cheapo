@@ -61,15 +61,15 @@
 				</div>
 				<div class="pull-right">
 					<ul class="header-btns">
-						<!-- Account -->
 						<li class="header-account dropdown default-dropdown">
+						<!-- Account -->
+						<% if (req.user) { %>
 							<div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
 								<div class="header-btns-icon">
-									<i class="fa fa-user-o"></i>
+									<img src="<%= avatar %>" alt="Profile Picture" style="width:38.5px">
 								</div>
-								<strong class="text-uppercase">My Account <i class="fa fa-caret-down"></i></strong>
+								<strong class="text-uppercase"  style="top: 10.2px;position: relative;"><%= username %> <i class="fa fa-caret-down"></i></strong>		
 							</div>
-							<a href="/login" class="text-uppercase">Login</a> / <a href="/signup" class="text-uppercase">Join</a>
 							<ul class="custom-menu">
 								<li><a href="/profile"><i class="fa fa-user-o"></i> My Account</a></li>
 								<li><a href="#"><i class="fa fa-heart-o"></i> My Wishlist</a></li>
@@ -77,6 +77,13 @@
 								<li><a href="#"><i class="fa fa-check"></i> Checkout</a></li>
 								<li><a href="/logout"><i class="fa fa-unlock-alt"></i> Logout</a></li>
 							</ul>
+								
+						<% } else { %>
+						<div style="margin-top: 10.2px;">
+						<a href="/login" class="text-uppercase"><strong>Login</strong></a> / <a href="/signup" class="text-uppercase"><strong>Join</strong></a>
+						</div>
+							
+						<% } %>
 						</li>
 						<!-- /Account -->
 
@@ -85,31 +92,31 @@
 							<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 								<div class="header-btns-icon">
 									<i class="fa fa-shopping-cart"></i>
-									<span class="qty">3</span>
+									<span class="qty">0</span>
 								</div>
 								<strong class="text-uppercase">My Cart:</strong>
 								<br>
-								<span>35.20$</span>
+								<span>$0</span>
 							</a>
 							<div class="custom-menu">
 								<div id="shopping-cart">
 									<div class="shopping-cart-list">
 										<div class="product product-widget">
 											<div class="product-thumb">
-												<img src="./img/thumb-product01.jpg" alt="">
+												<img src="" alt="">
 											</div>
 											<div class="product-body">
-												<h3 class="product-price">$32.50 <span class="qty">x3</span></h3>
+												<h3 class="product-price">$0 <span class="qty">x0</span></h3>
 												<h2 class="product-name"><a href="#">Product Name Goes Here</a></h2>
 											</div>
 											<button class="cancel-btn"><i class="fa fa-trash"></i></button>
 										</div>
 										<div class="product product-widget">
 											<div class="product-thumb">
-												<img src="./img/thumb-product01.jpg" alt="">
+												<img src="" alt="">
 											</div>
 											<div class="product-body">
-												<h3 class="product-price">$32.50 <span class="qty">x3</span></h3>
+												<h3 class="product-price">$0 <span class="qty">x0</span></h3>
 												<h2 class="product-name"><a href="#">Product Name Goes Here</a></h2>
 											</div>
 											<button class="cancel-btn"><i class="fa fa-trash"></i></button>
