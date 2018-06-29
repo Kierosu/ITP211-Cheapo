@@ -11,6 +11,7 @@ var stripe = require('stripe')('sk_test_PdG9Jw0lx0FPCqhtlT123siy');
 var bodyparser = require('body-parser');
 var multer = require('multer');
 var payform = require('payform'); 
+var flash = require('connect-flash')
 
 //Database
 var myDatabase = require('./public/js/database')

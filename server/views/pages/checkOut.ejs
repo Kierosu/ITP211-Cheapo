@@ -63,9 +63,9 @@
 						<div class="step"></div>
 						<div class="step"></div>
 					</div>
-					<div id="charge-error" class="alert alert-danger hidden">
+					<!-- <div id="charge-error" class="alert alert-danger">
 						
-					</div>
+					</div> -->
 					<div class="payment-method">
 						<label for="card" class="method card">
 							<div class="card-logos">
@@ -86,8 +86,18 @@
 						</label>
 					</div>
 					<br><br>
+					<div class="warningmsg">
+						<% if (message.length > 0) { %>
+						<div class="alert alert-warning alert-dismissible fade in" role="alert">
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<%= message %>
+						</div>
+						<% } %>
+					</div>
 					<div id="paypal-button-container"></div>
-					<form action="/charge" method="POST" id="checkoutForm">
+					<!-- <form action="/charge" method="POST" id="checkoutForm"> -->
 					<div class="stripe">
 							<h3 class="title">Card Details:</h3>
 							<div class="input-fields">
@@ -168,9 +178,19 @@
 	<!-- /section -->
 
 	<% include ../partials/footer %>
+		<!-- jQuery Plugins -->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/slick.min.js"></script>
+		<script src="js/nouislider.min.js"></script>
+		<script src="js/jquery.zoom.min.js"></script>
+		<script src="js/main.js"></script>
+		<script src="js/backendcheckout.js"></script>
+		<script src="js/stripeCheckout.js"></script>
+		<script src="cleave.min.js"></script>
 	<script>
 	//Inserting Data with ajax
-	$(input.cardNumber).payment('formatCardNumber');
+	$('input.cardNumber').payment('formatCardNumber');
 	function addDetails() {
 		var url = "<%=hostPath%>/checkout/<%= userID%>"; //Edit when database is added
 		var cardDetails = {
@@ -204,16 +224,6 @@
 	}
 	
 	</script>
-	<!-- jQuery Plugins -->
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/slick.min.js"></script>
-	<script src="js/nouislider.min.js"></script>
-	<script src="js/jquery.zoom.min.js"></script>
-	<script src="js/main.js"></script>
-	<script src="js/backendcheckout.js"></script>
-	<script src="js/stripeCheckout.js"></script>
-	<script src="cleave.min.js"></script>
 	<script>
 
     // Render the PayPal button

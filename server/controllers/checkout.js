@@ -44,16 +44,19 @@ exports.insert = function (req, res) {
     else if (cardNoValidation == false)
     {
         console.log("Wrong card number")
+        req.flash('info', 'Wrong Card Number!')
         res.redirect("/checkout")
     }
     else if (cardValidateExpiry == false)
     {
         console.log("Wrong Expiry Date Enetered!")
+        req.flash('info', 'Wrong Expiry Date Entered!')
         res.redirect("/checkout")
     }
     else if (cvcValidation == false)
     {
         console.log("Wrong CVC entered!")
+        req.flash('info', 'Wrong CVC Entered!')
         res.redirect("/checkout")
     }
 }
@@ -78,6 +81,7 @@ exports.show = function (req, res){
         }
         if (subtotal != 0 )
         {
+            console.log(req.flash('info'));
             var id = req.params.userID;
             UserModel.findById(id).then(function() {
                 res.render('checkOut', {
@@ -90,6 +94,7 @@ exports.show = function (req, res){
                     type: req.user.userType,
                     membership: req.user.membership,
                     req: req,
+                    message: req.flash('info'),
                     products: products,
                     total: totalPrice,
                     stripeTotal: stripeTotal * 100,
