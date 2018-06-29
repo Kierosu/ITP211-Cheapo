@@ -12,7 +12,10 @@
 	<script src="https://www.paypalobjects.com/api/checkout.js"></script>
 	<script src="https://js.stripe.com/v3/"></script>
 	<script src="https://checkout.stripe.com/checkout.js"></script>
-
+	<script src="js/payform.js"></script>
+	<script src="js/jquery.payform.js"></script>
+	<script src="js/jquery.payform.min.js"></script>
+	<script src="js/payform.min.js"></script>
 	<!-- Google font -->
 	<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
 
@@ -103,25 +106,25 @@
 							<div class="input-fields">
 									<div class="column-1">
 										<label for="cardholder">Cardholder's Name</label>
-										<input type="text" id="cardholder" name="nameCard"/>
+										<input type="text" id="cardholder" name="nameCard"required/>
 								
 										<div class="small-inputs">
 										<div>
 											<label for="date">Valid thru</label>
-											<input type="text" id="date" placeholder="MM / YY" />
+											<input type="text" id="date" placeholder="MM / YY" required/>
 										</div>
 								
 										<div>
 											<label for="verification">CVV / CVC *</label>
-											<input type="password" id="verification"/>
+											<input autocomplete="off" type="password" id="verification"required/>
 										</div>
 										</div>
 								
 									</div>
 									<div class="column-2">
 										<label for="cardnumber">Card Number</label>
-										<input id="cardnumber" name="number"/>
-								
+										<input type="text" id="cardnumber" name="number" autocomplete="off"required/>
+										<label> Card Type: <p id = "ct" ></p></label>
 										<span class="info">* CVV or CVC is the card security code, unique three digits number on the back of your card separate from its number.</span>
 									</div>
 									</div>
@@ -131,17 +134,16 @@
 								<div class="input-fields">
 										<div class="column-1">
 											<label for="cardholder">Shipping Address:</label>
-											<input type="text" id="shippingAddress" placeholder="Ang Mo Kio Ave 5, Singapore"/>
+											<input type="text" id="shippingAddress" autocomplete="off" placeholder="Ang Mo Kio Ave 5, Singapore"/>
 										</div>
 										<center>
 										<div class="column-2">
 											<label for="cardnumber">Block/Unit-Number</label>
-											<input type="password" id="blockUnit"/>
+											<input type="password" autocomplete="off" id="blockUnit" placeholder="Blk 190, #01-123"/>
 										</div>
 										</center>
 					
 										</div>
-										<button id="customButton">Purchase</button>
 										</div>
 									</div>
 							<!-- <form action="/charge" method="POST">
@@ -187,10 +189,37 @@
 		<script src="js/main.js"></script>
 		<script src="js/backendcheckout.js"></script>
 		<script src="js/stripeCheckout.js"></script>
-		<script src="cleave.min.js"></script>
+		<script src="js/cleave.min.js"></script>
 	<script>
+	//Card Type shower
+	var type = document.getElementById("ct");
+	var ccnum = document.getElementById("cardnumber");
+	function updateType(e) {
+		var cardType = payform.parseCardType(e.target.value);
+		console.log("test")
+		console.log(cardType)
+		type.innerHTML = cardType || "Invalid Card!"
+	}
+
+	ccnum.addEventListener('input', updateType);
+
+
+	//Formatting Inputs
+	var cleave = new Cleave('#date', {
+    date: true,
+    datePattern: ['m', 'y']
+	});
+	var selectedCardIcon = null;
+	var cleave = new Cleave('#cardnumber', {
+    creditCard: true,
+    onCreditCardTypeChanged: function (type) {
+		// update UI ...
+		type = type.split('15')[0];
+		
+    }
+	});
+
 	//Inserting Data with ajax
-	$('input.cardNumber').payment('formatCardNumber');
 	function addDetails() {
 		var url = "<%=hostPath%>/checkout/<%= userID%>"; //Edit when database is added
 		var cardDetails = {
