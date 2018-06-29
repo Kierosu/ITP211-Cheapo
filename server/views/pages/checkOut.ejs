@@ -170,6 +170,7 @@
 	<% include ../partials/footer %>
 	<script>
 	//Inserting Data with ajax
+	$(input.cardNumber).payment('formatCardNumber');
 	function addDetails() {
 		var url = "<%=hostPath%>/checkout/<%= userID%>"; //Edit when database is added
 		var cardDetails = {
@@ -212,6 +213,7 @@
 	<script src="js/main.js"></script>
 	<script src="js/backendcheckout.js"></script>
 	<script src="js/stripeCheckout.js"></script>
+	<script src="cleave.min.js"></script>
 	<script>
 
     // Render the PayPal button

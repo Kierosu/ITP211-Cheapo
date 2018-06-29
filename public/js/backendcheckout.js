@@ -20,3 +20,33 @@ $("input[name='payment']").click(function ()
             }
             ;
         });
+
+// var selectedCardIcon = null;
+// // credit card
+// var cleaveCreditCard = new Cleave('.input-credit-card', {
+//     creditCard:              true,
+//     onCreditCardTypeChanged: function (type) {
+//         type = type.split('15')[0];
+        
+//         if (selectedCardIcon) {
+//             DOM.removeClass(selectedCardIcon, 'active');
+//         }
+
+//         selectedCardIcon = DOM.select('.icon-' + type);
+
+//         if (selectedCardIcon) {
+//             DOM.addClass(selectedCardIcon, 'active');
+//         }
+//     }
+// });
+
+// var btnClear = DOM.select('.btn-clear');
+// var creditCardInput = DOM.select('.input-credit-card');
+// creditCardInput.addEventListener('focus', function () {
+//     DOM.removeClass(btnClear, 'hidden-right');
+// });
+// btnClear.addEventListener('click', function () {
+//     cleaveCreditCard.setRawValue('');
+//     DOM.addClass(btnClear, 'hidden-right');
+//     creditCardInput.focus();
+// });
