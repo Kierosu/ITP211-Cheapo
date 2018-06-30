@@ -183,6 +183,10 @@ app.post('/charge', function(req,res){ //Need to be stopped when credit card inp
     res.redirect("/done")
 });
 
+//test page
+app.get("/test", (req,res) =>{
+    res.render('try');
+})
 //Confirmations
 app.get('/confirmation', auth.isLoggedIn, confirmation.show);
 
