@@ -95,19 +95,25 @@ var position = [parseFloat('<%= myLatitude %>'), parseFloat('<%= myLongitude %>'
 function initMap(){
     var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
 
+	//Current location
     var c = function(pos){
         var lat = pos.coords.latitude,
             long = pos.coords.longitude,
-            coords = lat + " , " + long;
+			coords = lat + " , " + long;
 
+		//Shipment location
+		var lati = parseFloat(1.378949)
+		var longi = parseFloat(103.755845)
+
+	//Van location
     var p1 = {
         lat: parseFloat('<%= myLatitude %>'),
         lng: parseFloat('<%= myLongitude %>')
     }
 
     var p2 = {
-        lat: lat,
-        lng: long
+        lat: parseFloat(lati), //in c thats why need shippingLacation and dont need c
+        lng: parseFloat(longi)
     }
     var rad = function(x) {
         return x * Math.PI / 180;
@@ -117,31 +123,15 @@ function initMap(){
         var R = 6378137; // Earth’s mean radius in meter
         var dLat = rad(p2.lat - p1.lat);
         var dLong = rad(p2.lng - p1.lng);
-        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(rad(p1.lat)) * Math.cos(rad(p2.lat)) *
-            Math.sin(dLong / 2) * Math.sin(dLong / 2);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var a = parseFloat(Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(p1.lat)) * Math.cos(rad(p2.lat)) * Math.sin(dLong / 2) * Math.sin(dLong / 2));
+        var c = parseFloat(2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
         var d = (parseFloat(R * c));
-        
         console.log(d);
-        return d; // returns the distance in meter
+        return parseFloat(d); // returns the distance in meter
     };
-    
-    // //Home marker
-    // addMarker({
-    // 	coords:{lat: lat, lng: long},
-    // 	content: '<h3>Current Location</h3>'
-    // });
-
-    // //Delivery van marker
-    // addMarker({
-    // 	coords:{lat: parseFloat('<%= myLatitude %>'), lng: parseFloat('<%= myLongitude %>')},
-    // 	iconImage: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-    // 	content: '<h3>Delivery Van Location</h3><br><p>Delivery Van is ' + Math.round(getDistance(p1,p2))  + 'm Away from you.'
-    // });
 
     //Add marker function
-    var homeMarker = new google.maps.Marker({
+    var currentMarker = new google.maps.Marker({
             position: {lat: lat, lng: long},
             map:map
         });
@@ -150,50 +140,69 @@ function initMap(){
 		position: {lat: parseFloat('<%= myLatitude %>'), lng: parseFloat('<%= myLongitude %>')},
 		map:map			
 	});
-
-        // marker.addListener('click', function() {
-        // 	map.setZoom(14);
-        // 	map.setCenter(marker.getPosition());
-		// });
-		
-		    
+	
+	var homeMarker = new google.maps.Marker({
+		position: {lat: 1.378949, lng: 103.755845},
+		map:map
+	})
+	
 		//Codes to move markers
 		function movingMarkers() {
-			var result = [1.3691, 103.8454];
+			var result = [1.3329, 103.7436];
         	transition(result);
 		}
 
-		setInterval (function() {
+		setTimeout (function() {
 			movingMarkers();
 		}, 5000);
-        
-        homeMarker.addListener('click', toggleBounce);
-        vanMarker.addListener('click', toggleBounce);
+
+		function movingMarkers2nd() {
+			var result = [1.3590, 103.7637];
+        	transition(result);
+		}
+
+		setTimeout (function() {
+			movingMarkers2nd();
+		}, 30000);
 		
+		//Adding animations to markers
+        homeMarker.addListener('click', toggleBounce);
+		vanMarker.addListener('click', toggleBounce);
+		currentMarker.addListener('click', toggleBounce);
+		
+		//set current variables
 		var numDeltas = 100;
-		var delay = 10; //milliseconds
+		var delay = 200; //milliseconds
 		var i = 0;
 		var deltaLat;
 		var deltaLng;
-
+		
+		//calculating the variables needed to move the markers
 		function transition(result){
 			i = 0;
-			deltaLat = (result[0] - position[0])/numDeltas;
-			deltaLng = (result[1] - position[1])/numDeltas;
+			deltaLat = parseFloat((result[0] - position[0])/numDeltas);
+			deltaLng = parseFloat((result[1] - position[1])/numDeltas);
 			moveMarker();
 		}
-
+		
+		//Moving markers
 		function moveMarker(){
-			position[0] += deltaLat;
-			position[1] += deltaLng;
-			var latlng = new google.maps.LatLng(position[0], position[1]);
-			vanMarker.setTitle("Latitude:"+position[0]+" | Longitude:"+position[1]);
+			position[0] += parseFloat(deltaLat);
+			position[1] += parseFloat(deltaLng);
+			var p1 = parseFloat(position[0]);
+			var p2 = parseFloat(position[1]);
+			var latlng = new google.maps.LatLng(p1, p2);
+			vanMarker.setTitle('Delivery Van is ' + Math.round(getDistance(p1,p2))  + 'm Away from you.') //Nan error
 			vanMarker.setPosition(latlng);
+			vanMarker.setAnimation(google.maps.Animation.BOUNCE);
+			// secondLocation(); //move from je to bukit batok
 			if(i!=numDeltas){
 				i++;
 				setTimeout(moveMarker, delay);
 			}
 		}
+
+		//bouncing function
         function toggleBounce() {
             if (homeMarker.getAnimation() !== null || vanMarker.getAnimation() !== null) {
                 homeMarker.setAnimation(null);
@@ -203,20 +212,22 @@ function initMap(){
                 vanMarker.setAnimation(google.maps.Animation.BOUNCE);
             }
           }
-
+		  
+		//adding click on map to zoom
         map.addListener('click', function() {
             map.setZoom(11);
         })
 
         //Check content
         var infoWindowhome = new google.maps.InfoWindow({
-            content: '<h3>Current Location</h3>'
+            content: 'Shipping Area'
         });
 
         var infoWindowvan = new google.maps.InfoWindow({
             content: '<h3>Delivery Van Location</h3><br><p>Delivery Van is ' + Math.round(getDistance(p1,p2))  + 'm Away from you.'
         });
-
+		
+		//zoom and show content when marker is clicked
         homeMarker.addListener('click', function(){
             infoWindowhome.open(map,homeMarker);
             map.setZoom(14);
@@ -227,6 +238,11 @@ function initMap(){
             infoWindowvan.open(map,vanMarker);
             map.setZoom(14);
             map.setCenter(vanMarker.getPosition());
+		})
+		
+		currentMarker.addListener('click', function(){
+            map.setZoom(14);
+            map.setCenter(currentMarker.getPosition());
         })
 	}
     
