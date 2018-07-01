@@ -13,6 +13,13 @@
 	<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
 	<script type ="text/javascript" src="js/googleMap.js"></script>
 
+	<!-- Notification -->
+	<script src="https://cdn.pubnub.com/pubnub-3.7.13.min.js"></script>
+
+	<!-- Fonts for google maps -->
+	<link rel="stylesheet" type="text/css" href="css/map-icons.css">
+	<script type="text/javascript" src="js/map-icons.js"></script>
+
 	<!-- Bootstrap -->
 	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
 	<!-- <link rel="stylesheet" type="text/css" href="../dist/css/map-icons.css">
@@ -105,47 +112,134 @@ function initMap(){
 		var lati = parseFloat(1.378949)
 		var longi = parseFloat(103.755845)
 
-	//Van location
-    var p1 = {
-        lat: parseFloat('<%= myLatitude %>'),
-        lng: parseFloat('<%= myLongitude %>')
-    }
+		//Van location
+		var p1 = {
+			lat: parseFloat('<%= myLatitude %>'),
+			lng: parseFloat('<%= myLongitude %>')
+		}
 
-    var p2 = {
-        lat: parseFloat(lati), //in c thats why need shippingLacation and dont need c
-        lng: parseFloat(longi)
-    }
-    var rad = function(x) {
-        return x * Math.PI / 180;
-    };
+		var p2 = {
+			lat: parseFloat(lati), //in c thats why need shippingLacation and dont need c
+			lng: parseFloat(longi)
+		}
+		var rad = function(x) {
+			return x * Math.PI / 180;
+		};
 
-    var getDistance = function(p1, p2) {
-        var R = 6378137; // Earth’s mean radius in meter
-        var dLat = rad(p2.lat - p1.lat);
-        var dLong = rad(p2.lng - p1.lng);
-        var a = parseFloat(Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(p1.lat)) * Math.cos(rad(p2.lat)) * Math.sin(dLong / 2) * Math.sin(dLong / 2));
-        var c = parseFloat(2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-        var d = (parseFloat(R * c));
-        console.log(d);
-        return parseFloat(d); // returns the distance in meter
-    };
+		var getDistance = function(p1, p2) {
+			var R = 6378137; // Earth’s mean radius in meter
+			var dLat = rad(p2.lat - p1.lat);
+			var dLong = rad(p2.lng - p1.lng);
+			var a = parseFloat(Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(p1.lat)) * Math.cos(rad(p2.lat)) * Math.sin(dLong / 2) * Math.sin(dLong / 2));
+			var c = parseFloat(2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+			var d = (parseFloat(R * c));
+			console.log(d);
+			return parseFloat(d); // returns the distance in meter
+		};
 
-    //Add marker function
-    var currentMarker = new google.maps.Marker({
-            position: {lat: lat, lng: long},
-            map:map
-        });
+		//Add marker function
+		var currentMarker = new google.maps.Marker({
+				position: {lat: lat, lng: long},
+				map:map
+			});
 
-	var vanMarker = new google.maps.Marker({
-		position: {lat: parseFloat('<%= myLatitude %>'), lng: parseFloat('<%= myLongitude %>')},
-		map:map			
-	});
-	
-	var homeMarker = new google.maps.Marker({
-		position: {lat: 1.378949, lng: 103.755845},
-		map:map
-	})
-	
+		var vanMarker = new google.maps.Marker({
+			position: {lat: parseFloat('<%= myLatitude %>'), lng: parseFloat('<%= myLongitude %>')},
+			map:map	
+		});
+		
+		var homeMarker = new google.maps.Marker({
+			position: {lat: 1.378949, lng: 103.755845},
+			map:map
+		})
+		
+		function notifyMe() {
+		if (!("Notification" in window)) {
+			alert("This browser does not support system notifications");
+		}
+		else if (Notification.permission === "granted") {
+			notify();
+		}
+		else if (Notification.permission !== 'denied') {
+			Notification.requestPermission(function (permission) {
+			if (permission === "granted") {
+				notify();
+			}
+			});
+		}
+  
+		function notify() {
+			var notification = new Notification('Delivery for <%= username %>', {
+			icon: 'https://preview.ibb.co/dpUkUy/toh_Hai_Ji_Face_png.jpg',
+			body: "Hi! This is Mr Toh delivering your items! Will be around in 1 hour",
+			});
+
+			notification.onclick = function () {
+			window.open("http://carnes.cc");      
+			};
+			setTimeout(notification.close.bind(notification), 10000); 
+		}
+
+		}
+
+		function notifyMe2() {
+		if (!("Notification" in window)) {
+			alert("This browser does not support system notifications");
+		}
+		else if (Notification.permission === "granted") {
+			notify2();
+		}
+		else if (Notification.permission !== 'denied') {
+			Notification.requestPermission(function (permission) {
+			if (permission === "granted") {
+				notify2();
+			}
+			});
+		}
+  
+		function notify2() {
+			var notification = new Notification('Delivery for <%= username %>', {
+			icon: 'https://preview.ibb.co/dpUkUy/toh_Hai_Ji_Face_png.jpg',
+			body: "Mr Toh: Just reached Jurong East! Sorry caught up in a traffic jam and was mopping the table!",
+			});
+
+			notification.onclick = function () {
+			window.open("http://carnes.cc");      
+			};
+			setTimeout(notification.close.bind(notification), 10000); 
+		}
+
+		}
+		
+		function notifyMe3() {
+		if (!("Notification" in window)) {
+			alert("This browser does not support system notifications");
+		}
+		else if (Notification.permission === "granted") {
+			notify3();
+		}
+		else if (Notification.permission !== 'denied') {
+			Notification.requestPermission(function (permission) {
+			if (permission === "granted") {
+				notify3();
+			}
+			});
+		}
+  
+		function notify3() {
+			var notification = new Notification('Delivery for <%= username %>', {
+			icon: 'https://preview.ibb.co/dpUkUy/toh_Hai_Ji_Face_png.jpg',
+			body: "Mr Toh: My apologies, table too hard to mop. Im reaching soon!",
+			});
+
+			notification.onclick = function () {
+			window.open("http://carnes.cc");      
+			};
+			setTimeout(notification.close.bind(notification), 10000); 
+		}
+
+		}
+
 		//Codes to move markers
 		function movingMarkers() {
 			var result = [1.3329, 103.7436];
@@ -154,7 +248,10 @@ function initMap(){
 
 		setTimeout (function() {
 			movingMarkers();
+			notifyMe();
 		}, 5000);
+		// ^^ Moving from downtowncore to jurong east
+
 
 		function movingMarkers2nd() {
 			var result = [1.3590, 103.7637];
@@ -163,8 +260,21 @@ function initMap(){
 
 		setTimeout (function() {
 			movingMarkers2nd();
-		}, 30000);
-		
+			notifyMe2();
+		}, 35000);
+		//^^ Moving from jurong east to bukit batok
+
+		function movingMarkers3rd() {
+			var result = [lati, longi];
+        	transition(result);
+		}
+
+		setTimeout (function() {
+			movingMarkers3rd();
+			notifyMe3();
+		}, 60000);
+		//^^ Moving towards shipping destination
+
 		//Adding animations to markers
         homeMarker.addListener('click', toggleBounce);
 		vanMarker.addListener('click', toggleBounce);
