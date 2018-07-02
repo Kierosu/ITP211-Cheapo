@@ -43,21 +43,21 @@ exports.insert = function (req, res) {
     }
     else if (cardNoValidation == false)
     {
-        console.log("Wrong card number")
-        req.flash('info', 'Wrong Card Number!')
-        res.redirect("/checkout")
+        console.log("Wrong card number");
+        res.redirect('/checkout');
+        // res.status(200).send( { message: 'Wrong Card Number!' } );
     }
     else if (cardValidateExpiry == false)
     {
-        console.log("Wrong Expiry Date Enetered!")
-        req.flash('info', 'Wrong Expiry Date Entered!')
-        res.redirect("/checkout")
+        console.log("Wrong Expiry Date Entered!")
+        res.redirect('/checkout');
+        // res.status(200).send( { message: 'Wrong Expiry Date Entered!' } );
     }
     else if (cvcValidation == false)
     {
         console.log("Wrong CVC entered!")
-        req.flash('info', 'Wrong CVC Entered!')
-        res.redirect("/checkout")
+        res.redirect('/checkout');
+        // res.status(200).send( { message: 'Wrong CVC entered' } );
     }
 }
 exports.show = function (req, res){

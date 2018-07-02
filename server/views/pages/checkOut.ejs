@@ -12,10 +12,6 @@
 	<script src="https://www.paypalobjects.com/api/checkout.js"></script>
 	<script src="https://js.stripe.com/v3/"></script>
 	<script src="https://checkout.stripe.com/checkout.js"></script>
-	<script src="js/payform.js"></script>
-	<script src="js/jquery.payform.js"></script>
-	<script src="js/jquery.payform.min.js"></script>
-	<script src="js/payform.min.js"></script>
 	<!-- Google font -->
 	<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
 
@@ -89,15 +85,11 @@
 						</label>
 					</div>
 					<br><br>
-					<div class="warningmsg">
-						<% if (message.length > 0) { %>
-						<div class="alert alert-warning alert-dismissible fade in" role="alert">
-							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-							<%= message %>
-						</div>
-						<% } %>
+					<div class="alert alert-success hidden" id="green">
+						<strong>Success!</strong> Payment Complete! Redirecting you in 5 seconds.
+					  </div>
+					<div class="alert alert-danger  hidden" id="red">
+						<strong>Failed!</strong> <p id = "messageFailed" >Payment Failed! </p>
 					</div>
 					<div id="paypal-button-container"></div>
 					<!-- <form action="/charge" method="POST" id="checkoutForm"> -->
@@ -118,8 +110,7 @@
 											<label for="verification">CVV / CVC *</label>
 											<input autocomplete="off" type="password" id="verification"required/>
 										</div>
-										</div>
-								
+									</div>
 									</div>
 									<div class="column-2">
 										<label for="cardnumber">Card Number</label>
@@ -190,14 +181,15 @@
 		<script src="js/backendcheckout.js"></script>
 		<script src="js/stripeCheckout.js"></script>
 		<script src="js/cleave.min.js"></script>
+		<script src="js/payform.min.js"></script>
+		<script src="js/jquery.payform.js"></script>
 	<script>
+
 	//Card Type shower
 	var type = document.getElementById("ct");
 	var ccnum = document.getElementById("cardnumber");
 	function updateType(e) {
 		var cardType = payform.parseCardType(e.target.value);
-		console.log("test")
-		console.log(cardType)
 		type.innerHTML = cardType || "Invalid Card!"
 	}
 
@@ -239,19 +231,67 @@
 			dataType: "json",
 			contentType: "application/json",
 			success: function(result){
-				alert("Card Details  Entered.")
+				$("#red").addClass("hidden");
+				$("#green").removeClass("hidden");
+				setTimeout(function myTimer(){
+					location.href  = "<%=hostPath%>/done";
+				},5000)
 			},
 			error: function(result){
 				alert("Card Details Failed")
-				discardDetails();
+				$("#red").removeClass("hidden");
+				console.log("testing validation");
+				validationshow();
+				// discardDetails();
 			}
 		})
 	}
 
-	function discordDetails() {
+
+	function discardDetails() {
 		location.href = "<%=hostPath%>/checkout"
 	}
 	
+	function validationshow() {
+		// var cardNoValidation = payform.cardNumberInput($("#cardnumber").val());
+		// var date = payform.expiryInput($("#date").val());
+		// var cvcValidation = payform.cvcInput($("#verification").val());
+		// console.log(cardNoValidation, cardValidateExpiry, cvcValidation)
+
+		var isCardValid = $.payform.validateCardNumber($("#cardnumber").val());
+		var date = $("#date").val();
+		var month = date[0] + date[1];
+    	var year = date[3] + date[4];
+		var finalDate = $.payform.validateCardExpiry(month, year);
+        var isCvvValid = $.payform.validateCardCVC($("#verification").val());
+
+        if($("#cardholder").val().length < 5){
+            alert("Wrong owner name");
+
+        } else if (!isCardValid) {
+			var messageId = document.getElementById("messageFailed");
+			var textAdded = document.createTextNode("Invalid Card Number");
+			messageId.appendChild(textAdded);
+
+        } else if (!isCvvValid) {
+			var messageId = document.getElementById("messageFailed");
+			var textAdded = document.createTextNode("Invalid CVV");
+			messageId.appendChild(textAdded);
+        } else if (!finalDate) {
+			var messageId = document.getElementById("messageFailed");
+			var textAdded = document.createTextNode("Invalid Date");
+			messageId.appendChild(textAdded);
+		} else if ($("#cardholder").val().length < 5 || !isCardValid) {
+			var messageId = document.getElementById("messageFailed");
+			var textAdded = document.createTextNode("Invalid Name and Invalid Card");
+			messageId.appendChild(textAdded);
+		}
+		else {
+			var messageId = document.getElementById("messageFailed");
+			var textAdded = document.createTextNode("Invalid Name, Invalid Date, Invalid CVV, ");
+			messageId.appendChild(textAdded);
+        }
+	}
 	</script>
 	<script>
 
