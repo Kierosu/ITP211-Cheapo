@@ -2489,3 +2489,70 @@ p.error {
   }
 }
 
+.stepVer2 {
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 25px;
+  height: 25px;
+  margin-bottom: 30px;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  background-color: #efefef;
+}
+
+.stepVer2:after {
+  position: absolute;
+  z-index: -1;
+  top: 5px;
+  left: 22px;
+  width: 225px;
+  height: 6px;
+  content: '';
+  background-color: #efefef;
+}
+
+.stepVer2:before {
+  color: #2e2e2e;
+  position: absolute;
+  top: 40px;
+}
+
+.stepVer2:last-child:after {
+  content: none;
+}
+
+.stepVer2.active {
+  background-color: #f62f5e;
+}
+.stepVer2.active:after {
+  background-color: #f62f5e;
+}
+.stepVer2.active:before {
+  color: #f62f5e;
+}
+
+.stepVer2.active + .step {
+  background-color: #f62f5e;
+}
+.stepVer2.active + .step:before {
+  color: #f62f5e;
+}
+
+.stepVer2:nth-child(1):before {
+  content: 'Receiving Orders';
+}
+.stepVer2:nth-child(2):before {
+  right: -50px;
+  content: 'Preparing Your Item';
+}
+.stepVer2:nth-child(3):before {
+  right: -30px;
+  content: 'Packing Your Item';
+}
+.stepVer2:nth-child(4):before {
+  right: -30px;
+  content: 'Shipping Your Item';
+}
+
