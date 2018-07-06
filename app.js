@@ -159,34 +159,11 @@ app.delete('/shopping-cart/:ProductID', products.delete);
 // Checkout 
 app.get('/checkout', auth.isLoggedIn, checkout.show);
 app.post("/checkout/:userID", checkout.insert)
-  
-app.post('/charge', function(req,res){ //Need to be stopped when credit card input failed
-    //Stripe 
-    let amount = req.body.chargeAmount;
 
-    stripe.customers.create({
-        email: req.body.nameCard + "@gmail.com", 
-        card: "tok_visa"
-    })
-    .then(customer =>
-        stripe.charges.create({
-        amount,
-        description: "Purchases from Cheapo",
-        currency: "sgd",
-        customer: customer.id
-        }))
-    .then(charge => res.send(charge))
-    .catch(err => {
-        console.log("Error:", err);
-        res.status(500).send({error: "Purchase Failed"});
-    });
-    res.redirect("/done")
-});
-
-//test page
-app.get("/test", (req,res) =>{
-    res.render('try');
-})
+// //test page
+// app.get("/test", (req,res) =>{
+//     res.render('try');
+// })
 //Confirmations
 app.get('/confirmation', auth.isLoggedIn, confirmation.show);
 

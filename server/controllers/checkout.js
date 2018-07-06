@@ -9,7 +9,7 @@ var CardDetails = require('../models/cardDetails');
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
 var payform = require('payform'); 
-
+const http = require('http');
 
 //Insert Card Data Into database
 exports.insert = function (req, res) {
@@ -31,6 +31,37 @@ exports.insert = function (req, res) {
             cardType: payform.parseCardType(req.body.cardNumber),
             blockUnit: req.body.blockUnit
         }
+        var postData = JSON.stringify({ user: cardDetails });
+
+        const options = {
+            hostname: 'localhost',
+            port: 3001,
+            path: '/bank',
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                'accept': 'application/json'
+            }
+        };
+
+        const httpreq = http.request(options, (res) => {
+            res.setEncoding('utf8');
+            res.on('data', (chuck) => {
+                console.log(`BODY: ${chuck}`);
+            });
+            res.on('end', () => {
+                console.log('No more data in response.');
+            });
+        });
+
+        httpreq.on('error', (e) => {
+            console.error(`problem with request: ${e.message}`);
+        })
+
+        //write data to request body
+        httpreq.write(postData);
+        httpreq.end();
+
         console.log(cardDetails);
         CardDetails.create(cardDetails).then((newRecord, created) => {
             if (!newRecord) {

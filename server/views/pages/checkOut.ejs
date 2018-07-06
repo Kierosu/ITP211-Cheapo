@@ -233,9 +233,9 @@
 			success: function(result){
 				$("#red").addClass("hidden");
 				$("#green").removeClass("hidden");
-				setTimeout(function myTimer(){
-					location.href  = "<%=hostPath%>/done";
-				},5000)
+				// setTimeout(function myTimer(){
+				// 	location.href  = "<%=hostPath%>/done";
+				// },5000)
 			},
 			error: function(result){
 				alert("Card Details Failed")
