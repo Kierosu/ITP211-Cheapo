@@ -13,13 +13,8 @@
 	<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
 	<script type ="text/javascript" src="js/googleMap.js"></script>
 
-	<!-- Animated Progress Bar -->
-	<link  type="text/css" href="css/mainRayson.css" rel="stylesheet" />
-
 	<!-- Fonts for google maps -->
 	<link rel="stylesheet" type="text/css" href="css/map-icons.css">
-	<script type="text/javascript" src="js/map-icons.js"></script>
-
 	<!-- Bootstrap -->
 	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
 	<!-- <link rel="stylesheet" type="text/css" href="../dist/css/map-icons.css">
@@ -36,6 +31,9 @@
 
 	<!-- Custom stylesheet -->
 	<link type="text/css" rel="stylesheet" href="css/raysonStyle.css" />
+
+	<!-- Animated Progress Bar -->
+	<!-- <link  type="text/css" href="css/mainRayson.css" rel="stylesheet" /> -->
 
  <style>
      #map{
@@ -64,9 +62,13 @@
 			<div class="checkout-panel">
 					<div class="panel-body">
 					  <h2 class="title">Order Tracking</h2>
-                        <div class="row">
-							<div class="progress-bar-wrapper"></div><!-- 30 seconds to complete this bar -->
-							<br><br><br>
+						<div class="row"></div>
+						<div class="bar" id="realBar1"> <!-- 30 seconds to complete this bar -->
+							<div class="stepVer2"></div>
+							<div class="stepVer3"></div>
+							<div class="stepVer4"></div>
+							<div class="stepVer5"></div>
+						</div>
 							<div id="map"></div>
 							<strong><p>Instructions For Navigating:</p></strong>
 							<ul>
@@ -82,7 +84,6 @@
 							</div>
 						</div>
 				  </div>
-				
 	</div>
 </center>
 	<!-- /section -->
@@ -94,8 +95,8 @@
 	<script src="js/nouislider.min.js"></script>
 	<script src="js/jquery.zoom.min.js"></script>
 	<script src="js/main.js"></script>
-	<script src="js/progress-bar.js"></script>
-	<script src="js/appGress.js"></script>
+	<!-- <script src="js/progress-bar.js"></script>
+	<script src="js/appGress.js"></script> -->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSG_1ZKHdkjPhREhtUba47ZqCUMCzw61U&callback=initMap"
 async defer>
 </script>
@@ -244,8 +245,24 @@ function initMap(){
 		}
 		//Codes to move the progress bar
 		setTimeout(function (){
-			$("#realBar1").addClass("active");
+			$(".stepVer2").addClass("active");
+			console.log("added")
 		},7000)
+
+		setTimeout(function (){
+			$(".stepVer3").addClass("active");
+			console.log("added")
+		},14000)
+
+		setTimeout(function (){
+			$(".stepVer4").addClass("active");
+			console.log("added")
+		},21000)
+
+		setTimeout(function (){
+			$(".stepVer5").addClass("active");
+			console.log("added")
+		},28000)
 
 		//Codes to move markers
 		function movingMarkers() {
