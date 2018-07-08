@@ -17,7 +17,8 @@ exports.insert = function (req, res){
         ProductName: req.body.ProductName,
         ProductPrice: parseDecimalNumber(req.body.ProductPrice),
         ProductDescription: req.body.ProductDescription,
-        ProductImage: req.body.ProductImage
+        ProductImage: req.body.ProductImage,
+        sellerId: req.body.sellerId
     }
     Product.create(products).then((newRecord, created) => {
         if (!newRecord) {
@@ -32,9 +33,12 @@ exports.insert = function (req, res){
 // Insert data into wish List
 exports.add = function (req, res){
     var wishlist = {
-        ProductName: req.body.macbookName,
-        ProductPrice: parseDecimalNumber(req.body.macbookPrice2),
-        ProductDescription: "",
+        UserId: req.body.UserId,
+        ProductName: req.body.ProductName,
+        ProductPrice: parseDecimalNumber(req.body.ProductPrice),
+        ProductDescription: req.body.ProductDescription,
+        ProductImage: req.body.ProductImage,
+        sellerId: req.body.sellerId
     }
     wishList.create(wishlist).then((newRecord, created) => {
         if (!newRecord) {
@@ -42,7 +46,7 @@ exports.add = function (req, res){
                 message: "error"
             });
         }
-        res.redirect("/wishlist")
+        res.status(200).send({ message: "Uploaded Product Details" + newRecord});
     });
 };
 exports.show = function (req, res){

@@ -69,17 +69,37 @@
 							<div class="stepVer4"></div>
 							<div class="stepVer5"></div>
 						</div>
-							<div id="map"></div>
-							<strong><p>Instructions For Navigating:</p></strong>
-							<ul>
-								<li><kbd>Click on the map to zoom out.</kbd></li>
-								<li><kbd>Click on the markers to zoom in and see details about it.</kbd></li>
-							</ul>
+							<div id="map" class="border border-dark rounded"></div>
+							<div class="navigation1">
+								<strong><p>Instructions For Navigating:</p></strong>
+								<ul>
+									<li><kbd>Click on the map to zoom out.</kbd></li>
+									<li><kbd>Click on the markers to zoom in and see details about it.</kbd></li>
+								</ul>
+							</div>
+							<div class="done hidden">
+								<fieldset>
+									<legend>Shipment Completed!</legend>
+									<p>Thanks for shopping with Cheapo!</p>
+									<p>Please leave a feedback for our shopping site so as we can improve on our webpage!</p>
+									<br><br><br>
+									<legend>Feedback Form:</legend>
+									<div class="feedback">
+										<label for="userrealname">User Name:</label>
+										<input id = "userrealname"class="form-control" type="text" placeholder="<%=username%>" readonly>
+										<br><br>
+										<div class="form-group">
+											<label for="exampleFormControlTextarea1">Feedback:</label>
+											<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+										  </div>
+										</form>
+									</div>
+								</fieldset>
+							</div>
 							<br><br>
                         </div>
 						<div class="row">
-							<div class="col-sm-12 text-center">
-								<button id="orderTracking" class="btn" onclick="test()">Order Tracking</button>
+							<div class="col-sm-12">
 								<button id="backToShopping"class="btn">Back To Shopping</button>
 							</div>
 						</div>
@@ -297,6 +317,13 @@ function initMap(){
 			movingMarkers3rd();
 			notifyMe3();
 		}, 80000);
+
+		setTimeout (function() {
+			$("#map").addClass("hidden");
+			$(".navigation1").addClass("hidden");
+			$(".bar").addClass("hidden");
+			$(".done").removeClass("hidden");
+		}, 100000);
 		//^^ Moving towards shipping destination
 
 		//Adding animations to markers

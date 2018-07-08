@@ -25,6 +25,9 @@ const products = sequelize.define('products', {
         type: Sequelize.STRING,
         defaultValue: ""
     },
+    sellerId: {
+        type: Sequelize.INTEGER
+    },
     createdAt: {
         type: Sequelize.DATE,
         field: 'createdAt',

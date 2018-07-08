@@ -80,7 +80,7 @@
                                 <br>
                                     <center>
                                         <button type="submit" onclick=addToData() class="creativeButton" data-toggle="modal" data-target="#addToCart">Add To Cart</button>
-                                        <button type="submit" formaction="/add" formmethod="POST" class="creativeButton">
+                                        <button type="submit"  onclick=addToWish() class="creativeButton">
                                             <i class="fa fa-heart-o" style="color:black"></i>
                                         </button>
                                     </center>
@@ -132,6 +132,7 @@
             var url = "<%=hostPath%>/item/macbook"; //Edit when database is implemented\
             var products = {
                 UserId: '<%=userID%>',
+                sellerId: 5,
                 ProductName: $("#macbookName").val(),
                 ProductPrice: $("#macbookPrice").val(),
                 ProductDescription: "",
@@ -160,6 +161,41 @@
         $("#check").click( function()
         {
             window.location.replace("http://localhost:3000/shopping-cart");
+        })
+
+        function addToWish() {
+            var url = "<%=hostPath%>/add"; //Edit when database is implemented\
+            var products = {
+                UserId: '<%=userID%>',
+                sellerId: 9,
+                ProductName: $("#macbookName").val(),
+                ProductPrice: $("#macbookPrice").val(),
+                ProductDescription: "",
+                ProductImage: $("#macbookImg").val()
+            }
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: JSON.stringify(products),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(result){
+                    alert("Item Posted Successfully!");
+                },
+                error: function(result){
+                    alert("Error Posting Item");
+                    discardAdd();
+                }
+            })
+        }
+
+        function discardAdd() {
+            location.href = "<%=hostPath%>/item"
+        }
+        
+        $("#check").click( function()
+        {
+            window.location.replace("http://localhost:3000/wishlist");
         })
 
         </script>

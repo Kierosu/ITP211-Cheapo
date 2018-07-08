@@ -23,7 +23,7 @@
       <link type="text/css" rel="stylesheet" href="css/raysonStyle.css" />
    </head>
    <body>
-      
+        <% include ../partials/header %>
       <!-- BREADCRUMB -->
       <div id="breadcrumb">
          <div class="container">
@@ -40,24 +40,15 @@
       <center>
          <div class="section">
             <div class="container">
-               <h2>Panel Heading</h2>
-               <div class="checkout-panel">
-                  <div class="panel-body">
-                     <div class="bar">
-                        <div class="step"></div>
-                        <div class="step"></div>
-                        <div class="step"></div>
-                        <div class="step"></div>
-                     </div>
-                  </div>
-               </div>
+                <fieldset>
+                    <h2>WishList</h2>
+                </fieldset>
                <br>
                <br>
                <div class="panel panel-default">
                   <div class="panel-heading">
                      <div class="#">
                         <div class="heading cf">
-                           <h1>Wish List</h1>
                            <a href="#" class="continue">Continue Shopping</a>
                         </div>
                      </div>
@@ -75,8 +66,8 @@
                            <li class="items even" data-id="<%= wishlist.ProductID %>">
                               <div class="infoWrap">
                                  <div class="cartSection">
-                                    <img src="http://lorempixel.com/output/technics-q-c-300-300-4.jpg" alt="" class="itemImg" />
-                                    <p class="itemNumber">#QUE-007544-002</p>
+                                    <img src="<%=wishlist.ProductImage%>" alt="" class="itemImg" />
+                                    <p class="itemNumber"><%= wishlist.sellerId %></p>
                                     <h3>
                                        <%= wishlist.ProductName %>
                                     </h3>
@@ -131,6 +122,7 @@
                      console.log(result.message);
                      var itemToRemove = '.items even[data-id=' + ProductID + ']';
                      $(itemToRemove).remove();
+                     location.reload(true);
                  },
                  error: function (result) {
                      alert("Unable to delete Product.");

@@ -9,6 +9,9 @@ const wishList = sequelize.define('wishList', {
         autoIncrement: true,
         primaryKey: true
     },
+    UserId: {
+        type: Sequelize.INTEGER
+    },
     ProductName: {
         type: Sequelize.STRING
     },
@@ -21,6 +24,9 @@ const wishList = sequelize.define('wishList', {
     ProductImage: {
         type: Sequelize.STRING,
         defaultValue: ""
+    },
+    sellerId: {
+        type: Sequelize.INTEGER
     },
     createdAt: {
         type: Sequelize.DATE,
