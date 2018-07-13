@@ -5,13 +5,12 @@ var bodyParser = require("body-parser");
 var express = require('express');
 var app = express();
 var path = require("path");
-var serverPort = 3000;
-var httpServer = require('http').Server(app);
-var stripe = require('stripe')('sk_test_PdG9Jw0lx0FPCqhtlT123siy');
 var bodyparser = require('body-parser');
 var multer = require('multer');
-var payform = require('payform'); 
 var flash = require('connect-flash')
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+exports.ioExports = io;
 
 //Database
 var myDatabase = require('./public/js/database')
@@ -37,8 +36,6 @@ var sequelizeSessionStore = new SessionStore({
 // Import Passport and Warning flash modules
 var passport = require("passport");
 var flash = require("connect-flash");
-
-var app = express();
 
 // ejs template path
 app.set("views", path.join(__dirname, "server/views/pages"));
@@ -134,6 +131,7 @@ var confirmation = require('./server/controllers/confirmation');
 //import Item Description controllers
 var itemDes = require('./server/controllers/itemDescrip');
 
+
 //import done 
 var done = require('./server/controllers/done');
 
@@ -142,6 +140,9 @@ var wishList = require('./server/controllers/wishList');
 
 //import order tracking
 var orderTracking = require('./server/controllers/orderTracking');
+
+//import pending
+var pending = require('./server/controllers/pending');
 
 // Ejs directory
 app.set("views", path.resolve(__dirname, "server/views/pages"));
@@ -158,12 +159,12 @@ app.delete('/shopping-cart/:ProductID', products.delete);
 
 // Checkout 
 app.get('/checkout', auth.isLoggedIn, checkout.show);
-app.post("/checkout/:userID", checkout.insert)
+app.post("/checkout/:userID", checkout.insert);
 
-// //test page
-// app.get("/test", (req,res) =>{
-//     res.render('try');
-// })
+//Pending Page
+app.get('/pending', auth.isLoggedIn, pending.show)
+app.post("/pendingBankAnswer", pending.answer);
+
 //Confirmations
 app.get('/confirmation', auth.isLoggedIn, confirmation.show);
 
@@ -183,7 +184,26 @@ app.delete('/wishlist/:ProductID', auth.isLoggedIn, wishList.delete);
 //Order Tracking
 app.get('/order-tracking', auth.isLoggedIn, orderTracking.show)
 
+// io.on('connection',function(socket){
+//         // socket.on('send', function(redirectData){
+//         //     var destination = redirectData;
+//         //     global.destination = destination
+//         // });
+//         // socket.emit('redirect', destination);
+//         console.log("Connected!")
+//     });
+
+io.on('connection', function (socket) {
+    console.log("really connected!");
+    socket.on('realDest', function(destination){
+        var route = destination;
+        console.log(route);
+    })
+    // socket.emit('redirect', {
+    //     destination: route
+    // })
+});
 
 app.get('/', auth.test)
 
-app.listen(3000);
+server.listen(3000);

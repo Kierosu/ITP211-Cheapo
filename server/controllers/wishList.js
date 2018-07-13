@@ -26,7 +26,11 @@ exports.delete = function (req, res) {
 
 exports.show = function (req, res){
     //List all the products
-    sequelize.query("select w.ProductId, sellerId, w.ProductImage, w.ProductPrice, w.ProductDescription from wishList w left outer join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + "group by w.sellerId, u.userId", {model: wishList}).then((wishList) => { 
+    sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from wishList w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", {model: wishList}).then((wishList) => { 
+        console.log(wishList);
+        wishList.forEach(function(wishlist){
+            console.log(wishlist.dataValues.sellerName)
+        });
         var id = req.params.userID;
         UserModel.findById(id).then(function() {
             res.render('wishList', {

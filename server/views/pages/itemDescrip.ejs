@@ -167,7 +167,7 @@
             var url = "<%=hostPath%>/add"; //Edit when database is implemented\
             var products = {
                 UserId: '<%=userID%>',
-                sellerId: 9,
+                sellerId: 2,
                 ProductName: $("#macbookName").val(),
                 ProductPrice: $("#macbookPrice").val(),
                 ProductDescription: "",
@@ -195,7 +195,7 @@
         
         $("#check").click( function()
         {
-            window.location.replace("http://localhost:3000/wishlist");
+            window.location.replace("http://localhost:3000/shopping-cart");
         })
 
         </script>

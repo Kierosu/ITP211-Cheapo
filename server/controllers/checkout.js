@@ -10,6 +10,7 @@ var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
 var payform = require('payform'); 
 const http = require('http');
+const url = require('url');
 
 //Insert Card Data Into database
 exports.insert = function (req, res) {
@@ -31,36 +32,6 @@ exports.insert = function (req, res) {
             cardType: payform.parseCardType(req.body.cardNumber),
             blockUnit: req.body.blockUnit
         }
-        var postData = JSON.stringify({ user: cardDetails });
-
-        const options = {
-            hostname: 'localhost',
-            port: 3001,
-            path: '/bank',
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-                'accept': 'application/json'
-            }
-        };
-
-        const httpreq = http.request(options, (res) => {
-            res.setEncoding('utf8');
-            res.on('data', (chuck) => {
-                console.log(`BODY: ${chuck}`);
-            });
-            res.on('end', () => {
-                console.log('No more data in response.');
-            });
-        });
-
-        httpreq.on('error', (e) => {
-            console.error(`problem with request: ${e.message}`);
-        })
-
-        //write data to request body
-        httpreq.write(postData);
-        httpreq.end();
 
         console.log(cardDetails);
         CardDetails.create(cardDetails).then((newRecord, created) => {
@@ -71,6 +42,61 @@ exports.insert = function (req, res) {
             }
             res.status(200).send({ message: "Uploaded Card Details" + newRecord });
         })
+
+        sequelize.query("select CardID from cardDetails cd left outer join Users u on cd.UserId = u.userID where cd.UserId = " + req.user.userID, {model: CardDetails}).then((card) => {   
+            card.forEach(function(i, idx, CardData){
+                if (idx === CardData.length - 1)
+                {
+                    var finalInt = parseInt(idx) + 1 //getting last cardid index
+                    var realCard = (i.CardID) + 1; //getting last cardid
+                    global.realCard = realCard
+                }
+            });
+            var cardDetailsVer2 = {
+                cardName: req.body.cardName,
+                userID: req.body.userID,
+                cardId: realCard,
+                cardNumber: req.body.cardNumber,
+                expiryDate: req.body.expiryDate,
+                verification: req.body.verification,
+                shippingAddress: req.body.shippingAddress,
+                cardType: payform.parseCardType(req.body.cardNumber),
+                blockUnit: req.body.blockUnit
+            }
+            
+            console.log(cardDetailsVer2);
+
+            var postData = JSON.stringify({ user: cardDetailsVer2 });
+    
+            const options = {
+                hostname: 'localhost',
+                port: 3001,
+                path: '/bank',
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'accept': 'application/json'
+                }
+            };
+    
+            const httpreq = http.request(options, (res) => {
+                res.setEncoding('utf8');
+                res.on('data', (chuck) => {
+                    console.log(`BODY: ${chuck}`);
+                });
+                res.on('end', () => {
+                    console.log('No more data in response.');
+                });
+            });
+    
+            httpreq.on('error', (e) => {
+                console.error(`problem with request: ${e.message}`);
+            })
+    
+            //write data to request body
+            httpreq.write(postData);
+            httpreq.end();
+        });
     }
     else if (cardNoValidation == false)
     {
@@ -128,6 +154,7 @@ exports.show = function (req, res){
                     message: req.flash('info'),
                     products: products,
                     total: totalPrice,
+                    query: "",
                     stripeTotal: stripeTotal * 100,
                     shippingFee: shippingFee,
                     subtotal: subtotal,

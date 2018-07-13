@@ -26,6 +26,45 @@
 </head>
 
 <body>
+<style>
+    .tooltip {
+    position: relative;
+    display: inline-block;
+    }
+
+    .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 140px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -75px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    }
+
+    .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+    }
+
+    .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+    }
+</style>
     <% include ../partials/header %>
     
     <!-- BREADCRUMB -->
@@ -44,7 +83,7 @@
     <center>
         <div class="section">
                 <div class="container">
-                    <h2>Panel Heading</h2>
+                    <h2>Shopping Cart</h2>
                     <div class="checkout-panel">
                             <div class="panel-body">
                                 <div class="bar">
@@ -87,6 +126,7 @@
                                                             <p>
                                                                 <%= products.ProductDescription %>
                                                             </p>
+                                                            <p class="itemNumber stockStatus">Uploaded By: <%= products.dataValues.sellerName %></p>
                                                             <p class="stockStatus"> In Stock</p>
                                                         </div>
                                                         <div class="prodTotal cartSection">
@@ -94,7 +134,7 @@
                                                             </p>
                                                         </div>
                                                         <div class="cartSection removeWrap">
-                                                            <a href="#" class="remove" data-id="<%= products.ProductID %>">x</a>
+                                                            <a class="remove" data-id="<%= products.ProductID %>">x</a>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -139,6 +179,28 @@
                 </div>
         </div>
     </center>
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle"><%=announce%></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <label for="coup">Your Promo Code:</label>
+                        <input id = "coup"class="form-control" type="text" value="<%=coupons%>" readonly>
+                        <br>
+                        <center><button class="btn btn-primary" onclick="copyClipboard()">Copy text</button></center>
+                </div>
+                <div class="modal-footer">
+                    <center><p id="itemNumber">Copy the promo code and apply it on your shopping cart!</p></center>
+                </div>
+                </div>
+            </div>
+            </div>
     <!-- section -->
     <% include ../partials/footer %>
     <!-- jQuery Plugins -->
@@ -150,24 +212,43 @@
     <script src="/js/jquery.zoom.min.js"></script>
     <script src="/js/main.js"></script>
     <script>
-        $('.remove').click(function () {
-            var ProductID = $(this).data("id");
-            $.ajax({
-                url: '<%-urlPath%>' + '/' + ProductID,
-                type: 'DELETE',
-                success: function (result) {
-                    console.log(result.message);
-                    var itemToRemove = '.items even[data-id=' + ProductID + ']';
-                    $(itemToRemove).remove();
-                    location.reload(true);
-                },
-                error: function (result) {
-                    alert("Unable to delete Product.");
-                    console.log(result.message);
-                }
+            function copyClipboard() {
+                /* Get the text field */
+                var copyText = document.getElementById("coup");
+
+                /* Select the text field */
+                copyText.select();
+
+                /* Copy the text inside the text field */
+                document.execCommand("copy");
+
+                /* Alert the copied text */
+                alert("Copied the text: " + copyText.value);
+            }
+
+            $(window).load(function() {
+            // executes when complete page is fully loaded, including all frames, objects and images
+            $('#exampleModalCenter').modal('toggle');
             });
-        });
-    </script>
+
+            $('.remove').click(function () {
+                var ProductID = $(this).data("id");
+                $.ajax({
+                    url: '<%-urlPath%>' + '/' + ProductID,
+                    type: 'DELETE',
+                    success: function (result) {
+                        console.log(result);
+                        var itemToRemove = '.items even[data-id=' + ProductID + ']';
+                        $(itemToRemove).remove();
+                        location.reload(true);
+                    },
+                    error: function (result) {
+                        alert("Unable to delete Product.");
+                        console.log(result);
+                    }
+                });
+            });
+            </script>
 </body>
 
 </html>

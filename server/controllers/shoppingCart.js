@@ -8,15 +8,46 @@ var sequelize = myDatabase.sequelize;
 var passport = require('passport');
 var fs = require('fs');
 var UserModel = require('../models/user');
+var rn = require('random-number');
+var cc = require('coupon-code');
+
+var checkCoupons = 0
+
+
 
 //set iage file types 
 var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png']
 
 exports.list = function (req, res){
     //List all the products
-    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID, {model: Product}).then((products) => { 
+    sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", {model: Product}).then((products) => { 
         console.log(products);
-        
+        //Random number generator
+        var options = {
+            min:  0, // 1/10 possibility of getting coupons appearing
+            max:  10, 
+            integer: true
+        }
+        var random = rn(options) // example outputs → -187, 636
+        console.log(random)
+        if (random == 7)
+        {
+            console.log("Congrates you got a coupon!");
+            // generate a 3 part code
+            var announce = "Congratulations! You got a Promo Code!"
+            var coupons = cc.generate();
+        }
+        else if (random != 7)
+        {
+            console.log("Oops Better luck next time!");
+            var coupons = "Oops no coupons for you today!"
+            var announce = "Oops better luck next time!"
+
+        }
+        else
+        {
+
+        }
         //Calculating product total value
         var totalPrice = 0;
         var shippingFee = 0;
@@ -45,6 +76,8 @@ exports.list = function (req, res){
                 type: req.user.userType,
                 membership: req.user.membership,
                 req: req,
+                coupons: coupons,
+                announce:announce,
                 products: products,
                 total: totalPrice,
                 stripeTotal: stripeTotal * 100,
@@ -73,5 +106,5 @@ exports.delete = function (req, res) {
             });
         }
         res.status(200).send({ message: "Deleted Product : " + record_num});
-    })
-}
+    });
+};

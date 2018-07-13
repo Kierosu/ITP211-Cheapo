@@ -86,7 +86,7 @@
 					</div>
 					<br><br>
 					<div class="alert alert-success hidden" id="green">
-						<strong>Success!</strong> Payment Complete! Redirecting you in 5 seconds.
+						<strong>Success!</strong> Card Details Correct! Redirecting you for verifications with the bank in 5 seconds.
 					  </div>
 					<div class="alert alert-danger  hidden" id="red">
 						<strong>Failed!</strong> <p id = "messageFailed" >Payment Failed! </p>
@@ -184,7 +184,14 @@
 		<script src="js/payform.min.js"></script>
 		<script src="js/jquery.payform.js"></script>
 	<script>
-
+	// if ("<%=query%>" == "reject")
+	// {
+	// 	alert("rejected")
+	// }
+	// else
+	// {
+	// 	alert("wrong")
+	// }
 	//Card Type shower
 	var type = document.getElementById("ct");
 	var ccnum = document.getElementById("cardnumber");
@@ -233,9 +240,9 @@
 			success: function(result){
 				$("#red").addClass("hidden");
 				$("#green").removeClass("hidden");
-				// setTimeout(function myTimer(){
-				// 	location.href  = "<%=hostPath%>/done";
-				// },5000)
+				setTimeout(function myTimer(){
+					location.href  = "<%=hostPath%>/pending";
+				},5000)
 			},
 			error: function(result){
 				alert("Card Details Failed")

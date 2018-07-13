@@ -121,6 +121,42 @@
 async defer>
 </script>
 <script>
+	       function addToWish() {
+            var url = "<%=hostPath%>/feedback"; //Edit when database is implemented\
+            var feedback = {
+				UserId: '<%=userID%>',
+				userName: $('#userrealname').val(),
+				sellerId: 1,
+				sellerName: "Rayson"
+				
+            }
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: JSON.stringify(products),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(result){
+                    alert("Item Posted Successfully!");
+                },
+                error: function(result){
+                    alert("Error Posting Item");
+                    discardAdd();
+                }
+            })
+        }
+
+        function discardAdd() {
+            location.href = "<%=hostPath%>/item"
+        }
+        
+        $("#check").click( function()
+        {
+            window.location.replace("http://localhost:3000/shopping-cart");
+        })
+</script>
+
+<script>
 var markers = [];
 var position = [parseFloat('<%= myLatitude %>'), parseFloat('<%= myLongitude %>')];
 
