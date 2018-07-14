@@ -11,6 +11,8 @@ var url = require('url');
 const http = require('http');
 var io = require('../../app');
 var ioCheck = io.ioExports;
+var EventEmitter = require('events').EventEmitter;
+var eventExample = new EventEmitter;
 
 // Answer from bank 
 exports.answer = function (req, res) {
@@ -21,22 +23,15 @@ exports.answer = function (req, res) {
         if (req.body.data.status == "accept" && userIIDD == req.body.data.userId)
         {
             console.log("accepted the data")
-            // ioCheck.on('connection',function(socket){
-            //     socket.on('event',function(redirectData){
-            //         var redirectData = '/done';
-            //         socket.emit('send', redirectData);
-            //         });
-            //     });
-            ioCheck.on('connection', function(socket){
-                    console.log("connected v2")
-                    var destination = '/done'
-                    socket.emit('realDest', destination)
-            })
-
+            //To trigger an event listener you must emit:
+            var someData = "/done";
+            eventExample.emit('anEvent', someData);
         }
         else if (req.body.data.status == "reject" && userIIDD == req.body.data.userId)
         {
             console.log("rejected the data")
+            var someData = "/checkout";
+            eventExample.emit('anEvent', someData);
         }
 }
 
@@ -44,6 +39,17 @@ exports.show = function (req, res){
     //List all the products
     sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID, {model: Product}).then((products) => {   
     //Calculating product total value
+        ioCheck.on('connection', function (socket) {
+            console.log("really connected!");
+            eventExample.on('anEvent', function(someData){
+                console.log("working");
+                //Do something with someData
+                console.log(someData);
+                socket.emit('redirect', someData);
+            });
+            // var destination = socket.on('anEvent', someData);
+            // socket.emit('redirect', destination);
+        });
         var totalPrice = 0;
         var shippingFee = 0;
         var stripeTotal = 0;

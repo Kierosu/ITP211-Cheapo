@@ -193,17 +193,6 @@ app.get('/order-tracking', auth.isLoggedIn, orderTracking.show)
 //         console.log("Connected!")
 //     });
 
-io.on('connection', function (socket) {
-    console.log("really connected!");
-    socket.on('realDest', function(destination){
-        var route = destination;
-        console.log(route);
-    })
-    // socket.emit('redirect', {
-    //     destination: route
-    // })
-});
-
 app.get('/', auth.test)
 
 server.listen(3000);

@@ -102,7 +102,10 @@
 	<script src="js/socket.io.js"></script>
 	<script>
 	var socket = io('http://localhost:3000');
-	socket.on(); 
+	socket.on('redirect', function(someData) {
+		alert(someData);
+    	window.location.href = someData;
+	});
 	</script>
 	<% include ../partials/footer %>
 		<!-- jQuery Plugins -->
