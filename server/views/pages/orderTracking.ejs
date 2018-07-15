@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title><%= title %></title>
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
+	<script type ="text/javascript" src="js/googleMap.js"></script>
+
+	<!-- Fonts for google maps -->
+	<link rel="stylesheet" type="text/css" href="css/map-icons.css">
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+	<!-- <link rel="stylesheet" type="text/css" href="../dist/css/map-icons.css">
+	<script type="text/javascript" src="../dist/js/map-icons.js"></script> -->
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="css/slick.css" />
+	<link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
+
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
+
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+
+	<!-- Custom stylesheet -->
+	<link type="text/css" rel="stylesheet" href="css/raysonStyle.css" />
+
+	<!-- Animated Progress Bar -->
+	<!-- <link  type="text/css" href="css/mainRayson.css" rel="stylesheet" /> -->
+
+ <style>
+     #map{
+         height:400px;
+         width:100%
+     }
+ </style>
+</head>
+
+<body>
+	<% include ../partials/header %>
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href="#">Home</a></li>
+				<li class="active">Confirmation</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+
+	<!-- section -->
+	<center>
+	<div class="section">
+			<div class="checkout-panel">
+					<div class="panel-body">
+					  <h2 class="title">Order Tracking</h2>
+						<div class="row"></div>
+						<div class="bar" id="realBar1"> <!-- 30 seconds to complete this bar -->
+							<div class="stepVer2"></div>
+							<div class="stepVer3"></div>
+							<div class="stepVer4"></div>
+							<div class="stepVer5"></div>
+						</div>
+							<div id="map" class="border border-dark rounded"></div>
+							<div class="navigation1">
+								<strong><p>Instructions For Navigating:</p></strong>
+								<ul>
+									<li><kbd>Click on the map to zoom out.</kbd></li>
+									<li><kbd>Click on the markers to zoom in and see details about it.</kbd></li>
+								</ul>
+							</div>
+							<div class="done hidden">
+								<fieldset>
+									<legend>Shipment Completed!</legend>
+									<p>Thanks for shopping with Cheapo!</p>
+									<p>Please leave a feedback for our shopping site so as we can improve on our webpage!</p>
+									<br><br><br>
+									<legend>Feedback Form:</legend>
+									<div class="feedback">
+										<label for="userrealname">User Name:</label>
+										<input id = "userrealname"class="form-control" type="text" placeholder="<%=username%>" readonly>
+										<br><br>
+										<div class="form-group">
+											<label for="exampleFormControlTextarea1">Feedback:</label>
+											<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+										  </div>
+										</form>
+									</div>
+								</fieldset>
+							</div>
+							<br><br>
+                        </div>
+						<div class="row">
+							<div class="col-sm-12">
+								<button id="backToShopping"class="btn">Back To Shopping</button>
+							</div>
+						</div>
+				  </div>
+	</div>
+</center>
+	<!-- /section -->
+
+	<!-- jQuery Plugins -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/slick.min.js"></script>
+	<script src="js/nouislider.min.js"></script>
+	<script src="js/jquery.zoom.min.js"></script>
+	<script src="js/main.js"></script>
+	<!-- <script src="js/progress-bar.js"></script>
+	<script src="js/appGress.js"></script> -->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSG_1ZKHdkjPhREhtUba47ZqCUMCzw61U&callback=initMap"
+async defer>
+</script>
+<script>
+	       function addToWish() {
+            var url = "<%=hostPath%>/feedback"; //Edit when database is implemented\
+            var feedback = {
+				UserId: '<%=userID%>',
+				userName: $('#userrealname').val(),
+				sellerId: 1,
+				sellerName: "Rayson"
+				
+            }
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: JSON.stringify(products),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(result){
+                    alert("Item Posted Successfully!");
+                },
+                error: function(result){
+                    alert("Error Posting Item");
+                    discardAdd();
+                }
+            })
+        }
+
+        function discardAdd() {
+            location.href = "<%=hostPath%>/item"
+        }
+        
+        $("#check").click( function()
+        {
+            window.location.replace("http://localhost:3000/shopping-cart");
+        })
+</script>
+
+<script>
+var markers = [];
+var position = [parseFloat('<%= myLatitude %>'), parseFloat('<%= myLongitude %>')];
+
+function initMap(){
+    var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+
+	//Current location
+    var c = function(pos){
+        var lat = pos.coords.latitude,
+            long = pos.coords.longitude,
+			coords = lat + " , " + long;
+
+		//Shipment location
+		var lati = parseFloat(1.378949)
+		var longi = parseFloat(103.755845)
+
+		//Van location
+		var p1 = {
+			lat: parseFloat('<%= myLatitude %>'),
+			lng: parseFloat('<%= myLongitude %>')
+		}
+
+		var p2 = {
+			lat: parseFloat(lati), //in c thats why need shippingLacation and dont need c
+			lng: parseFloat(longi)
+		}
+		var rad = function(x) {
+			return x * Math.PI / 180;
+		};
+
+		var getDistance = function(p1, p2) {
+			var R = 6378137; // Earth’s mean radius in meter
+			var dLat = rad(parseFloat(p2.lat) - parseFloat(p1.lat));
+			var dLong = rad(p2.lng - p1.lng);
+			var a = parseFloat(Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(p1.lat)) * Math.cos(rad(p2.lat)) * Math.sin(dLong / 2) * Math.sin(dLong / 2));
+			var c = parseFloat(2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+			var d = (parseFloat(R * c));
+			return d; // returns the distance in meter
+		};
+
+		//Add marker function
+		var currentMarker = new google.maps.Marker({
+				position: {lat: lat, lng: long},
+				map:map
+			});
+
+		var vanMarker = new google.maps.Marker({
+			position: {lat: parseFloat('<%= myLatitude %>'), lng: parseFloat('<%= myLongitude %>')},
+			map:map	
+		});
+		
+		var homeMarker = new google.maps.Marker({
+			position: {lat: 1.378949, lng: 103.755845},
+			map:map
+		})
+		
+		function notifyMe() {
+		if (!("Notification" in window)) {
+			alert("This browser does not support system notifications");
+		}
+		else if (Notification.permission === "granted") {
+			notify();
+		}
+		else if (Notification.permission !== 'denied') {
+			Notification.requestPermission(function (permission) {
+			if (permission === "granted") {
+				notify();
+			}
+			});
+		}
+  
+		function notify() {
+			var notification = new Notification('Delivery for <%= username %>', {
+			icon: 'https://preview.ibb.co/dpUkUy/toh_Hai_Ji_Face_png.jpg',
+			body: "Hi! This is Uncle Toh delivering your items! Will be around in 1 hour",
+			});
+
+			notification.onclick = function () {
+			window.open("http://carnes.cc");      
+			};
+			setTimeout(notification.close.bind(notification), 10000); 
+		}
+
+		}
+
+		function notifyMe2() {
+		if (!("Notification" in window)) {
+			alert("This browser does not support system notifications");
+		}
+		else if (Notification.permission === "granted") {
+			notify2();
+		}
+		else if (Notification.permission !== 'denied') {
+			Notification.requestPermission(function (permission) {
+			if (permission === "granted") {
+				notify2();
+			}
+			});
+		}
+  
+		function notify2() {
+			var notification = new Notification('Delivery for <%= username %>', {
+			icon: 'https://preview.ibb.co/dpUkUy/toh_Hai_Ji_Face_png.jpg',
+			body: "Uncle Toh: Just reached Jurong East! Sorry caught up in a traffic jam and was mopping the table!",
+			});
+
+			notification.onclick = function () {
+			window.open("<%=hostPath%>");      
+			};
+			setTimeout(notification.close.bind(notification), 10000); 
+		}
+
+		}
+		
+		function notifyMe3() {
+		if (!("Notification" in window)) {
+			alert("This browser does not support system notifications");
+		}
+		else if (Notification.permission === "granted") {
+			notify3();
+		}
+		else if (Notification.permission !== 'denied') {
+			Notification.requestPermission(function (permission) {
+			if (permission === "granted") {
+				notify3();
+			}
+			});
+		}
+  
+		function notify3() {
+			var notification = new Notification('Delivery for <%= username %>', {
+			icon: 'https://preview.ibb.co/dpUkUy/toh_Hai_Ji_Face_png.jpg',
+			body: "Uncle Toh: My apologies, table too hard to mop. Im reaching soon!",
+			});
+
+			notification.onclick = function () {
+			window.open("<%=hostPath%>");      
+			};
+			setTimeout(notification.close.bind(notification), 10000); 
+		}
+
+		}
+		//Codes to move the progress bar
+		setTimeout(function (){
+			$(".stepVer2").addClass("active");
+			console.log("added")
+		},7000)
+
+		setTimeout(function (){
+			$(".stepVer3").addClass("active");
+			console.log("added")
+		},14000)
+
+		setTimeout(function (){
+			$(".stepVer4").addClass("active");
+			console.log("added")
+		},21000)
+
+		setTimeout(function (){
+			$(".stepVer5").addClass("active");
+			console.log("added")
+		},28000)
+
+		//Codes to move markers
+		function movingMarkers() {
+			var result = [1.3329, 103.7436];
+        	transition(result);
+		}
+
+		setTimeout (function() {
+			movingMarkers();
+			notifyMe();
+		}, 30000);
+		// ^^ Moving from downtowncore to jurong east
+
+
+		function movingMarkers2nd() {
+			var result = [1.3590, 103.7637];
+        	transition(result);
+		}
+
+		setTimeout (function() {
+			movingMarkers2nd();
+			notifyMe2();
+		}, 65000);
+		//^^ Moving from jurong east to bukit batok
+
+		function movingMarkers3rd() {
+			var result = [lati, longi];
+        	transition(result);
+		}
+
+		setTimeout (function() {
+			movingMarkers3rd();
+			notifyMe3();
+		}, 80000);
+
+		setTimeout (function() {
+			$("#map").addClass("hidden");
+			$(".navigation1").addClass("hidden");
+			$(".bar").addClass("hidden");
+			$(".done").removeClass("hidden");
+		}, 100000);
+		//^^ Moving towards shipping destination
+
+		//Adding animations to markers
+        homeMarker.addListener('click', toggleBounce);
+		vanMarker.addListener('click', toggleBounce);
+		currentMarker.addListener('click', toggleBounce);
+		
+		//set current variables
+		var numDeltas = 100;
+		var delay = 200; //milliseconds
+		var i = 0;
+		var deltaLat;
+		var deltaLng;
+		
+		//calculating the variables needed to move the markers
+		function transition(result){
+			i = 0;
+			deltaLat = parseFloat((result[0] - position[0])/numDeltas);
+			deltaLng = parseFloat((result[1] - position[1])/numDeltas);
+			moveMarker();
+		}
+		
+		//Moving markers
+		function moveMarker(){
+			position[0] += parseFloat(deltaLat);
+			position[1] += parseFloat(deltaLng);
+			var newP1 = {
+				lat: parseFloat(position[0]),
+				lng: parseFloat(position[1])
+			}
+			var latlng = new google.maps.LatLng(newP1, p2);
+			vanMarker.setTitle('Delivery Van is ' + Math.round(getDistance(newP1,p2))  + 'm Away from you.') //Nan error
+			vanMarker.setPosition(latlng);
+			vanMarker.setAnimation(google.maps.Animation.BOUNCE);
+			// secondLocation(); //move from je to bukit batok
+			if(i!=numDeltas){
+				i++;
+				setTimeout(moveMarker, delay);
+			}
+		}
+
+		//bouncing function
+        function toggleBounce() {
+            if (homeMarker.getAnimation() !== null || vanMarker.getAnimation() !== null) {
+                homeMarker.setAnimation(null);
+                vanMarker.setAnimation(null);
+            } else {
+                homeMarker.setAnimation(google.maps.Animation.BOUNCE);
+                vanMarker.setAnimation(google.maps.Animation.BOUNCE);
+            }
+          }
+		  
+		//adding click on map to zoom
+        map.addListener('click', function() {
+            map.setZoom(11);
+        })
+
+        //Check content
+        var infoWindowhome = new google.maps.InfoWindow({
+            content: 'Shipping Area'
+        });
+
+        var infoWindowvan = new google.maps.InfoWindow({
+            content: '<h3>Delivery Van Location</h3><br><p>Delivery Van is ' + Math.round(getDistance(p1,p2))  + 'm Away from you.'
+        });
+		
+		//zoom and show content when marker is clicked
+        homeMarker.addListener('click', function(){
+            infoWindowhome.open(map,homeMarker);
+            map.setZoom(14);
+            map.setCenter(homeMarker.getPosition());
+        })
+
+        vanMarker.addListener('click', function(){
+            infoWindowvan.open(map,vanMarker);
+            map.setZoom(14);
+            map.setCenter(vanMarker.getPosition());
+		})
+		
+		currentMarker.addListener('click', function(){
+            map.setZoom(14);
+            map.setCenter(currentMarker.getPosition());
+        })
+	}
+    
+    var e = function(error) {
+        if (error.code === 1) {
+            alert('Unable to get location!');
+        }
+    }
+  
+    navigator.geolocation.getCurrentPosition(c, e);
+
+    //Map options
+    var options = {
+        zoom: 11,
+        center: {lat: 1.3521, lng:103.8198}
+    }
+    
+    var map = new google.maps.Map(document.getElementById('map'), options);
+}
+
+</script>
+<% include ../partials/footer %>
+</body>
+
+</html>
