@@ -1,0 +1,221 @@
+<!doctype HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <% include ../partials/javascript %>
+    <% include ../partials/stylesheet %>
+    <% include ../partials/eugenecss %>
+    <title><%= title %></title>
+</head>
+<body>
+    <% include ../partials/header %>
+    <div class="body">
+        <div class="sidenav">
+            <a href="/profile">Profile</a>
+            <a href="/edit/profile">Edit Profile</a>
+            <a href="/changePassword">Change Password</a>
+            <a href="/2FA">2-Factor Authentication</a>
+        </div>
+        
+        <form class="form-signin form-horizontal" action="/updateProfile" method="post" enctype="multipart/form-data">
+            <h2 class="form-signin-heading">Two-Factor Authentication</h2>
+            <div style="position: relative; left: 535px; margin: 30px 0 120px 0;">
+            <label class="radioContainer">
+                <input type="radio" name="Select2FA" value="disabled" data-toggle="modal" data-target="#disabledModal" id="disabled">Disabled
+                <span class="checkmark"></span>
+            </label>
+            <label class="radioContainer">
+                <input type="radio" name="Select2FA" value="GoogleAuth" data-toggle="modal" data-target="#googleAuthModal" id="GoogleAuth">Google Authenticator
+                <span class="checkmark"></span>
+            </label>
+            </div>
+        </form>
+        
+    </div>
+
+    <!-- Modal For Google/App Auth-->
+    <div class="modal fade" id="googleAuthModal" role="dialog">
+        <div class="modal-dialog">
+        <!-- Modal content-->
+            <div class="modal-content">
+            <div class="modal-header" style="background-color: #F8694A;">
+                <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                <h4 class="modal-title" style="color: white;">Enable Google Authenticator</h4>
+            </div>
+            <div class="modal-body" style="font-size: 18px;" id="modalbodyGoogleAuth">    
+                <p>1. Download the Google Authenticator from the app store on your mobile device. Select an option to setup a new account and follow the instructions given to you in your app.</p>
+                <p>2. Use the app to scan the barcode below</p>
+                <img src="<%= qrcode %>">
+                <p>Or enter the secret key below: </p>
+                <p style="color: green; font-size: 18px;"><%= secretkey %></p>
+                <p>3. Enter the verification code on the Google Authenticator app to complete setup</p>
+                <label for="token"></label>
+                <input type="text" name="token" id="token" placeholder="6-digit verification code">
+            </div>
+            <div class="modal-footer" id="modalfooterGoogleAuth">
+                <button type="button" class="btn btn-default" data-dismiss="modal" class="closeModal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="enableGoogleAuth">Enable Two-Factor</button>    
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+
+    <!-- Modal To Disable TFA -->
+    <div class="modal fade" id="disabledModal" role="dialog">
+        <div class="modal-dialog">
+        <!-- Modal content-->
+            <div class="modal-content">
+            <div class="modal-header" style="background-color: #F8694A;">
+                <button type="button" class="close" data-dismiss="modal" >&times;</button>
+                <h4 class="modal-title" style="color: white;">Disable Two-Factor Authentication</h4>
+            </div>
+            <div class="modal-body" style="font-size: 17px;" id="modalbodyDisabled">    
+                <label for="password">Enter your password:</label><br>
+                <input type="password" name="password" id="password" placeholder="Password" required>
+                <br><br>
+                <label for="disableToken">Enter the verification code:</label> <br>
+                <input type="text" name="disableToken" id="disableToken" placeholder="6-digit verification code" required>
+            </div>
+            <div class="modal-footer" id="modalfooterDisabled">
+                <button type="button" class="btn btn-default" data-dismiss="modal" class="closeModal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="disableTFA">Disable Two-Factor</button>      
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      <!-- Modal To display success/error -->
+      <div class="modal fade" id="messageModal" role="dialog" >
+            <div class="modal-dialog">
+            <!-- Modal content-->
+                <div class="modal-content">
+                <div class="modal-header" style="background-color: #F8694A;">
+                    <h4 class="modal-title" style="color: white;">Message</h4>
+                </div>
+                <div class="modal-body" style="font-size: 17px;" id="modalbodyMessage">    
+                    <p id="msg"></p>
+                    <p>This message box will close in 3 Seconds</p>
+                </div>
+                <div class="modal-footer" id="modalfooterMessage">    
+                </div>
+              </div>
+              
+            </div>
+        </div>
+
+    <script>
+        $(document).ready(function (){
+            $("input[value='<%= Select2FA %>']").prop("checked", true);
+            $('#messageModal').modal({
+                backdrop: 'static',
+                keyboard: false,
+                show: false
+            });  
+            $('#googleAuthModal').modal({
+                backdrop: 'static',
+                keyboard: false,
+                show: false
+            });  
+            $('#disabledModal').modal({
+                backdrop: 'static',
+                keyboard: false,
+                show: false
+            });  
+        })
+
+        $("#disabled").click(()=>{
+            if("<%= Select2FA %>" == "disabled"){
+                $("#modalbodyDisabled").html("<p>Two-Factor Authentication is already disabled!</p>");
+                $("#modalfooterDisabled").html("<button type='button' class='btn btn-default' data-dismiss='modal' class='closeModal'>Close</button>")
+            }
+            else if("<%= Select2FA %>" != "disabled"){
+                $("#modalbodyDisabled").html("<label for=\"password\">Enter your password:</label><br>" +
+                "<input type=\"password\" name=\"password\" id=\"password\" placeholder=\"Password\">"+
+                "<br><br>" +
+                "<label for=\"disableToken\">Enter the verification code:</label> <br>"+
+                "<input type=\"text\" name=\"disableToken\" id=\"disableToken\" placeholder=\"6-digit verification code\">");
+                $("#modalfooterDisabled").html("<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" class=\"closeModal\">Close</button> <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" id=\"disableTFA\">Disable Two-Factor</button>")
+            }
+        });
+        
+        $("#GoogleAuth").click(()=>{
+            if("<%= Select2FA %>" == "GoogleAuth"){
+                $("#modalbodyGoogleAuth").html("<p>You are already using Google Authenticator for your Two-Factor Authentication!</p>");
+                $("#modalfooterGoogleAuth").html("<button type='button' class='btn btn-default' data-dismiss='modal' class='closeModal'>Close</button>")
+            }
+            else if("<%= Select2FA %>" != "GoogleAuth"){
+                $("#modalbodyGoogleAuth").html("<p>1. Download the Google Authenticator from the app store on your mobile device. Select an option to setup a new account and follow the instructions given to you in your app.</p>" +
+                "<p>2. Use the app to scan the barcode below</p>" +
+                "<img src=\"<%= qrcode %>\">" +
+                "<p>Or enter the secret key below: </p>" +
+                "<p style=\"color: green; font-size: 18px;\"><%= secretkey %></p>" +
+                "<p>3. Enter the verification code on the Google Authenticator app to complete setup</p>" +
+                "<label for=\"token\"></label>" +
+                "<input type=\"text\" name=\"token\" id=\"token\" placeholder=\"6-digit verification code\">")
+                $("#modalfooterGoogleAuth").html("<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" class=\"closeModal\">Close</button>" +
+                "<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" id=\"enableGoogleAuth\">Enable Two-Factor</button>")
+            }
+        })
+
+        $("#cancelpass").click(()=>{
+            location.href = "/profile";
+        });
+
+        $(document).on("click", '#enableGoogleAuth',function(e){
+            e.preventDefault();
+            var tokenData ={
+                token: $("#token").val(),
+                TwoFA: $('input[name=Select2FA]:checked').val()
+            };
+            $.ajax({
+                url: "/googleauth",
+                type: "post",
+                data: JSON.stringify(tokenData),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(msg){
+                    $('#messageModal').modal('show');
+                    $('#msg').html(msg.message);
+                    setTimeout(function(){ location.href="/2FA"; }, 3000);
+                },
+                error: function(result){
+                    $('#messageModal').modal('show');
+                    $('#msg').html(result.responseText);
+                    setTimeout(function(){ location.href="/2FA"; }, 3000);
+                }
+            });
+        })
+
+        $(document).on("click", '#disableTFA',function(e){
+            e.preventDefault();
+            var data ={
+                password: $("#password").val(),
+                disableToken: $("#disableToken").val(),
+                TwoFA: $('input[name=Select2FA]:checked').val()
+            }
+            $.ajax({
+                url: "/disableTFA",
+                type: "post",
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(msg){
+                    $('#messageModal').modal('show');
+                    $('#msg').html(msg.message);
+                    setTimeout(function(){ location.href="/2FA"; }, 3000);
+                },
+                error: function(result){
+                    $('#messageModal').modal('show');
+                    $('#msg').html(result.responseText);
+                    setTimeout(function(){ location.href="/2FA"; }, 3000);
+                }
+            });
+        })
+
+    </script>
+    <% include ../partials/footer %>
+</body>
+</html>

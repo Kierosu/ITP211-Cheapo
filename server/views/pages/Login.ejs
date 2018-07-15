@@ -40,6 +40,107 @@
         </form>
         <p id = "p">Don't have an account? <span style="font-weight: bold;">Sign up now!</span></p>
         <button class="btn btn-primary" id="signupButton" onclick="window.location='/signup'">Sign Up</button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="verificationModal" role="dialog">
+            <div class="modal-dialog">
+            <!-- Modal content-->
+                <div class="modal-content">
+                <div class="modal-header"  style="background-color: #F8694A;">
+                    <h4 class="modal-title" style="color: white;">Verify OTP</h4>
+                </div>
+                <div class="modal-body">    
+                    <p>Please enter your verification code</p>
+                    <input type="text" id="otp" name="otp" placeholder="6 digit verification code">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" class="closeModal" id="closeVerify">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="verifyOTP">Verify OTP</button>  
+                </div>
+              </div>
+              
+            </div>
+          </div>
+                
+        <!-- Modal To display success/error -->
+        <div class="modal fade" id="messageModal" role="dialog" >
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                <div class="modal-header" style="background-color: #F8694A;">
+                    <h4 class="modal-title" style="color: white;">Message</h4>
+                </div>
+                <div class="modal-body" style="font-size: 17px;" id="modalbodyMessage">    
+                    <p id="msg"></p>
+                </div>
+                <div class="modal-footer" id="modalfooterMessage">   
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="closeModal" class="closeModal" data-toggle="modal" data-target="#verificationModal">Close</button> 
+                </div>
+            </div>           
+            </div>
+        </div>
+
+
+          <script>
+            $(document).ready(function (){
+                $('#verificationModal').modal({
+                    backdrop: 'static',
+                    keyboard: false,
+                    show: false
+                }); 
+           })
+            
+            $("#closeVerify").click(()=>{
+                location.href = "/logout";
+            })
+
+            $("#loginButton").click((e)=>{ 
+                e.preventDefault();
+                var loginData= {
+                    username: $("#username").val(),
+                    password: $("#password").val()
+                }
+                $.ajax({
+                    url: "/login",
+                    type: "post",
+                    data: JSON.stringify(loginData),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function(msg){
+                        if(msg.message=="disabled"){
+                            location.href = '/';
+                        }
+                        else if(msg.message=="GoogleAuth"){
+                            $("#verificationModal").modal('show');
+                        }
+                    },
+                    error: function(result){
+                       location.href="/login";
+                    }
+                });
+            });
+            $("#verifyOTP").click((e)=>{
+                e.preventDefault();
+                var tokenData ={
+                    otp: $("#otp").val()
+                }
+                $.ajax({
+                    url: "/verifyOTP",
+                    type: "post",
+                    data: JSON.stringify(tokenData),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function(msg){
+                        location.href = '/';
+                    },
+                    error: function(result){
+                        $("#messageModal").modal("show");
+                        $("#msg").html(result.responseText);
+                    }
+                });
+            });
+            
+          </script>
         <% include ../partials/footer %>
     </body>
 </html>

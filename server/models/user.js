@@ -2,6 +2,8 @@
 var myDatabase = require('../controllers/database');
 var sequelize = myDatabase.sequelize;
 var Sequelize = myDatabase.Sequelize;
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 const User = sequelize.define('User', {
     userID:{
@@ -39,8 +41,16 @@ const User = sequelize.define('User', {
     membership: {
         type: Sequelize.STRING,
         defaultValue: "Bronze"
+    },
+    TwoFA: {
+        type: Sequelize.STRING,
+        defaultValue: "disabled"
+    },
+    SecretToken: {
+        type: Sequelize.STRING,
     }
 });
+
 
 User.sync({force: false, logging: console.log}).then(()=>{
     console.log("User table synced");
@@ -50,7 +60,7 @@ User.sync({force: false, logging: console.log}).then(()=>{
         email: "shafie@gmail.com",
         password: "shafieMemeLord",
         userType: "Admin",
-        membership: "Gold"
+        membership: "Gold",
     });
     User.upsert({
         userID: 2,
@@ -85,6 +95,13 @@ User.sync({force: false, logging: console.log}).then(()=>{
         userType: "Admin",
         membership: "Gold"
     });
+});
+
+User.beforeUpsert(function(user, options) {
+    bcrypt.hash(user.password, saltRounds, function(err, hash) {
+        var passEncrypt = {password: hash}
+        User.update(passEncrypt,{where:{userID:user.userID}});
+    })
 });
 
 module.exports = sequelize.model('User', User);

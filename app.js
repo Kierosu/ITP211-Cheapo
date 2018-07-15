@@ -1,13 +1,12 @@
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var bodyParser = require("body-parser");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const multer = require('multer');
 
-//Import multer
-var multer = require('multer');
-var upload = multer({dest: './public/uploads/', limits: {fileSize: 1000000, files:1} });
+const upload = multer({dest: './public/uploads/', limits: {fileSize: 1000000, files:1} });
 
-var auth = require('./server/controllers/profile');
+const auth = require('./server/controllers/profile');
 
 // Modules to store session
 var myDatabase = require("./server/controllers/database");
@@ -57,33 +56,47 @@ app.use(flash());
 // Logout Page
 app.get('/logout', auth.logout);
 
-app.get('/login', auth.isLoggedInV2, auth.signin);
+app.get('/login', auth.loginCheck, auth.signin);
 app.post('/login',passport.authenticate('local-login', {
-    //Success go to Profile Page / Fail go to login page
-    successRedirect: '/',
-    failureRedirect: '/login',
+    failureRedirect: '/',
     failureFlash: true
-})
+}), function(req,res){
+    res.status(200).send({message: req.user.TwoFA}); 
+}
 );
+
+app.post('/verifyOTP', auth.verifyOTP)
 
 app.get('/signup', auth.isLoggedInV2, auth.signup);
 app.post('/signup', passport.authenticate('local-signup', {
-    //Success go to Login Page / Fail go to Signup page
     successRedirect: '/logout',
     failureRedirect: '/signup',
     failureFlash: true
 }));
 
+app.post('/checkTFA', auth.checkTFA);
+
 app.get('/profile', auth.isLoggedIn, auth.profilepage);
 
 //edit profile info
-app.get('/edit' + '/profilepicture', auth.isLoggedIn, auth.editProfile);
+app.get('/edit' + '/profile', auth.isLoggedIn, auth.editProfile);
 app.post('/uploadImage', upload.single('image'), auth.uploadImage);
-app.post('/updatePicture', auth.saveChanges);
+app.post('/updateProfile', auth.saveChanges);
 
-//forget password
+//forget username/password
 app.get('/forgetpass', auth.isLoggedInV2, auth.forgetPass);
-app.post('/forgetpass', auth.checkUserEmail)
+app.post('/forgetpass', auth.setSendPass);
+app.get('/forgetusername', auth.isLoggedInV2, auth.forgetUsername);
+app.post('/forgetusername', auth.sendUsername);
+
+//Change pass
+app.get('/changePassword', auth.isLoggedIn, auth.changePass);
+app.post('/changePassword',auth.isLoggedIn, auth.savePassword);
+
+//2-Factor Auth
+app.get('/2FA', auth.isLoggedIn, auth.TwoFactorAuth);
+app.post('/googleauth', auth.isLoggedIn, auth.saveGoogleAuth);
+app.post('/disableTFA', auth.isLoggedIn, auth.disableTFA);
 
 app.get('/', auth.test)
 

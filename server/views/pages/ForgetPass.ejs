@@ -13,6 +13,7 @@
         <h1>Password Reset</h1>
         <h3>Please enter your username and email </h3>
     </div>
+    
     <div class="warningmsg" id = "warningmsg">
         <div class="alert alert-warning alert-dismissible fade in">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -25,11 +26,11 @@
     <div id = "body">
         <form class="form-signin" action="" method="post">
         <label for="username" class="control-label col-sm-2">Username:</label>
-        <div class="col-sm-10">
+        <div style="position: relative; top: 20px; left:14px; width: 82%; margin: 25px 0 25px 0;">
             <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
         </div>
         <label for="email" class="control-label col-sm-2">Email Address:</label>
-        <div class="col-sm-10">
+        <div style="position: relative; top: 20px; left:14px; width: 82%; margin: 25px 0 25px 0;">
             <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" required>
         </div>
         <button class="btn" type="submit" id="resetPass">Reset Password</button>
@@ -66,6 +67,7 @@
             success: function(msg){
                 $('#body').css('display', 'none');
                 $('#head').css('display', 'none'); 
+                $('#warningmsg').css('display', 'none');
                 $('#message').css({'display': 'initial','margin-bottom': '20px'});
             },
             error: function(err){
