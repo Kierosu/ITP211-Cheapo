@@ -2,9 +2,8 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-const path = require("path");
 const multer = require('multer');
-const flash = require('connect-flash')
+const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 exports.ioExports = io;
@@ -23,8 +22,6 @@ var sequelizeSessionStore = new SessionStore({
 // Import Passport and Warning flash modules
 var passport = require("passport");
 var flash = require("connect-flash");
-
-const app = express();
 
 // ejs template path
 app.set("views", path.join(__dirname, "server/views/pages"));
