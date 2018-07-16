@@ -164,6 +164,7 @@ app.get('/done', auth.isLoggedIn, done.show);
 //Wish List
 app.get('/wishlist', auth.isLoggedIn, wishList.show)
 app.delete('/wishlist/:ProductID', auth.isLoggedIn, wishList.delete);
+app.post('/wishlist-Add/:ProductID', auth.isLoggedIn, wishList.addItems);
 
 //Order Tracking
 app.get('/order-tracking', auth.isLoggedIn, orderTracking.show)

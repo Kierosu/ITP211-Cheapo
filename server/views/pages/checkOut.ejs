@@ -92,9 +92,7 @@
 						<strong>Failed!</strong> <p id = "messageFailed" >Payment Failed! </p>
 					</div>
 					<div id="paypal-button-container"></div>
-					<!-- <form action="/charge" method="POST" id="checkoutForm"> -->
 					<div class="stripe">
-							<h3 class="title">Card Details:</h3>
 							<div class="input-fields">
 									<div class="column-1">
 										<label for="cardholder">Cardholder's Name</label>
@@ -108,7 +106,7 @@
 								
 										<div>
 											<label for="verification">CVV / CVC *</label>
-											<input autocomplete="off" type="password" id="verification"required/>
+											<input autocomplete="off" type="text" id="verification"required/>
 										</div>
 									</div>
 									</div>
@@ -121,8 +119,7 @@
 									</div>
 									<br>
 									<br>
-									<h3 class="title">Shipping Details:</h3>
-								<div class="input-fields">
+								<div class="input-fields" style="padding-bottom: 2em">
 										<div class="column-1">
 											<label for="cardholder">Shipping Address:</label>
 											<input type="text" id="shippingAddress" autocomplete="off" placeholder="Ang Mo Kio Ave 5, Singapore"/>
@@ -130,8 +127,8 @@
 										<center>
 										<div class="column-2">
 											<label for="cardnumber">Block/Unit-Number</label>
-											<input type="password" autocomplete="off" id="blockUnit" placeholder="Blk 190, #01-123"/>
-										</div>
+											<input type="text" autocomplete="off" id="blockUnit" placeholder="Blk 190, #01-123"/>
+										</div><span class="info">Please make sure that all details are entered correctly!</span>
 										</center>
 					
 										</div>
@@ -160,9 +157,6 @@
 				<br>
 				<br>
 				<br>
-				<div class="panel-footer">
-					<a href="/shopping-cart" class="btn back-btn">Back</a>
-				</div>
 			</form>
 			</div>
 
