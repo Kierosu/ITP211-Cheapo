@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        Cheapo
+    </title>
+    <!-- css -->
+    <% include ../partials/stylesheet %>
+</head>
+
+<body>
+    <!-- header -->
+    <% include ../partials/header %>
+        <div class="container">         
+            <% if(item){ %>            
+            <div style="width: 60%;height: 400px;display: flex;float: left;">
+                <div style="width: 95%;height: 95%;margin: auto;border: 1px solid rgb(197, 187, 187)">
+                    <img src="/img/<%= item.itemPic %>" style="height: 100%;width: 100%;" alt="item IMG">                    
+                </div>
+            </div>
+            <div style="width: 40%;height: 400px;float: right;display: flex;">
+                <form action="/items/auction/<%= item.itemID %>" method="POST" style="height: 95%;width: 95%;border: 1px solid rgb(197, 187, 187);margin: auto;border-radius: 8px;overflow: hidden;">
+                    <div style="height: 28%;width: 90%;margin: auto;">
+                        <div style="height: 50%;width: 100%;display: flex;">
+                            <p style="margin: auto 0;font-family: calibri;font-size: 35px;text-decoration: bold;">Name:</p>
+                        </div>
+                        <div style="height: 50%;width: 100%;display: flex;">
+                            <p style="margin: auto 0;font-family: calibri;font-size: 32px;font-weight: bold;"><%= item.name %></p>
+                        </div>
+                    </div>
+                    <div style="height: 28%;width: 90%;margin: auto;">
+                        <div style="height: 50%;width: 100%;display: flex;">
+                            <p style="margin: auto 0;font-family: calibri;font-size: 35px;text-decoration: bold;">Starting price:</p>
+                        </div>
+                        <div style="height: 50%;width: 100%;display: flex;">
+                            <input style="margin: auto 0;width: 80%;height: 80%;border-radius: 7px;font-size: 23px;" min="0" type="number" step=".01" required name="startPrice" id="startPrice">
+                        </div>
+                    </div>
+                    <div style="height: 28%;width: 90%;margin: auto;">
+                        <div style="height: 50%;width: 100%;display: flex;">
+                            <p style="margin: auto 0;font-family: calibri;font-size: 35px;text-decoration: bold;">End date:</p>
+                        </div>
+                        <div style="height: 50%;width: 100%;display: flex;">
+                            <input style="margin: auto 0;width: 80%;height: 80%;border-radius: 7px;font-size: 20px;" step="1" type="datetime-local" name="endDate" id="myDatetimeField" required>
+                        </div>
+                    </div>
+                    <div style="height: 16%;width: 90%;margin: auto;">
+                        <div style="height: 100%;width: 50%;float: left;display: flex;">
+                            <button type="reset" style="height: 80%;width: 85%;margin: auto 0;font-size: 23px;" class="btn btn-danger">Cancel</button>
+                        </div>
+                        <div style="height: 100%;width: 50%;float: right;display: flex;">
+                            <button type="submit" style="height: 80%;width: 85%;margin: auto;font-size: 23px;" class="btn btn-success">Auction</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <% } %>  
+        </div>
+        <% include ../partials/footer %>
+        <!-- jQuery Plugins -->
+        <% include ../partials/javascript %>
+        <script>
+            window.onload = function() {
+            var now = new Date();
+            var utcString = now.toISOString().substring(0,19);
+            var hour = now.getHours();
+            var localDatetime = utcString.substring(0,11) + (hour < 10 ? "0" + hour : hour) + utcString.substring(13,19);
+            var datetimeField = document.getElementById("myDatetimeField");
+            datetimeField.value = localDatetime;
+        }
+        </script>
+</body>
+
+</html>

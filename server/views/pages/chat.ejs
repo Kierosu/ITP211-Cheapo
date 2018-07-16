@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cheapo</title>
+    <!-- css -->
+    <% include ../partials/stylesheet %>
+</head>
+
+<body>
+    <% include ../partials/header %>
+        <div class="container">            
+            <div style="text-align: center;">
+                <h1>Chat test</h1>
+            </div>
+            <form id="chatForm" style="height: 450px;width: 80%;margin: auto;border-radius: 15px;overflow: hidden;">
+                <div id="chat" class="card" style="background-color: rgb(176, 248, 182);height: 80%;width: 100%;overflow-y: auto">
+                    
+                </div>
+                <div style="height: 20%;width: 100%;">
+                    <div style="height: 100%;width: 80%;background-color: pink;display: flex;float: left;">
+                        <input type="text" class="form-control" style="margin: auto;width: 80%;" name="txtSend" id="txtSend" autocomplete="off">
+                    </div>
+                    <div style="height: 100%;width: 20%;background-color: pink;display: flex;float: right;">
+                        <button type="submit" class="btn btn-success" style="margin: auto" name="btnSend" id="btnSend">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </form>   
+            <br>
+        </div>
+    <% include ../partials/footer %>
+    <!-- jQuery Plugins -->
+    <% include ../partials/javascript %>
+    <script>
+        $(function () {
+            var socket = io('/testAC');
+            var $chatForm = $('#chatForm');
+            var $chat = $('#chat');
+            var $txtSend = $('#txtSend');
+            var $username = "<% if(locals.user) { %> <%= user.username %> <% } else { %> Stranger: <% } %>";
+
+            $chatForm.submit(function(e){
+                if ($txtSend.val().length > 0){
+                    e.preventDefault();
+                    socket.emit('testA', $txtSend.val());
+                    $txtSend.val('');
+                    $txtSend.focus();
+                } else{
+                    e.preventDefault();                    
+                }                
+            })
+
+            socket.on('replayFromServer', function(data) {
+                $chat.append('<div class="well well-sm">' + data.msg +'</div>');
+            })
+        })
+    </script>
+</body>
+
+</html>

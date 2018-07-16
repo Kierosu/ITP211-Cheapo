@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cheapo</title>
+    <!-- css -->
+    <% include ../partials/stylesheet %>
+</head>
+
+<body>
+    <% include ../partials/header %>
+        <div class="container">
+            <div style="height: 550px;width: 30%;display: flex;border: 0.5px solid lightgray">
+                <div style="height: 95%;width: 90%;border: 1px solid lightgray;margin: auto;overflow: hidden;">
+                    <div style="height: 8%;width: 100%;display: flex;">
+                        <h3 style="margin: auto;font-style: calibri;font-weight: 100;">Auction</h3>
+                    </div>
+                    <hr style="width: 75%;height: 3px;">
+                    <div style="display: flex;">
+                        <div style="overflow: hidden;margin: auto;width: 65%;height: 200px;border-radius: 50%;border: 3px solid rgb(103, 110, 79);background-color: lightblue">
+                            <div style="display: flex;height: 30%;width: 100%;background-color: lawngreen;">
+                                <p style="margin: auto;font-weight: bold">Ends within:</p>
+                            </div>
+                            <div style="height: 25%;width: 100%;display: flex;overflow: hidden;background-color: hotpink">
+                                <p style="margin: auto;">0hours 0mins 0sec</p>
+                            </div>
+                            <div style="height: 45%;width: 100%;background-color: grey;overflow: hidden;display: flex;">
+                                <div style="margin:auto">
+                                    <p style="text-align: center">Current bid:</p>
+                                    <h3 style="text-align: center;color: rgb(211, 119, 43)">$2000.00</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="width: 75%;height: 3px;margin: 11px auto;">
+                    <form style="height:42%;width: 100%;display: flex;">
+                        <div style="height: 80%;margin: auto;">
+                            <div style="height: 50%;width: 100%;display: flex;">
+                                <input style="margin: auto;height: 45%;width: 95%;" type="number" step="0.01"  name="" id="" required>
+                            </div>
+                            <div style="height: 50%;width: 100%;display: flex;">
+                                <button class="btn btn-primary" style="height: 50%;width: 95%;margin: auto;" type="submit">BID</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <% include ../partials/footer %>
+        <!-- jQuery Plugins -->
+        <% include ../partials/javascript %>
+</body>
+
+</html>

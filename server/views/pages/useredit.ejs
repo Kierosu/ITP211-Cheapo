@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cheapo</title>
+    <!-- css -->
+    <% include ../partials/stylesheet %>
+</head>
+
+<body>
+    <% include ../partials/header %>
+        <div class="container">
+            <div class="cad card-body">
+                <h3>Edit listed User</h3>
+                <form action="" method="post">
+                    <input type="hidden" name="_method" value="PUT">
+                    <div class="form-group">
+                        <label for="Name">Username</label>
+                        <input type="text" name="username" class="form-control" value="<%= user.username %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="details">Email</label>
+                        <input type="text" name="email" class="form-control" value="<%= user.email %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="details">Membership</label>
+                        <select name="Membership" name="membership" required>
+							<option value="Bronze">Bronze</option>
+							<option value="Silver">Silver</option>
+							<option value="Gold">Gold</option>
+						</select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </form>
+            </div>
+        </div>
+    <% include ../partials/footer %>
+    <!-- jQuery Plugins -->
+    <% include ../partials/javascript %>
+</body>
+
+</html>
