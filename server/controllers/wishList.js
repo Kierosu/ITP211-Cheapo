@@ -8,6 +8,7 @@ var sequelize = myDatabase.sequelize;
 var passport = require('passport');
 var fs = require('fs');
 var UserModel = require('../models/user');
+var parseDecimalNumber = require('parse-decimal-number');
 
 //Destroy wish list items
 // Destroy product
@@ -23,6 +24,28 @@ exports.delete = function (req, res) {
         res.status(200).send({ message: "Deleted Product : " + record_num});
     })
 }
+
+// Insert data into wish List
+exports.addItems = function (req, res){
+    console.log("wishlist add working! with values")
+    var addShop = {
+        UserId: req.body.UserId,
+        ProductName: req.body.ProductName,
+        ProductDescription: req.body.ProductDescription,
+        ProductPrice: parseFloat(req.body.ProductPrice),
+        sellerId: req.body.sellerId,
+        ProductImage: req.body.ProductImage
+    }
+    console.log(addShop);
+    Product.create(addShop).then((newRecord, created) => {
+        if (!newRecord) {
+            return res.send (400, {
+                message: "error"
+            });
+        }
+        res.status(200).send({ message: "Uploaded To Shopping Cart" + newRecord});
+    });
+};
 
 exports.show = function (req, res){
     //List all the products

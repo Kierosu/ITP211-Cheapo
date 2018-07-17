@@ -66,11 +66,15 @@
                            <li class="items even" data-id="<%= wishlist.ProductID %>">
                               <div class="infoWrap">
                                  <div class="cartSection">
-                                    <img src="<%=wishlist.ProductImage%>" alt="" class="itemImg" />
+                                    <img src="<%=wishlist.ProductImage%>" value="<%=wishlist.ProductImage%>" alt="" class="itemImg" />
                                     <p class="itemNumber">#123456789</p>
                                     <h3>
                                        <%= wishlist.ProductName %>
                                     </h3>
+                                    <input type="hidden" class="name" value="<%= wishlist.ProductName%>">
+                                    <input type="hidden" class="sellerId" value="<%= wishlist.sellerId%>">
+                                    <input type="hidden" class="img" value="<%= wishlist.ProductImage%>">
+                                    <input type="hidden" class="desc" value="<%= wishlist.ProductDescription%>">
                                     <p>
                                        <%= wishlist.ProductDescription %>
                                     </p>
@@ -78,10 +82,11 @@
                                     <p class="stockStatus"> In Stock</p>
                                  </div>
                                  <div class="prodTotal cartSection">
-                                    <p>$<%= wishlist.ProductPrice %>
+                                    <p class="price">$<%= wishlist.ProductPrice %>
                                     </p>
                                  </div>
                                  <div class="cartSection removeWrap">
+                                     <a class="add" data-id="<%= wishlist.ProductID %>">+</a>
                                     <a class="remove" data-id="<%= wishlist.ProductID %>">x</a>
                                  </div>
                               </div>
@@ -131,5 +136,35 @@
                  }
              });
          });
+
+	//Inserting Data with ajax
+	$('.add').click(function () {
+        var s = $('.price').text();
+        var sliced = s.slice(1)
+        console.log(sliced)
+        var ProductID = $(this).data("id");
+		var url = "<%=hostPath%>/wishlist-Add/" + ProductID;
+		var addToCart = {
+            UserId: "<%= userID %>",
+            ProductName: $('.name').val(),
+            ProductDescription: $('.desc').val(),
+            ProductPrice:  sliced,
+            sellerId: parseInt($('.sellerId').val()),
+            ProductImage: $('.img').val()
+		}
+		$.ajax({
+			url: url,
+			type: "POST",
+			data: JSON.stringify(addToCart),
+			dataType: "json",
+			contentType: "application/json",
+			success: function(result){
+                alert('Success')
+			},
+			error: function(result){
+				alert("Failed")
+			}
+		})
+    })
          </script>
    </body>

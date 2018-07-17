@@ -33,7 +33,28 @@
 	<!-- Custom stylesheet -->
 	<link type="text/css" rel="stylesheet" href="css/raysonStyle.css" />
 
+<style>
+	.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
 
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
 </head>
 
 <body>
@@ -56,56 +77,42 @@
 		<div class="section">
 			<div class="checkout-panel">
 				<div class="panel-body">
-					<h2 class="title">Step 4: Pending Request</h2>
-
-					<div class="bar">
-						<div class="step active"></div>
-						<div class="step active"></div>
-						<div class="step"></div>
-						<div class="step"></div>
-					</div>
+					<h2 class="title">Pending Request</h2>
 					<div class="alert alert-success hidden" id="green">
 						<strong>Success!</strong> Payment Complete! Redirecting you in 5 seconds.
 					  </div>
 					<div class="alert alert-danger  hidden" id="red">
 						<strong>Failed!</strong> <p id = "messageFailed" >Payment Failed! </p>
 					</div>
-						<div class="panel-footer">
-							<button class="btn back-btn">Back</button>
-							<button class="btn next-btn" onclick="addDetails()">Next Step</button>
-						</div>
+					<div class="loader"></div>
+					<br>
+					<figcaption id="someText">Waiting For Connection...</figcaption>
+					<br>
+					<br>
+					<br>
 					</div>
 				</div>
-				<br>
-				<br>
-				<br>
-				<br>
-				<div class="panel-footer">
-					<a href="/shopping-cart" class="btn back-btn">Back</a>
-				</div>
-			</form>
 			</div>
-
-		</div>
 	</center>
 	<!-- /section -->
-	<!-- <script>
-	var socket = io.connect('http://localhost:3000');
-	socket.on('redirect', function(destination) {
-		window.location.href = destination;
-		console.log(destination)
-	});	socket.on('redirect', function(destination) {
-		window.location.href = destination;
-		console.log(destination)
-	});
-	</script> -->
+
 	<script src="js/socket.io.js"></script>
 	<script>
 	var socket = io('http://localhost:3000');
 	socket.on('redirect', function(someData) {
-		alert(someData);
-    	window.location.href = someData;
+		function redirectPage (){
+			// window.location.href = someData;
+		}
+		setTimeout(redirectPage, 5000)
 	});
+	socket.on('status', function(text) {
+		alert(text);
+		$("#someText").text(text);
+	});
+	function loadInfo (){
+		$("#someText").text("Connection Established! Waiting For Bank Reply...");		
+	}
+	setTimeout(loadInfo, 10000)
 	</script>
 	<% include ../partials/footer %>
 		<!-- jQuery Plugins -->

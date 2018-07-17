@@ -23,6 +23,8 @@ exports.answer = function (req, res) {
         if (req.body.data.status == "accept" && userIIDD == req.body.data.userId)
         {
             console.log("accepted the data")
+            var text = "Bank Verified Please Wait...";
+            eventExample.emit('text', text);
             //To trigger an event listener you must emit:
             var someData = "/done";
             eventExample.emit('anEvent', someData);
@@ -30,6 +32,8 @@ exports.answer = function (req, res) {
         else if (req.body.data.status == "reject" && userIIDD == req.body.data.userId)
         {
             console.log("rejected the data")
+            var text = "Bank Rejected Payment! Redirecting back to checkout page...";
+            eventExample.emit('text', text);
             var someData = "/checkout";
             eventExample.emit('anEvent', someData);
         }
@@ -47,8 +51,15 @@ exports.show = function (req, res){
                 console.log(someData);
                 socket.emit('redirect', someData);
             });
-            // var destination = socket.on('anEvent', someData);
-            // socket.emit('redirect', destination);
+        });
+
+        ioCheck.on('connection', function (socket) {
+            eventExample.on('text', function(text){
+                console.log("text working");
+                //Do something with someData
+                console.log(text);
+                socket.emit('status', text);
+            });
         });
         var totalPrice = 0;
         var shippingFee = 0;
