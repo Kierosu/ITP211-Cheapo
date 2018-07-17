@@ -36,7 +36,18 @@
                 <li><img src= "<%= avatarTemp %>" id="ImgTemp" alt="Profile Picture" width="184px" height="184px" style="border: 1px solid black;"></li>
                 </ul>
                 <label class="file">
-                  <input type="file" id="uploadImg" name="uploadImg" accept="image/*"/><br>
+                  <input type="file" id="uploadImg" name="uploadImg" accept="image/*"/>
+                  <!-- Progress Bar -->
+                    <div class="row">
+                        <div class="col-md-12"><br>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                    <span class="sr-only"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="position: relative; bottom: 41px; left: 280px; font-size: 17px; margin-bottom: -20px;" id="done">0%</p>
+                    </div>
                   <button class="btn" id="uploadBtn" style="width: 85px; height: 40px;">Upload</button>
                 </label>   
             </div>
@@ -80,6 +91,8 @@
             }
         }
         $("#uploadImg").change(function() {
+            $('.progress-bar').width('0%');
+            $("#done").html("0%");
             readFile(this);
         });
 
@@ -94,13 +107,28 @@
                 data: formData,
                 processData: false,
                 contentType: false,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    // Add progress event listener to the upload.
+                    xhr.upload.addEventListener('progress', function (event) {
+                        var progressBar = $('.progress-bar');
+                        if (event.lengthComputable) {
+                            var percent = (event.loaded / event.total) * 100;
+                            progressBar.width(percent + '%');
+                            $("#done").html(percent + '%');
+                            if (percent === 100) {
+                                progressBar.removeClass('active');
+                                $("#done").html("Completed");
+                            }
+                        }
+                    });
+                    return xhr;
+                },
                 success: function (result) {
-                    alert('Image is uploaded');
                     uploaded = 1;
                 },
                 error: function(result){
                     alert('There is an error uploading');
-                    alert(result.responseText)
                 }
             });
         });

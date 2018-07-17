@@ -18,11 +18,7 @@
   },
   "homepage": "https://github.com/Kierosu/ITP211-Cheapo#readme",
   "dependencies": {
-<<<<<<< HEAD
-    "bcrypt": "^2.0.1",
-=======
     "biguint-format": "^1.0.0",
->>>>>>> a4d3853562df71b4b47e1ff5ae4d3a5443fcc9cd
     "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
@@ -46,21 +42,15 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "password-generator": "^2.2.0",
-<<<<<<< HEAD
     "qrcode": "^1.2.0",
     "sequelize": "^4.37.10",
     "sequelize-transforms": "^2.0.0",
     "speakeasy": "^2.0.0",
-    "tedious": "^2.6.1"
-=======
+    "tedious": "^2.6.1",
     "payform": "^1.2.2",
     "random-number": "0.0.9",
-    "sequelize": "^4.37.10",
-    "sequelize-transforms": "^2.0.0",
     "socket.io": "^2.1.1",
     "stripe": "^6.1.1",
-    "tedious": "^2.6.1",
     "url": "^0.11.0"
->>>>>>> a4d3853562df71b4b47e1ff5ae4d3a5443fcc9cd
   }
 }

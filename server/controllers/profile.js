@@ -25,7 +25,6 @@ exports.signup = function(req, res) {
 };
 // Signin 
 exports.signin = function(req, res) {
-    console.log("ASDFGHJK1314312ZXCVe231d1BNMWERTYUIO")
     res.render('Login', {
         title: "Cheapo - Login Page",
         message: req.flash('loginMessage'),
@@ -316,7 +315,7 @@ exports.savePassword = (req, res) => {
 //2-Factor Auth Page
 exports.TwoFactorAuth = (req, res) => {
     // Get the data URL of the authenticator URL
-    secret = speakeasy.generateSecret({length: 20});
+    secret = speakeasy.generateSecret();
     temp_secret = secret.base32;
     urlpath = "otpauth://totp/"+ req.user.username + "?secret=" + temp_secret + "&issuer=Cheapo%20Eshop";
     QRCode.toDataURL(urlpath, function(err, data_url) {
