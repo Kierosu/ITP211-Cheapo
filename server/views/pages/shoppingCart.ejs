@@ -146,8 +146,8 @@
                         <div class="panel-footer">
                                 <div class="promoCode">
                                         <label for="promo">Have A Promo Code?</label>
-                                        <input type="text" name="promo" placholder="Enter Code" />
-                                        <a href="#" class="btn"></a>
+                                        <input type="text" name="promo" class="promoCodeInput" placholder="Enter Code" />
+                                        <button class="btn btn-continue" style="margin-top: 2em; background-color: #82ca9c; color: whitesmoke" onclick="promoCode()"></button>
                                     </div>
                                     <div class="subtotal cf">
                                         <ul>
@@ -170,7 +170,7 @@
                                                                 </span>
                                                             </li>
                                                             <li class="totalRow">
-                                                                <a href="/confirmation" class="btn continue">Checkout</a>
+                                                                <a href="/confirmation" style="margin-bottom: 1em; background-color: #82ca9c"class="btn continue">Checkout</a>
                                                             </li>
                                         </ul>
                                     </div>
@@ -212,6 +212,27 @@
     <script src="/js/jquery.zoom.min.js"></script>
     <script src="/js/main.js"></script>
     <script>
+            function promoCode() {
+                var promoCode = $(".promoCodeInput").val();
+                alert(promoCode)
+                if (promoCode == $("#coup").val() && promoCode != 'Oops no coupons for you today!')
+                {
+                    alert("Correct Code")
+                    var promoCodeDsicount = 0.2;
+                    var totalPrice = $("#money").text();
+                    var sliced = parseInt(totalPrice.slice(1));
+                    $("#money").text("$" + (sliced * (1-promoCodeDsicount).toFixed(2)));        
+                } 
+                else if (promoCode == "")
+                {
+                    alert("Please Enter A Promo Code!")
+                }
+                else
+                {
+                    alert("Wrong Code Please Try Again!")
+                }
+            }
+
             function copyClipboard() {
                 /* Get the text field */
                 var copyText = document.getElementById("coup");
