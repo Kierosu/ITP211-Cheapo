@@ -96,23 +96,23 @@
 								</div>
 								<strong class="text-uppercase">My Cart:</strong>
 								<br>
-								<span class="totalMoney">$<%= total %></span>
+								<span class="totalMoney">$</span>
 							</a>
 							<div class="custom-menu">
 								<div id="shopping-cart">
 									<div class="shopping-cart-list">
-										<% products.forEach(function(products){ %>
-										<div class="product product-widget" data-id="<%= products.ProductID %>">
+										
+										<div class="product product-widget" data-id="">
 											<div class="product-thumb">
-												<img src="<%= products.ProductImage %>" alt="">
+												<img src="" alt="">
 											</div>
 											<div class="product-body">
-												<h3 class="product-price">$<%= products.ProductPrice %> <span class="qty">x1</span></h3>
-												<h2 class="product-name"><a href="#"><%= products.ProductName %></a></h2>
+												<h3 class="product-price">$ <span class="qty">x1</span></h3>
+												<h2 class="product-name"><a href="#"><</a></h2>
 											</div>
-											<button class="cancel-btn" data-id="<%= products.ProductID %>"><i class="fa fa-trash"></i></button>
+											<button class="cancel-btn" data-id=""><i class="fa fa-trash"></i></button>
 										</div>
-										<% }); %>
+										
 									</div>
 									<div class="shopping-cart-btns">
 										<button class="main-btn">View Cart</button>
@@ -499,27 +499,6 @@
 		</div>
 		<!-- /container -->
 	</div>
-	<script>
-	$('.cancel-btn').click(function () {
-	var ProductID = $(this).data("id");
-	$.ajax({
-		url: '<%-urlPath%>' + '/' + ProductID,
-		type: 'DELETE',
-		success: function (result) {
-			console.log(result.price);
-			var itemToRemove = '.product-widget[data-id=' + ProductID + ']';
-			$(itemToRemove).remove();
-			
-			$('.totalMoney').text(result.price)
-		},
-		error: function (result) {
-			alert("Unable to delete Product.");
-			console.log(result);
-		}
-	});
-});
-	
-	</script>
 	<!-- /NAVIGATION -->
 
 	<!-- BREADCRUMB -->
