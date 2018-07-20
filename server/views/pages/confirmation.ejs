@@ -110,13 +110,12 @@
 		$("#check").click( function()
            {
 			var password = document.getElementById("passwordHolder").value;
-			alert(password);
 			alert('<%= onePassword %>')
 			if (password == '<%= onePassword %>')
 			{
 				$("#wrongPassword").addClass("hidden");
 				$("#correctPassword").removeClass("hidden");
-				// window.location.replace("http://localhost:3000/checkout");
+				window.location.replace("http://localhost:3000/checkout");
 			}
 			else
 			{

@@ -168,15 +168,7 @@ app.post('/wishlist-Add/:ProductID', auth.isLoggedIn, wishList.addItems);
 
 //Order Tracking
 app.get('/order-tracking', auth.isLoggedIn, orderTracking.show)
-
-// io.on('connection',function(socket){
-//         // socket.on('send', function(redirectData){
-//         //     var destination = redirectData;
-//         //     global.destination = destination
-//         // });
-//         // socket.emit('redirect', destination);
-//         console.log("Connected!")
-//     });
+app.post('/feedback', auth.isLoggedIn, orderTracking.feedback)
 
 app.get('/', auth.test)
 
