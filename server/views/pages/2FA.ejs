@@ -9,14 +9,15 @@
 </head>
 <body>
     <% include ../partials/header %>
-    <div class="body">
+
         <div class="sidenav">
-            <a href="/profile">Profile</a>
+            <a href="/profile/<%= locals.loginuser.username %>">Profile</a>
             <a href="/edit/profile">Edit Profile</a>
             <a href="/changePassword">Change Password</a>
             <a href="/2FA">2-Factor Authentication</a>
         </div>
-        
+
+    <div class="body">
         <form class="form-signin form-horizontal" action="/updateProfile" method="post" enctype="multipart/form-data">
             <h2 class="form-signin-heading">Two-Factor Authentication</h2>
             <div style="position: relative; left: 535px; margin: 30px 0 120px 0;">
@@ -97,9 +98,9 @@
                 </div>
                 <div class="modal-body" style="font-size: 17px;" id="modalbodyMessage">    
                     <p id="msg"></p>
-                    <p>This message box will close in 3 Seconds</p>
                 </div>
                 <div class="modal-footer" id="modalfooterMessage">    
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="close" class="closeModal">Close</button>
                 </div>
               </div>
               
@@ -160,10 +161,6 @@
             }
         })
 
-        $("#cancelpass").click(()=>{
-            location.href = "/profile";
-        });
-
         $(document).on("click", '#enableGoogleAuth',function(e){
             e.preventDefault();
             var tokenData ={
@@ -179,12 +176,15 @@
                 success: function(msg){
                     $('#messageModal').modal('show');
                     $('#msg').html(msg.message);
-                    setTimeout(function(){ location.href="/2FA"; }, 3000);
+                    $("#close").click(()=>{
+                        location.href="/2FA";
+                    });
                 },
                 error: function(result){
                     $('#messageModal').modal('show');
                     $('#msg').html(result.responseText);
-                    setTimeout(function(){ location.href="/2FA"; }, 3000);
+                    $("#close").attr('data-toggle','modal');
+                    $("#close").attr('data-target','#googleAuthModal');
                 }
             });
         })
@@ -205,12 +205,15 @@
                 success: function(msg){
                     $('#messageModal').modal('show');
                     $('#msg').html(msg.message);
-                    setTimeout(function(){ location.href="/2FA"; }, 3000);
+                    $("#close").click(()=>{
+                        location.href="/2FA";
+                    });
                 },
                 error: function(result){
                     $('#messageModal').modal('show');
                     $('#msg').html(result.responseText);
-                    setTimeout(function(){ location.href="/2FA"; }, 3000);
+                    $("#close").attr('data-toggle','modal');
+                    $("#close").attr('data-target','#disabledModal');
                 }
             });
         })

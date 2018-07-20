@@ -34,6 +34,7 @@ require("./server/config/passport")(passport);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(cookieParser());
 
 // Setup public directory
@@ -46,6 +47,7 @@ app.use(expressSession({
     store: sequelizeSessionStore,
     resave: false,
     saveUninitialized: false,
+    
 }));
 
 // Init passport authentication
@@ -55,6 +57,16 @@ app.use(passport.session());
 // flash messages
 app.use(flash());
 
+// Global variables
+app.use((req, res, next) => {
+    res.locals.msg = req.flash('msg');
+    res.locals.error = req.flash('error');
+    res.locals.loginuser = req.user || null;
+    res.locals.items = req.items || null;
+    next();
+});
+
+//Eugene's code
 // Logout Page
 app.get('/logout', auth.logout);
 
@@ -78,7 +90,7 @@ app.post('/signup', passport.authenticate('local-signup', {
 
 app.post('/checkTFA', auth.checkTFA);
 
-app.get('/profile', auth.isLoggedIn, auth.profilepage);
+app.get('/profile/:username', auth.isLoggedIn, auth.profilepage);
 
 //edit profile info
 app.get('/edit' + '/profile', auth.isLoggedIn, auth.editProfile);
@@ -99,6 +111,18 @@ app.post('/changePassword',auth.isLoggedIn, auth.savePassword);
 app.get('/2FA', auth.isLoggedIn, auth.TwoFactorAuth);
 app.post('/googleauth', auth.isLoggedIn, auth.saveGoogleAuth);
 app.post('/disableTFA', auth.isLoggedIn, auth.disableTFA);
+
+//Google Sign In
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read' ] } ));
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    var day = 86400000;
+    req.session.cookie.expires = new Date(Date.now() + day);
+    req.session.cookie.maxAge = day;
+    res.redirect('/');
+});
 
 
 //Rayson's code

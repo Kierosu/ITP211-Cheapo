@@ -2,6 +2,7 @@
 var myDatabase = require('../controllers/database');
 var sequelize = myDatabase.sequelize;
 var Sequelize = myDatabase.Sequelize;
+const moment = require('moment');
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
@@ -32,15 +33,14 @@ const User = sequelize.define('User', {
     },
     joinDate: {
         type: Sequelize.DATEONLY,
-        defaultValue: Sequelize.NOW
+        defaultValue: Sequelize.NOW,
+        get: function() {
+            return moment.utc(this.getDataValue('regDate')).format('YYYY-MM-DD');
+        }
     },
     userType: {
         type: Sequelize.STRING,
         defaultValue: "Member"
-    },
-    membership: {
-        type: Sequelize.STRING,
-        defaultValue: "Bronze"
     },
     TwoFA: {
         type: Sequelize.STRING,
@@ -48,6 +48,9 @@ const User = sequelize.define('User', {
     },
     SecretToken: {
         type: Sequelize.STRING,
+    },
+    valueRecieved:{
+        type: Sequelize.DECIMAL(10,2)
     }
 });
 
@@ -59,24 +62,21 @@ User.sync({force: false, logging: console.log}).then(()=>{
         username: "Shafie",
         email: "shafie@gmail.com",
         password: "shafieMemeLord",
-        userType: "Admin",
-        membership: "Gold",
+        userType: "Admin"
     });
     User.upsert({
         userID: 2,
         username: "Matthew",
         email: "matthew@gmail.com",
         password: "matthewMemeLord",
-        userType: "Admin",
-        membership: "Gold"
+        userType: "Admin"
     });
     User.upsert({
         userID: 3,
         username: "Rayson",
         email: "rayson@gmail.com",
         password: "raysonMemeLord",
-        userType: "Admin",
-        membership: "Gold"
+        userType: "Admin"
     });
     User.upsert({
         userID: 4,
@@ -84,16 +84,14 @@ User.sync({force: false, logging: console.log}).then(()=>{
         email: "eugenetan9134@gmail.com",
         password: "WowWee123",
         profilePic: "ayaya.png",
-        userType: "Admin",
-        membership: "Gold"
+        userType: "Admin"
     });
     User.upsert({
         userID: 5,
         username: "Teh Yang",
         email: "tehyang@gmail.com",
         password: "tehyangMemeLord",
-        userType: "Admin",
-        membership: "Gold"
+        userType: "Admin"
     });
 });
 

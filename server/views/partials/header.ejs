@@ -63,15 +63,15 @@
 					<ul class="header-btns">
 						<li class="header-account dropdown default-dropdown">
 						<!-- Account -->
-						<% if (req.user) { %>
+						<% if(locals.loginuser) { %>
 							<div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
 								<div class="header-btns-icon">
-									<img src="<%= avatar %>" alt="Profile Picture" style="width:38.5px">
+									<img src="http://localhost:3000/img/<%= loginuser.profilePic %>" alt="Profile Picture" style="width:38.5px">
 								</div>
-								<strong class="text-uppercase"  style="top: 10.2px;position: relative;"><%= username %> <i class="fa fa-caret-down"></i></strong>		
+								<strong class="text-uppercase"  style="top: 10.2px;position: relative;"><%= loginuser.username %> <i class="fa fa-caret-down"></i></strong>		
 							</div>
 							<ul class="custom-menu">
-								<li><a href="/profile"><i class="fa fa-user-o"></i> My Account</a></li>
+								<li><a href="/profile/<%= loginuser.username %>"><i class="fa fa-user-o"></i> My Account</a></li>
 								<li><a href="#"><i class="fa fa-heart-o"></i> My Wishlist</a></li>
 								<li><a href="#"><i class="fa fa-exchange"></i> Compare</a></li>
 								<li><a href="#"><i class="fa fa-check"></i> Checkout</a></li>

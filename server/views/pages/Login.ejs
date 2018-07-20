@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <!-- <link href="/public/img/logo.ico" rel="icon"> -->
         <% include ../partials/javascript %>
         <% include ../partials/stylesheet %>
         <% include ../partials/eugenecss %>
@@ -9,6 +10,8 @@
     </head>
     <body>
         <% include ../partials/header %>
+        <div class="body">
+
         <div class="warningmsg">
             <% if (message.length > 0) { %>
             <div class="alert alert-warning alert-dismissible fade in" role="alert">
@@ -38,9 +41,10 @@
             </div>
             <button class="btn btn-primary" type="submit" id="loginButton">Log in</button>
         </form>
+        <button onclick="location.href='/auth/google'" class="btn" id="googlelogin"><span class="fa fa-google-plus"></span>&nbsp; Sign up with Google</button>
         <p id = "p">Don't have an account? <span style="font-weight: bold;">Sign up now!</span></p>
         <button class="btn btn-primary" id="signupButton" onclick="window.location='/signup'">Sign Up</button>
-
+        </div>
         <!-- Modal -->
         <div class="modal fade" id="verificationModal" role="dialog">
             <div class="modal-dialog">
@@ -87,7 +91,7 @@
                     backdrop: 'static',
                     keyboard: false,
                     show: false
-                }); 
+                });
            })
             
             $("#closeVerify").click(()=>{

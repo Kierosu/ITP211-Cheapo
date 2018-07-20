@@ -1,15 +1,15 @@
-var passport = require('passport');
-var fs = require('fs');
-var UserModel = require('../models/user');
-var myDatabase = require('./database');
-var sequelizeInstance = myDatabase.sequelizeInstance;
-var generatePassword = require('password-generator');
-var nodemailer = require('nodemailer');
-var speakeasy = require('speakeasy');
-var QRCode = require('qrcode');
+const passport = require('passport');
+const fs = require('fs');
+const UserModel = require('../models/user');
+const myDatabase = require('./database');
+const sequelizeInstance = myDatabase.sequelizeInstance;
+const generatePassword = require('password-generator');
+const nodemailer = require('nodemailer');
+const speakeasy = require('speakeasy');
+const QRCode = require('qrcode');
 // set images file types
 var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
-var bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 
 var secret;
 var temp_secret;
@@ -19,32 +19,23 @@ const saltRounds = 10;
 exports.signup = function(req, res) {
     res.render('Signup', {
         title: "Cheapo - Signup Page",
-        message: req.flash('signupMessage'), 
-        req: req
+        message: req.flash('signupMessage')
     });
 };
 // Signin 
 exports.signin = function(req, res) {
     res.render('Login', {
         title: "Cheapo - Login Page",
-        message: req.flash('loginMessage'),
-        req: req
+        message: req.flash('loginMessage')
     });
 };
 // Profile 
 exports.profilepage = function(req, res) {
-    var id = req.params.userID;
-    UserModel.findById(id).then(function(){
+    var username = req.params.username;
+    UserModel.findOne({where: {username: username}}).then(function(userprofile){
         res.render('Profile', { 
-        title: 'Cheapo - ' + req.user.username + '\'s Profile',
-        avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
-        username : req.user.username,
-        email: req.user.email,
-        dateJoined: req.user.joinDate,
-        type: req.user.userType,
-        membership: req.user.membership,
-        req: req
-    });
+            user: userprofile
+        });
     }).catch((err) => {
         return res.status(400).send({
             message: err
@@ -85,13 +76,11 @@ exports.editProfile = (req, res)=>{
     var id = req.params.userID;
     UserModel.findById(id).then(function(){
         res.render('EditProfile', { 
-        title: 'Cheapo - Edit Profile Picture',
+        title: 'Cheapo - Edit Profile',
         email: req.user.email,
         avatarTemp: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
         avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
-        username : req.user.username,
         hostPath: req.protocol + "://" + req.get("host"),
-        req: req
     });
     }).catch((err) => {
         return res.status(400).send({
@@ -106,10 +95,8 @@ exports.uploadImage = function (req, res){
     var dest;
     var targetPath;
     var tempPath = req.file.path;
-    console.log(req.file);
     //get the mime type of the file
     var type = req.file.mimetype
-    console.log(req.file.mimetype);
     //get file extension
     var extension = req.file.path.split(/[. ]+/).pop();
     //Check support file type
@@ -155,7 +142,6 @@ exports.saveChanges = (req,res)=>{
 exports.forgetUsername = (req,res)=>{
     res.render('ForgetUsername', {
         title: "Cheapo - Forget username",
-        req: req
     })
 }
 exports.sendUsername = (req,res) => {
@@ -209,8 +195,7 @@ exports.sendUsername = (req,res) => {
 //Forget password page
 exports.forgetPass = (req,res)=>{
     res.render('ForgetPass', {
-        title: "Cheapo - Forget password",
-        req: req
+        title: "Cheapo - Forget password"
     })
 }
 
@@ -279,10 +264,7 @@ exports.setSendPass = (req,res)=>{
 //Change password
 exports.changePass = (req, res) => {
     res.render('ChangePass',{
-        title: "Change Password",
-        username: req.user.username,
-        avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
-        req: req
+        title: "Change Password"
     })
 }
 
@@ -322,23 +304,17 @@ exports.TwoFactorAuth = (req, res) => {
         // Display this data URL to the user in an <img> tag
         res.render('2FA',{
             title: "Two-Factor Authentication",
-            username: req.user.username,
-            avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
-            req: req,
             qrcode: data_url,
             secretkey: "Something idk",
             Select2FA: req.user.TwoFA
         })
     });
 }
+
 exports.saveGoogleAuth = (req, res)=>{
     var id = req.user.userID
     var userToken = req.body.token;
     var base32secret = temp_secret;
-    console.log("secret: " + secret)
-    console.log("Actual Data: " + base32secret);
-    console.log("temp_secret Data: " + temp_secret);
-    console.log("User Data: "+userToken);
     var verified = speakeasy.totp.verify({ 
         secret: base32secret,
         encoding: 'base32',
@@ -409,17 +385,9 @@ exports.checkTFA=(req, res)=>{
 
 //Test
 exports.test = function(req,res){
-    if(req.user){
+
         res.render('template',{
             title: "Just A Test",
-            avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
-            username : req.user.username,
-            req: req
-            })        
-    }else{
-        res.render('template',{
-            title: "Just A Test",
-            req: req
         })
-    }   
+ 
 }

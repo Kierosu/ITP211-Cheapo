@@ -5,37 +5,37 @@
     <% include ../partials/javascript %>
     <% include ../partials/stylesheet %>
     <% include ../partials/eugenecss %>
-    <title><%= title %></title>
+    <title>Cheapo - <%= user.username %>'s Profile</title>
 </head>
 <body>
     <% include ../partials/header %>
 
+    <% if(locals.loginuser.username == user.username) { %>
     <div class="sidenav" id="sidenav">
-        <a href="/profile">Profile</a>
+        <a href="/profile/<%= locals.loginuser.username %>">Profile</a>
         <a href="/edit/profile">Edit Profile</a>
         <a href="/changePassword">Change Password</a>
         <a href="/2FA">2-Factor Authentication</a>
     </div>
+    <% } else { %>
+    <% } %>
 
-    <div class="body" style="margin-bottom: 80px;">    
+    <div style="margin-top: 80px;">
+    <div style="margin-bottom: 100px;">    
         <div class="media" style="position: relative;left:390px;">      
             <div class="media-left">
-                <img src="<%= avatar %>" alt="Profile Picture" width="160px" height="160px" style="border: 3px solid black; border-radius: 2px;">
+                <img src="http://localhost:3000/img/<%= user.profilePic %>" alt="Profile Picture" width="160px" height="160px" style="border: 3px solid black; border-radius: 2px;">
             </div>
             <div class="media-body" style="position: relative;left:50px; font-size: 17px">
-                <p style="font-size: 22px"><strong><%= username %></strong></p>
-                <p><strong>Email</strong>: <%= email %><br></p>
-                <p><strong>Date Joined</strong>: <%= dateJoined %></p>
-                <p><strong>Type (Member/Admin)</strong>: <%= type %></p>
-                <p><strong>Membership Rank</strong>: <%= membership %></p>
+                <p style="font-size: 22px"><strong value=""><%= user.username %></strong></p>
+                <p><strong>Email</strong>: <%= user.email %><br></p>
+                <p><strong>Date Joined</strong>: <%= user.joinDate %></p>
+                <p><strong>Type (Member/Admin)</strong>: <%= user.userType %></p>
             </div>
         </div>     
     </div>
-    <script>
-    window.onunload = function(){
-        alert("unload event detected!");
-    }
-</script>
+</div>
+    
     <% include ../partials/footer %>
 </body>  
 </html>

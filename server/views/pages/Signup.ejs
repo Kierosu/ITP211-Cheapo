@@ -9,7 +9,7 @@
     </head>
     <body>
         <% include ../partials/header %>
-
+        <div class="body">
         <div class="warningmsg">
            <% if (message.length > 0) { %>
             <div class="alert alert-warning" role="alert">
@@ -60,7 +60,7 @@
             <button class="btn btn-primary" type="submit" id="createProfile">Sign Up</button>
         </form>
         <button class="btn" id="back">Back</button>
-        
+        </div>
         <% include ../partials/footer %>
 
         <script>  

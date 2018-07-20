@@ -11,12 +11,13 @@
     <% include ../partials/header %>
 
     <div class="sidenav" id="sidenav">
-        <a href="/profile">Profile</a>
+        <a href="/profile/<%= locals.loginuser.username %>">Profile</a>
         <a href="/edit/profile">Edit Profile</a>
         <a href="/changePassword">Change Password</a>
         <a href="/2FA">2-Factor Authentication</a>
     </div>
 
+    <div class="body">
     <div class="warningmsg" id = "warningmsg">
         <div class="alert alert-warning alert-dismissible fade in">
             <strong>WOAH! </strong><p id="errmsg"></p>
@@ -55,7 +56,7 @@
         <button class="btn" type="submit" id="changepass">Change Password</button>
     </form>
     <button class="btn" id="cancelpass"type="button">Cancel</button>
-
+    </div>
     <!-- Modal for verification -->
     <div class="modal fade" id="verificationModal" role="dialog">
         <div class="modal-dialog">
@@ -204,7 +205,7 @@
                                     $("#messageModal").modal("show");
                                     $("#msg").html(message.message);
                                     $("#closeModal").click(()=>{
-                                        location.href="/profile"
+                                        location.href="/profile/<%= locals.loginuser.username %>"
                                     });
                                 },error: function(err){
                                     $('#warningmsg').css('display', 'inline');
@@ -245,7 +246,7 @@
                             $("#messageModal").modal("show");
                             $("#msg").html(message.message);
                             $("#closeModal").click(()=>{
-                                location.href="/profile"
+                                location.href="/profile/<%= locals.loginuser.username %>"
                             });
                         },error: function(err){
                             $('#warningmsg').css('display', 'inline');

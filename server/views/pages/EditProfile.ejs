@@ -12,7 +12,7 @@
     <div class="body">
 
         <div class="sidenav">
-            <a href="/profile">Profile</a>
+            <a href="/profile/<%= locals.loginuser.username %>">Profile</a>
             <a href="/edit/profile">Edit Profile</a>
             <a href="/changePassword">Change Password</a>
             <a href="/2FA">2-Factor Authentication</a>
@@ -161,21 +161,21 @@
                     $("#messageModal").modal("show");
                     $("#msg").html(msg.message);
                     $("#closeModal").click(()=>{
-                        location.href="/profile"              
+                        location.href="/profile//<%= locals.loginuser.username %>"              
                     });
                 },
                 error: function(result){
                     $("#messageModal").modal("show");
                     $("#msg").html(result.responseText);
                     $("#closeModal").click(()=>{
-                        location.href="/profile"
+                        location.href="/profile/<%= locals.loginuser.username %>"
                     });
                 }
             })  
             
         })
         $('#cancel').click(()=>{
-            location.href = "/profile";
+            location.href = "/profile/<%= locals.loginuser.username %>";
         })
 
     </script>
