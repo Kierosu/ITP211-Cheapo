@@ -11,7 +11,7 @@ var UserModel = require('../models/user');
 exports.show = function (req, res){
     //List all the products
     console.log('Copying tables')
-    sequelize.query('SET IDENTITY_INSERT finalProducts ON INSERT INTO finalProducts (finalProductID, finalProductName, finalProductDescription, finalProductPrice, finalProductImage, userID, createdAt, updatedAt) SELECT ProductID, ProductName, ProductDescription, ProductPrice, ProductImage, UserId, createdAt, updatedAt FROM products')
+    sequelize.query('SET IDENTITY_INSERT finalProducts ON INSERT INTO finalProducts (finalProductID, finalProductName, finalProductDescription, finalProductPrice, finalProductImage, userID, sellerId, createdAt, updatedAt) SELECT ProductID, ProductName, ProductDescription, ProductPrice, ProductImage, UserId, sellerId, createdAt, updatedAt FROM products')
 
     console.log('Deleting Product Table')
     sequelize.query("delete from products where UserId = " + req.user.userID);

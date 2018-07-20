@@ -105,6 +105,6 @@ exports.delete = function (req, res) {
                 message: "Error"
             });
         }
-        res.status(200).send({ message: "Deleted Product : " + record_num});
+        res.status(200).send({ message: "Deleted Product : " + record_num, price: deleteProduct.ProductPrice});
     });
 };

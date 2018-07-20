@@ -25,6 +25,9 @@ const finalProducts = sequelize.define('finalProducts', {
     userID: {
         type: Sequelize.INTEGER
     },
+    sellerId: {
+        type: Sequelize.INTEGER
+    },
     createdAt: {
         type: Sequelize.DATE,
         field: 'createdAt',
@@ -39,7 +42,7 @@ const finalProducts = sequelize.define('finalProducts', {
       underscored: true
     });
 // force: true will drop the table if it already exists
-finalProducts.sync({ force: true, logging: console.log}).then(() => {
+finalProducts.sync({ force: false, logging: console.log}).then(() => {
     // Table created
     console.log("Final Products table synced");
 });

@@ -77,14 +77,14 @@
 									<li><kbd>Click on the markers to zoom in and see details about it.</kbd></li>
 								</ul>
 							</div>
-							<div class="done hidden">
+							<div class="done"><!--remember to add class hidden -->
 								<fieldset>
 									<legend>Shipment Completed!</legend>
 									<p>Thanks for shopping with Cheapo!</p>
-									<p>Please leave a feedback for our shopping site so as we can improve on our webpage!</p>
-									<br><br><br>
-									<legend>Feedback Form:</legend>
 									<div class="feedback">
+										<p>Please leave a feedback for our shopping site so as we can improve on our webpage!</p>
+										<br><br><br>
+										<legend>Feedback Form:</legend>
 										<label for="userrealname">User Name:</label>
 										<input id = "userrealname"class="form-control" type="text" placeholder="<%=username%>" readonly>
 										<br><br>
@@ -92,15 +92,20 @@
 											<label for="exampleFormControlTextarea1">Feedback:</label>
 											<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
 										  </div>
-										</form>
+										  <button class="btn btn-primary" id="addFeedback">Submit</button>
+									</div>
 									</div>
 								</fieldset>
-							</div>
+								</div>
+								<div class="sellermoney hidden">
+									<p class="changeMoney"></p>
+									<p class="listOfSellers"></p>
+								</div>
 							<br><br>
                         </div>
 						<div class="row">
 							<div class="col-sm-12">
-								<button id="backToShopping"class="btn">Back To Shopping</button>
+								<button id="backToShopping"class="btn hidden">Back To Shopping</button>
 							</div>
 						</div>
 				  </div>
@@ -115,14 +120,64 @@
 	<script src="js/nouislider.min.js"></script>
 	<script src="js/jquery.zoom.min.js"></script>
 	<script src="js/main.js"></script>
+	<script src="js/socket.io.js"></script>
 	<!-- <script src="js/progress-bar.js"></script>
 	<script src="js/appGress.js"></script> -->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSG_1ZKHdkjPhREhtUba47ZqCUMCzw61U&callback=initMap"
 async defer>
 </script>
 <script>
-	       function addToWish() {
-            var url = "<%=hostPath%>/feedback"; //Edit when database is implemented\
+var socket = io('http://localhost:3000');
+
+socket.on('receiveMoney', function(sellerMoney) {
+	
+	var uniqueNameArr = []
+
+	//Get all unique names 
+	for(var index in sellerMoney){
+		//If names are empty
+		if(uniqueNameArr.length <=0){
+			var uniqueNamesTemplate = {};
+
+			uniqueNamesTemplate["name"] = sellerMoney[index]["SellerName"];
+			uniqueNamesTemplate["amount"] = 0;
+			uniqueNameArr.push(uniqueNamesTemplate); 
+		}
+
+		for(var uniqueNameIndex in uniqueNameArr){
+			if(uniqueNameArr[uniqueNameIndex]["name"] != sellerMoney[index]["SellerName"]){
+				var uniqueNamesTemplate = {};
+
+				uniqueNamesTemplate["name"] = sellerMoney[index]["SellerName"];
+				uniqueNamesTemplate["amount"] = 0;
+				uniqueNameArr.push(uniqueNamesTemplate); 
+			}
+		}
+	}
+	for(var SellIndex in sellerMoney){
+		for(var uniqueIndex in uniqueNameArr){
+			if(sellerMoney[SellIndex]["SellerName"] == uniqueNameArr[uniqueIndex]["name"]){
+				uniqueNameArr[uniqueIndex]["amount"] += parseFloat(sellerMoney[SellIndex]["Money"]);
+			}
+		}
+	}
+	
+	console.log("Printing...");
+	var tempString = "";
+	for(var index in uniqueNameArr){
+		tempString += uniqueNameArr[index]["name"] + " received $" + uniqueNameArr[index]["amount"]
+		console.log("Name: " + uniqueNameArr[index]["name"] + "Total: " + uniqueNameArr[index]["amount"]);
+
+		
+	}
+	$(".listOfSellers").text(tempString);
+
+	$(".sellermoney").removeClass("hidden");
+	$(".changeMoney").text("Thanks for giving us your feedback! Cheapo has released the amount of $" + sellerMoney[0]["SellerName"] + sellerMoney[0]["Money"] + "to seller!");
+});
+
+		$("#addFeedback").click(function(){
+			var url = "<%=hostPath%>/feedback"; //Edit when database is implemented\
             var feedback = {
 				UserId: '<%=userID%>',
 				userName: $('#userrealname').val(),
@@ -133,27 +188,23 @@ async defer>
             $.ajax({
                 url: url,
                 type: "POST",
-                data: JSON.stringify(products),
+                data: JSON.stringify(feedback),
                 dataType: "json",
                 contentType: "application/json",
                 success: function(result){
-                    alert("Item Posted Successfully!");
+					alert("Delivery Completed!");
+					console.log(result.message);
+					$(".feedback").addClass("hidden");
+					$("#backToShopping").removeClass("hidden");
+
+
+
                 },
                 error: function(result){
-                    alert("Error Posting Item");
-                    discardAdd();
+                    alert("Delivery Failed");
                 }
-            })
-        }
-
-        function discardAdd() {
-            location.href = "<%=hostPath%>/item"
-        }
-        
-        $("#check").click( function()
-        {
-            window.location.replace("http://localhost:3000/shopping-cart");
-        })
+			})
+		})
 </script>
 
 <script>
@@ -188,6 +239,7 @@ function initMap(){
 		};
 
 		var getDistance = function(p1, p2) {
+			//haversine formula
 			var R = 6378137; // Earth’s mean radius in meter
 			var dLat = rad(parseFloat(p2.lat) - parseFloat(p1.lat));
 			var dLong = rad(p2.lng - p1.lng);
@@ -393,7 +445,6 @@ function initMap(){
 			var latlng = new google.maps.LatLng(newP1, p2);
 			vanMarker.setTitle('Delivery Van is ' + Math.round(getDistance(newP1,p2))  + 'm Away from you.') //Nan error
 			vanMarker.setPosition(latlng);
-			vanMarker.setAnimation(google.maps.Animation.BOUNCE);
 			// secondLocation(); //move from je to bukit batok
 			if(i!=numDeltas){
 				i++;
