@@ -53,13 +53,11 @@ exports.show = function (req, res){
             }
         });
         //Calculating product total value
-        var realQuantity = 0;
         var totalPrice = 0;
         var shippingFee = 0;
         var stripeTotal = 0;
         products.forEach(function(rayson) {
             totalPrice += rayson.ProductPrice;
-            realQuantity += 1;
         });
         if (totalPrice >50){
             subtotal = totalPrice;
@@ -86,7 +84,6 @@ exports.show = function (req, res){
                     req: req,
                     products: products,
                     total: totalPrice,
-                    realQuantity:realQuantity,
                     onePassword: array,
                     stripeTotal: stripeTotal * 100,
                     shippingFee: shippingFee,
