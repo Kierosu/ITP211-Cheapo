@@ -92,26 +92,43 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                             <div class="header-btns-icon">
                                 <i class="fa fa-shopping-cart"></i>
-                                <span class="qty">0</span>
+                                <span class="qty"><%= realQuantity %></span>
                             </div>
                             <strong class="text-uppercase">My Cart:</strong>
-                            <br>
-                            <span class="totalMoney">$<%= total %></span>
+							<br>
+							<% if (products.length <= 0) {%>
+								<span class="totalMoney">$0</span>
+							<% } else { %>
+								<span class="totalMoney">$<%= total %></span>
+							<% }; %>
                         </a>
                         <div class="custom-menu">
                             <div id="shopping-cart">
                                 <div class="shopping-cart-list">
-                                    <% products.forEach(function(products){ %>
+									<% products.forEach(function(products){ %>
+										<% if (products.length <= 0) {%>
                                     <div class="product product-widget" data-id="<%= products.ProductID %>">
                                         <div class="product-thumb">
                                             <img src="<%= products.ProductImage %>" alt="">
                                         </div>
                                         <div class="product-body">
-                                            <h3 class="product-price">$<%= products.ProductPrice %> <span class="qty">x1</span></h3>
-                                            <h2 class="product-name"><a href="#"><%= products.ProductName %></a></h2>
+                                            <h3 class="product-price">$0 <span class="qty">x1</span></h3>
+                                            <h2 class="product-name"><a href="#"></a></h2>
                                         </div>
                                         <button class="cancel-btn" data-id="<%= products.ProductID %>"><i class="fa fa-trash"></i></button>
-                                    </div>
+									</div>
+										<% } else {%>
+									<div class="product product-widget" data-id="<%= products.ProductID %>">
+											<div class="product-thumb">
+												<img src="<%= products.ProductImage %>" alt="">
+											</div>
+											<div class="product-body">
+												<h3 class="product-price">$<%= products.ProductPrice %> <span class="qty">x1</span></h3>
+												<h2 class="product-name"><a href="#"><%= products.ProductName %></a></h2>
+											</div>
+											<button class="cancel-btn" data-id="<%= products.ProductID %>"><i class="fa fa-trash"></i></button>
+										</div>
+										<% }; %>
                                     <% }); %>
                                 </div>
                                 <div class="shopping-cart-btns">

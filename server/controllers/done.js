@@ -18,8 +18,10 @@ exports.show = function (req, res){
     sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID, {model: Product}).then((products) => { 
     //Calculating product total value
         var totalPrice = 0;
+        var realQuantity = 0;
         products.forEach(function(rayson) {
             totalPrice += rayson.ProductPrice;
+            realQuantity += 1;
         });
         if (totalPrice >50){
             subtotal = totalPrice;
@@ -40,6 +42,7 @@ exports.show = function (req, res){
                     username : req.user.username,
                     email: req.user.email,
                     userID: req.user.userID,
+                    realQuantity: realQuantity,
                     dateJoined: req.user.joinDate,
                     type: req.user.userType,
                     membership: req.user.membership,
