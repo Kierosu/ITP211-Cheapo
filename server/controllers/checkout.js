@@ -124,10 +124,8 @@ exports.show = function (req, res){
         var totalPrice = 0;
         var shippingFee = 0;
         var stripeTotal = 0;
-        var realQuantity = 0;
         products.forEach(function(rayson) {
             totalPrice += rayson.ProductPrice;
-            realQuantity += 1
         });
         if (totalPrice >50){
             subtotal = totalPrice;
@@ -153,7 +151,6 @@ exports.show = function (req, res){
                     type: req.user.userType,
                     membership: req.user.membership,
                     req: req,
-                    realQuantity: realQuantity,
                     message: req.flash('info'),
                     products: products,
                     total: totalPrice,

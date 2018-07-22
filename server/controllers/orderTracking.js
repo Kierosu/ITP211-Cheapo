@@ -2,111 +2,16 @@
 var gravatar = require('gravatar');
 //get comments model
 var Product = require('../models/products');
-var finalProduct = require('../models/finalProducts');
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
 var geoip = require('geoip-lite');
 var passport = require('passport');
 var fs = require('fs');
 var UserModel = require('../models/user');
-var io = require('../../app');
-var ioCheck = io.ioExports;
-var EventEmitter = require('events').EventEmitter;
-var eventExample = new EventEmitter;
 
-
-
-
-
-exports.feedback = function (req,res){
-
-    var realTotalPrice = 0
-    var allObjects = [];
-
-    
-    sequelize.query("select finalProductID, sellerId, u.userId, (select username from Users where userId = pd.sellerId) As sellerName,finalProductName, finalProductImage, finalProductPrice, finalProductDescription from finalProducts pd join Users u on pd.UserID = u.userID  where pd.UserID = " + req.user.userID + " order by sellerId", {model: finalProduct}).then((finalproductsName) => { 
-            finalproductsName.forEach(function(test){
-                var objectTemplate = {};
-                //if (req.user.userID == test.userId){
-                    objectTemplate["SellerName"] = test.dataValues.sellerName;
-                    objectTemplate["Money"] = test.finalProductPrice;
-                    allObjects.push(objectTemplate);
-                //}
-                    
-            })
-            var sellerMoney = allObjects;
-            for (var index in allObjects)
-                console.log("Checking items in allObjects " + allObjects[index]["SellerName"]);
-            eventExample.emit('price', sellerMoney);
-        //add code to put the total price to the database
-        var uniqueAcc = [];
-        var accExist = false;
-
-		//Set unique Names
-		for (var objIndex in sellerMoney){
-			//Check unique arr empty
-			if(uniqueAcc.length<=0){
-				var objTemplate = {};
-				objTemplate ["SellerName"] = sellerMoney[objIndex]["SellerName"];
-				objTemplate["Money"] = 0
-				uniqueAcc.push(objTemplate);
-			}
-			//Loop through uniqueAcc for names
-			for(var uAccIndex in uniqueAcc){
-				//If name exist in uniqueAcc, 
-				if(sellerMoney[objIndex]["SellerName"] == uniqueAcc[uAccIndex]["SellerName"])
-					accExist = true;
-			}
-			//If account doesnt exist
-			if(!accExist){
-				var objTemplate = {};
-				objTemplate ["SellerName"] = sellerMoney[objIndex]["SellerName"];
-				objTemplate["Money"] = 0
-				uniqueAcc.push(objTemplate);
-			}
-			else{
-				accExist = false;
-			}
-		}
-
-		//Add all sums together
-		for(var objIndex in sellerMoney){
-			for(var uAccIndex in uniqueAcc){
-				if (sellerMoney[objIndex]["SellerName"] == uniqueAcc[uAccIndex]["SellerName"]){
-					uniqueAcc[uAccIndex]["Money"] += sellerMoney[objIndex]["Money"];
-					break;
-				}
-			}
-        }
-        
-        //add to database
-        for(uAccIndex in uniqueAcc){
-            //Check Seller Name:
-            var seller = uniqueAcc[uAccIndex]["SellerName"];
-            var sellerDollars = parseFloat(uniqueAcc[uAccIndex]["Money"]);
-            //Add to database using seq
-            sequelize.query("update Users set valueRecieved = " + sellerDollars + " where username = '" + seller + "';");
-            console.log("Money Sent!")
-		}
-
-        });
-        
-        res.status(200).send({ message: "Successfully released money of " + realTotalPrice + " to seller!"})
-    }
 exports.show = function (req, res){
     //List all the products
     sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID, {model: Product}).then((products) => {     
-        //sending money socket io
-        ioCheck.on('connection', function (socket) {
-            console.log("MoneyLoader connected!");
-            eventExample.on('price', function(sellerMoney){
-                console.log("Money received");
-                //Do something with someData
-                console.log(sellerMoney[0]);
-                socket.emit('receiveMoney', sellerMoney);
-            });
-        });
-        
         //Ip to lon and lat
         var ip = "183.90.37.120";
         var geo = geoip.lookup(ip);
@@ -121,11 +26,8 @@ exports.show = function (req, res){
         var totalPrice = 0;
         var shippingFee = 0;
         var stripeTotal = 0;
-        var realQuantity = 0;
-
         products.forEach(function(rayson) {
             totalPrice += rayson.ProductPrice;
-            realQuantity += 1;
         });
         if (totalPrice >50){
             subtotal = totalPrice;
@@ -149,7 +51,6 @@ exports.show = function (req, res){
                 membership: req.user.membership,
                 req: req,
                 myCity: myCity,
-                realQuantity: realQuantity,
                 myLatitude: myLatitude,
                 myLongitude: myLongitude,
                 products: products,

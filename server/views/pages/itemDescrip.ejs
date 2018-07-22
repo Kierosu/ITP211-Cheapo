@@ -132,7 +132,7 @@
             var url = "<%=hostPath%>/item/macbook"; //Edit when database is implemented\
             var products = {
                 UserId: '<%=userID%>',
-                sellerId: 4,
+                sellerId: 5,
                 ProductName: $("#macbookName").val(),
                 ProductPrice: $("#macbookPrice").val(),
                 ProductDescription: "",
@@ -167,7 +167,7 @@
             var url = "<%=hostPath%>/add"; //Edit when database is implemented\
             var products = {
                 UserId: '<%=userID%>',
-                sellerId: 3,
+                sellerId: 2,
                 ProductName: $("#macbookName").val(),
                 ProductPrice: $("#macbookPrice").val(),
                 ProductDescription: "",
@@ -180,9 +180,10 @@
                 dataType: "json",
                 contentType: "application/json",
                 success: function(result){
-                    window.location = "http://localhost:3000/wishlist"
+                    alert("Item Posted Successfully!");
                 },
                 error: function(result){
+                    alert("Error Posting Item");
                     discardAdd();
                 }
             })

@@ -162,7 +162,7 @@ var pending = require('./server/controllers/pending');
 
 
 // Shopping Cart
-app.get('/shopping-cart',auth.isLoggedIn, products.list);
+app.get('/shopping-cart', products.list);
 app.delete('/shopping-cart/:ProductID', products.delete);
 
 // Checkout 
@@ -192,7 +192,15 @@ app.post('/wishlist-Add/:ProductID', auth.isLoggedIn, wishList.addItems);
 
 //Order Tracking
 app.get('/order-tracking', auth.isLoggedIn, orderTracking.show)
-app.post('/feedback', auth.isLoggedIn, orderTracking.feedback)
+
+// io.on('connection',function(socket){
+//         // socket.on('send', function(redirectData){
+//         //     var destination = redirectData;
+//         //     global.destination = destination
+//         // });
+//         // socket.emit('redirect', destination);
+//         console.log("Connected!")
+//     });
 
 app.get('/', auth.test)
 

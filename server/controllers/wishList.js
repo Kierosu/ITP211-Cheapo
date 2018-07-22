@@ -49,59 +49,32 @@ exports.addItems = function (req, res){
 
 exports.show = function (req, res){
     //List all the products
-    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID, {model: Product}).then((products) => {   
     sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from wishList w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", {model: wishList}).then((wishList) => { 
         console.log(wishList);
         wishList.forEach(function(wishlist){
             console.log(wishlist.dataValues.sellerName)
         });
-          //Calculating product total value
-          var totalPrice = 0;
-          var shippingFee = 0;
-          var stripeTotal = 0;
-          var realQuantity = 0;
-          products.forEach(function(rayson) {
-              totalPrice += rayson.ProductPrice;
-              realQuantity += 1
-          });
-          if (totalPrice >50){
-              subtotal = totalPrice;
-              stripeTotal = totalPrice;
-          } else{
-              subtotal = totalPrice;
-              totalPrice += 5.00;
-              shippingFee = 5.00;
-              stripeTotal = totalPrice;
-          }
-            var id = req.params.userID;
-            UserModel.findById(id).then(function() {
-                res.render('wishList', {
-                    title: 'Cheapo - '+ req.user.username + '\'s Wish List',
-                    avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
-                    username : req.user.username,
-                    email: req.user.email,
-                    userID: req.user.userID,
-                    dateJoined: req.user.joinDate,
-                    type: req.user.userType,
-                    membership: req.user.membership,
-                    req: req,
-                    realQuantity: realQuantity,
-                    products: products,
-                    total: totalPrice,
-                    query: "",
-                    wishlist: wishList,
-                    stripeTotal: stripeTotal * 100,
-                    shippingFee: shippingFee,
-                    subtotal: subtotal,
-                    gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro'}, true),
-                    hostPath: req.protocol + "://" + req.get("host"),
-                    urlPath: req.protocol + "://" + req.get('host') + req.url
-                });
-            }).catch((err) => {
-                return res.status(400).send({
-                    message: err
-                });
+        var id = req.params.userID;
+        UserModel.findById(id).then(function() {
+            res.render('wishList', {
+                title: 'Cheapo - '+ req.user.username + '\'s Wish List',
+                avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
+                username : req.user.username,
+                email: req.user.email,
+                userID: req.user.userID,
+                dateJoined: req.user.joinDate,
+                type: req.user.userType,
+                membership: req.user.membership,
+                req: req,
+                wishlist: wishList,
+                gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro'}, true),
+                hostPath: req.protocol + "://" + req.get("host"),
+                urlPath: req.protocol + "://" + req.get('host') + req.url
             });
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
+        });
     });
-});
 };

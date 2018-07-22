@@ -52,11 +52,8 @@ exports.list = function (req, res){
         var totalPrice = 0;
         var shippingFee = 0;
         var stripeTotal = 0;
-        var realQuantity = 0;
-
         products.forEach(function(rayson) {
             totalPrice += rayson.ProductPrice;
-            realQuantity += 1;
         });
         if (totalPrice >50){
             subtotal = totalPrice;
@@ -79,7 +76,6 @@ exports.list = function (req, res){
                 type: req.user.userType,
                 membership: req.user.membership,
                 req: req,
-                realQuantity: realQuantity,
                 coupons: coupons,
                 announce:announce,
                 products: products,
@@ -109,6 +105,6 @@ exports.delete = function (req, res) {
                 message: "Error"
             });
         }
-        res.status(200).send({ message: "Deleted Product : " + record_num, price: deleteProduct.ProductPrice});
+        res.status(200).send({ message: "Deleted Product : " + record_num});
     });
 };
