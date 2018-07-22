@@ -101,12 +101,11 @@
 	var socket = io('http://localhost:3000');
 	socket.on('redirect', function(someData) {
 		function redirectPage (){
-			// window.location.href = someData;
+			window.location.href = someData;
 		}
 		setTimeout(redirectPage, 5000)
 	});
 	socket.on('status', function(text) {
-		alert(text);
 		$("#someText").text(text);
 	});
 	function loadInfo (){
