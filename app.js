@@ -162,7 +162,7 @@ var pending = require('./server/controllers/pending');
 
 
 // Shopping Cart
-app.get('/shopping-cart', products.list);
+app.get('/shopping-cart',auth.isLoggedIn, products.list);
 app.delete('/shopping-cart/:ProductID', products.delete);
 
 // Checkout 
