@@ -79,7 +79,7 @@
 						  <input type="text" id="passwordHolder" />
 					  </div>
 					  <br><br>
-					  <center><button id='check'class="btn">Send OTP Email</button></center>
+					  <center><button id='check'class="btn">Confirm OTP</button></center>
 					</div>
 					<br><br>
 					<div class="panel-footer">
@@ -110,13 +110,12 @@
 		$("#check").click( function()
            {
 			var password = document.getElementById("passwordHolder").value;
-			alert(password);
 			alert('<%= onePassword %>')
 			if (password == '<%= onePassword %>')
 			{
 				$("#wrongPassword").addClass("hidden");
 				$("#correctPassword").removeClass("hidden");
-				// window.location.replace("http://localhost:3000/checkout");
+				window.location.replace("http://localhost:3000/checkout");
 			}
 			else
 			{
