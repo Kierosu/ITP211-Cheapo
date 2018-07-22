@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title>E-SHOP HTML Template</title>
+
+	<!-- Google font -->
+	<!-- Bootstrap -->
+	<% include ../partials/stylesheet %>
+
+</head>
+
+<body>
+
+	<% include ../partials/header %>
+
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href='#'>Home</a></li>
+				<li class="active">Blank</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+
+	<!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container-fluid">
+			<!-- row -->
+			<div class="row">    
+				<% itemPost.forEach(function(itemPost){ %>
+					<div class="col-md-3" style="border-style: solid; text-align: center; box-sizing: border-box;">	
+						<div class="classWithPad">
+							<img src="images/<%= itemPost.itemPic %>" class="figure-img img-fluid img-rounded" style="height:200px; width: 200px;"> <br>
+							<h2> <%= itemPost.title %> </h2> <br>
+							<label id="productFont"> S$<%= itemPost.price %> </label><br>
+							<label id="productFont"> Brand: <%= itemPost.brand %> </label> <br>
+							<label id="productFont"> Details: <%= itemPost.prodDesc %> </label> <br>
+							<button class="wishlistBtn"> Save to Wishlist</button>
+							<button class="productBtn" data-id="<%= itemPost.id%>">Product</button>
+							<button class="btn btn-secondary pull-right deleteBtn" type="button" data-id="<%= itemPost.id%>"> Delete </button>
+							<button class="btn btn-secondary pull-left editBtn" type="button" data-id="<%= itemPost.id%>"> Edit</button>
+						</div>
+					</div>
+				<% }) %>					
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
+
+	<!-- jQuery Plugins -->
+	<% include ../partials/javascript %>
+
+	<% include ../partials/footer %>
+	<script>
+		$('.deleteBtn').click(function() {
+			var item_id = $(this).data('id');
+			$.ajax({
+				url: '<%-urlPath%>' + '/' + item_id,
+				type: 'DELETE',
+				success: function(result) {
+					console.log(result);
+					var itemToRemove = '.list-group-item[data-id='+item_id+']';
+					$(itemToRemove).remove();
+					location.reload();
+				},
+				error: function(result){
+					alert("Unable to delete item.");
+					console.log(result);
+				}
+			});
+		})
+		$('.productBtn').click(function() {
+			var imageId = $(this).data('id');
+			window.location.replace("/itemProduct/" + imageId)
+			console.log("Check show")
+			$.ajax({
+				url: '<%=urlPath%>' + '/' + imageId,
+				type: 'GET',
+				success: function(result){
+					console.log('View Image')
+				}
+			})
+		})
+		$('.editBtn').click(function () {
+			var record_num = $(this).data('id');
+			location.href = "http://localhost:3000/editProduct/" + record_num;
+			
+		});
+
+	</script>
+</body>
+
+</html>

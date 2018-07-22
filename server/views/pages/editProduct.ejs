@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title>E-SHOP HTML Template</title>
+
+	<!-- Google font -->
+	<!-- Bootstrap -->
+	<% include ../partials/stylesheet %>
+
+</head>
+
+<body>
+        <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Edit Item Product</h4>
+        </div>
+        <div class="modal-body">
+            <fieldset class="form-group">
+                <label for="title">Listing Title</label>
+                <input type="text" id="title" name="title" class="form-control" placeholder="Listing Title" required="true" value="<%=item.title%>">
+            </fieldset>
+            <fieldset class="form-group">
+                <label for="price">Price</label>
+                <input type="number" id="price" name="price" class="form-control" placeholder="Price" required="true" value="<%=item.price%>">
+            </fieldset>
+            <fieldset class="form-group">
+                <label for="brand">Brand</label>
+                <input type="text" id="brand" name="brand" class="form-control" placeholder="Brand"  value="<%=item.brand%>">
+            </fieldset>
+            <fieldset class="form-group">
+                <label for="prodDesc">Product Description</label>
+                <textarea id="prodDesc" rows="5" name="prodDesc" class="form-control" placeholder="Product Description" value=""> <%=item.prodDesc%> </textarea>
+            </fieldset>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" onclick=saveChanges()>Save Changes</button>
+            <button type="button" class="btn btn-secondary" onclick=discardChanges()>Cancel</button>
+        </div>
+
+        <!-- jQuery Plugins -->
+	<% include ../partials/javascript %>
+    
+        <script>
+            function saveChanges() {
+                var url = "<%=hostPath%>/edit/<%=item.id%>";
+                var newValues = {
+                    title: $("#title").val(),
+                    price: $("#price").val(),
+                    brand: $("#brand").val(),
+                    prodDesc: $("#prodDesc").val()
+                }
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: JSON.stringify(newValues),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function(result){
+                        alert("Product updated successfully");
+                        location.href = "<%=hostPath%>/itemPosted"
+                    },
+                    error: function(result){
+                        alert("Error updating student record");
+                        discardChanges();
+                    }
+                })
+            }
+    
+            function discardChanges() {
+                location.href = "<%=hostPath%>/itemPosted"
+            }
+        </script>
+    </body>
+    
+
+</html>

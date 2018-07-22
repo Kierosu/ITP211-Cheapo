@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title>E-SHOP HTML Template</title>
+
+	<!-- Google font -->
+	<!-- Bootstrap -->
+	<% include ../partials/stylesheet %>
+
+</head>
+
+<body>
+
+	<% include ../partials/header %>
+
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href='#'>Home</a></li>
+				<li class="active">Blank</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+
+	<!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+                <h2>Basic Details</h2>
+                <form action="/posting" method="post" enctype="multipart/form-data">
+                  <div class="form-group">
+										<h3> Image </h3>
+									<input type="file" id="image" name="image" required="">
+									<br>
+										<h3> Product Title </h3>
+                    <input type="text" class="form-control" id="title" placeholder="Listing Title" name="title" required="">
+                  </div>
+                  <div class="form-group">
+                      <h3> Product Detail </h3>
+                        <input type="text" class="form-control" id="brand" placeholder="Brand" name="brand">
+                      </div>
+                  <div class="form-group">
+                    <input type="number" class="form-control" id="price" placeholder="Price" name="price" required="">
+                  </div>
+                  <div class="radio">
+                    <div class="form-group">
+                        <h3> Description </h3>
+                        <textarea class="form-control" rows="5" id="prodDesc" placeholder="Describe what you are selling, including details that might be interesting to the buyer" name="prodDesc" required></textarea>
+                        </div>
+                    <button id="send" type="submit" class="uploadButton">Submit</button>
+                </form>
+              </div>
+        <!-- /container -->
+	</div>
+	<!-- /section -->
+
+	<!-- jQuery Plugins -->
+	<% include ../partials/javascript %>
+
+	<% include ../partials/footer %>
+</body>
+
+</html>

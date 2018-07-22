@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title>E-SHOP HTML Template</title>
+
+	<!-- Google font -->
+	<!-- Bootstrap -->
+    <% include ../partials/stylesheet %>
+ 
+</head>
+
+<body>
+
+	<% include ../partials/header %>
+
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href='#'>Home</a></li>
+				<li class="active">Blank</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+
+	<!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<div class="row" style="margin:auto;">
+				<div class="col-lg-4"> <img src = "../images/<%= productImage %>" style="height:300px; width: 300px;"></img> </div>
+				<div class="col-lg-8"> <h2 class="title"> <%= productTitle %> </h2> </div>
+				<div class="col-lg-8"> <h3 class="price"> S$<%= productPrice %> </h3> </div>
+				<div class="col-lg-8"> <h3 class="brand"> Brand: <%= productBrand %> </h3> </div>
+				<div class="col-lg-8"> <h4 class="prodDesc"> Description: <%= productDesc %> </h4> </div>
+				</div>
+				<div class="row" style="margin:auto;">
+					<div class="col-lg-4"></div>
+					<div class="col-lg-8">
+						<button class="wishlistBtn" id="inputGone"> Save to Wishlist</button> 
+						<button class="productBtn" id="inputCart"> Add To Cart </button> 
+					</div>
+					
+				</div>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
+
+	<!-- jQuery Plugins -->
+	<% include ../partials/javascript %>
+	
+	<% include ../partials/footer %>
+
+	<script>
+		</script>
+	
+</body>
+
+</html>
