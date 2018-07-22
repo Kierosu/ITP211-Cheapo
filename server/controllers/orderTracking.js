@@ -38,11 +38,59 @@ exports.feedback = function (req,res){
             for (var index in allObjects)
                 console.log("Checking items in allObjects " + allObjects[index]["SellerName"]);
             eventExample.emit('price', sellerMoney);
+        //add code to put the total price to the database
+        var uniqueAcc = [];
+        var accExist = false;
+
+		//Set unique Names
+		for (var objIndex in sellerMoney){
+			//Check unique arr empty
+			if(uniqueAcc.length<=0){
+				var objTemplate = {};
+				objTemplate ["SellerName"] = sellerMoney[objIndex]["SellerName"];
+				objTemplate["Money"] = 0
+				uniqueAcc.push(objTemplate);
+			}
+			//Loop through uniqueAcc for names
+			for(var uAccIndex in uniqueAcc){
+				//If name exist in uniqueAcc, 
+				if(sellerMoney[objIndex]["SellerName"] == uniqueAcc[uAccIndex]["SellerName"])
+					accExist = true;
+			}
+			//If account doesnt exist
+			if(!accExist){
+				var objTemplate = {};
+				objTemplate ["SellerName"] = sellerMoney[objIndex]["SellerName"];
+				objTemplate["Money"] = 0
+				uniqueAcc.push(objTemplate);
+			}
+			else{
+				accExist = false;
+			}
+		}
+
+		//Add all sums together
+		for(var objIndex in sellerMoney){
+			for(var uAccIndex in uniqueAcc){
+				if (sellerMoney[objIndex]["SellerName"] == uniqueAcc[uAccIndex]["SellerName"]){
+					uniqueAcc[uAccIndex]["Money"] += sellerMoney[objIndex]["Money"];
+					break;
+				}
+			}
+        }
+        
+        //add to database
+        for(uAccIndex in uniqueAcc){
+            //Check Seller Name:
+            var seller = uniqueAcc[uAccIndex]["SellerName"];
+            var sellerDollars = parseFloat(uniqueAcc[uAccIndex]["Money"]);
+            //Add to database using seq
+            sequelize.query("update Users set valueRecieved = " + sellerDollars + " where username = '" + seller + "';");
+            console.log("Money Sent!")
+		}
+
         });
         
-        //add code to put the total price to the database
-
-
         res.status(200).send({ message: "Successfully released money of " + realTotalPrice + " to seller!"})
     }
 exports.show = function (req, res){
