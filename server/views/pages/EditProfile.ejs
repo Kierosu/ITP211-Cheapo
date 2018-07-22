@@ -161,7 +161,7 @@
                     $("#messageModal").modal("show");
                     $("#msg").html(msg.message);
                     $("#closeModal").click(()=>{
-                        location.href="/profile//<%= locals.loginuser.username %>"              
+                        location.href="/profile/<%= locals.loginuser.username %>"              
                     });
                 },
                 error: function(result){
