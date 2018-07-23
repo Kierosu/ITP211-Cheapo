@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+      <title><%= title %></title>
+      <!-- PayPal API -->
+      <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+      <!-- Google font -->
+      <link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
+      <!-- Bootstrap -->
+      <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+      <!-- Slick -->
+      <link type="text/css" rel="stylesheet" href="css/slick.css" />
+      <link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
+      <!-- nouislider -->
+      <link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
+      <!-- Font Awesome Icon -->
+      <link rel="stylesheet" href="css/font-awesome.min.css">
+      <!-- Custom stylesheet -->
+      <link type="text/css" rel="stylesheet" href="css/raysonStyle.css" />
+   </head>
+   <body>
+        <% include ../partials/header %>
+      <!-- BREADCRUMB -->
+      <div id="breadcrumb">
+         <div class="container">
+            <ul class="breadcrumb">
+               <li>
+                  <a href="#">Home</a>
+               </li>
+               <li class="active">Wish List</li>
+            </ul>
+         </div>
+      </div>
+      <!-- /BREADCRUMB -->
+      <!-- section -->
+      <center>
+         <div class="section">
+            <div class="container">
+                <fieldset>
+                    <h2>WishList</h2>
+                </fieldset>
+               <br>
+               <br>
+               <div class="panel panel-default">
+                  <div class="panel-heading">
+                     <div class="#">
+                        <div class="heading cf">
+                           <a href="#" class="continue">Continue Shopping</a>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="panel-body">
+                     <div class="cart">
+                        <ul class="tableHead">
+                           <li class="prodHeader">Product</li>
+                           <li>Quantity</li>
+                           <li>Total</li>
+                           <li>Remove</li>
+                        </ul>
+                        <% wishlist.forEach(function(wishlist){ %>
+                        <ul class="cartWrap">
+                           <li class="items even" data-id="<%= wishlist.ProductID %>">
+                              <div class="infoWrap">
+                                 <div class="cartSection">
+                                    <img src="<%=wishlist.ProductImage%>" value="<%=wishlist.ProductImage%>" alt="" class="itemImg" />
+                                    <p class="itemNumber">#123456789</p>
+                                    <h3>
+                                       <%= wishlist.ProductName %>
+                                    </h3>
+                                    <input type="hidden" class="name" value="<%= wishlist.ProductName%>">
+                                    <input type="hidden" class="sellerId" value="<%= wishlist.sellerId%>">
+                                    <input type="hidden" class="img" value="<%= wishlist.ProductImage%>">
+                                    <input type="hidden" class="desc" value="<%= wishlist.ProductDescription%>">
+                                    <p>
+                                       <%= wishlist.ProductDescription %>
+                                    </p>
+                                    <p class="itemNumber stockStatus">Uploaded By: <%= wishlist.dataValues.sellerName %></p>
+                                    <p class="stockStatus"> In Stock</p>
+                                 </div>
+                                 <div class="prodTotal cartSection">
+                                    <p class="price">$<%= wishlist.ProductPrice %>
+                                    </p>
+                                 </div>
+                                 <div class="cartSection removeWrap">
+                                     <a class="add" data-id="<%= wishlist.ProductID %>">+</a>
+                                    <a class="remove" data-id="<%= wishlist.ProductID %>">x</a>
+                                 </div>
+                              </div>
+                           </li>
+                        </ul>
+                        <% }); %>
+                     </div>
+                  </div>
+                  <br><br>
+                  <div class="panel-footer">
+                     <div class="subtotal cf">
+                        <ul>
+                           <li class="totalRow">
+                              <a href="/shopping-cart" class="btn continue">Shopping Cart</a>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </center>
+      <!-- /section -->
+      <% include ../partials/footer %>
+      <!-- jQuery Plugins -->
+      <script src="js/jquery.min.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+      <script src="js/slick.min.js"></script>
+      <script src="js/nouislider.min.js"></script>
+      <script src="js/jquery.zoom.min.js"></script>
+      <script src="js/main.js"></script>
+      <script>
+         $('.remove').click(function () {
+             var ProductID = $(this).data("id");
+             $.ajax({
+                 url: '<%-urlPath%>' + '/' + ProductID,
+                 type: 'DELETE',
+                 success: function (result) {
+                     console.log(result);
+                     var itemToRemove = '.items even[data-id=' + ProductID + ']';
+                     $(itemToRemove).remove();
+                     location.reload(true);
+                 },
+                 error: function (result) {
+                     alert("Unable to delete Product.");
+                     console.log(result);
+                 }
+             });
+         });
+
+	//Inserting Data with ajax
+	$('.add').click(function () {
+        var s = $('.price').text();
+        var sliced = s.slice(1)
+        console.log(sliced)
+        var ProductID = $(this).data("id");
+		var url = "<%=hostPath%>/wishlist-Add/" + ProductID;
+		var addToCart = {
+            UserId: "<%= userID %>",
+            ProductName: $('.name').val(),
+            ProductDescription: $('.desc').val(),
+            ProductPrice:  sliced,
+            sellerId: parseInt($('.sellerId').val()),
+            ProductImage: $('.img').val()
+		}
+		$.ajax({
+			url: url,
+			type: "POST",
+			data: JSON.stringify(addToCart),
+			dataType: "json",
+			contentType: "application/json",
+			success: function(result){
+                alert('Success')
+                $.ajax({
+                 url: '<%-urlPath%>' + '/' + ProductID,
+                 type: 'DELETE',
+                 success: function (result) {
+                     console.log(result);
+                     var itemToRemove = '.items even[data-id=' + ProductID + ']';
+                     $(itemToRemove).remove();
+                     location.reload(true);
+                 },
+                 error: function (result) {
+                     alert("Unable to delete Product.");
+                     console.log(result);
+                 }
+             });
+			},
+			error: function(result){
+				alert("Failed")
+			}
+		})
+    })
+         </script>
+   </body>

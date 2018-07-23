@@ -1,99 +1,212 @@
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
-var bodyParser = require('body-parser');
-var flash = require('connect-flash');
-var passport = require('passport');
-var express = require('express');
-var path = require('path');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-exports.ioC = io;
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const multer = require('multer');
+const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+exports.ioExports = io;
 
-// Staticfolder
-app.use(express.static(path.join(__dirname, 'public')));
+const upload = multer({dest: './public/uploads/', limits: {fileSize: 1000000, files:1} });
 
-// View engine setup
-app.set('views', path.join(__dirname, 'server/views/pages/'));
-app.set('view engine', 'ejs');
+const auth = require('./server/controllers/profile');
 
-// Passport Config
-require('./server/config/passport')(passport);
+// Modules to store session
+var myDatabase = require("./server/controllers/database");
+var expressSession = require("express-session");
+var SessionStore = require('express-session-sequelize')(expressSession.Store);
+var sequelizeSessionStore = new SessionStore({
+    db: myDatabase.sequelize
+});
+// Import Passport and Warning flash modules
+var passport = require("passport");
+var flash = require("connect-flash");
 
-// Import controllers
-var reviews = require('./server/controllers/review');
-var reports = require('./server/controllers/report');
-var users = require('./server/controllers/users');
-var items = require('./server/controllers/items');
-var auctions = require('./server/controllers/auctions');
+// ejs template path
+app.set("views", path.join(__dirname, "server/views/pages"));
+// view engine setup
+app.set("view engine", "ejs");
+
+
+// Passport configuration
+require("./server/config/passport")(passport);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(cookieParser());
 
-// Express session middleware
-app.use(session({
-    secret: 'mysecret',
-    resave: true,
-    saveUninitialized: true
-    // cookie: {secure: true}
-}))
+// Setup public directory
+app.use(express.static(path.join(__dirname, "public")));
 
-// Passport middleware
+// required for passport
+// secret for session
+app.use(expressSession({
+    secret: "sometextgohere",
+    store: sequelizeSessionStore,
+    resave: false,
+    saveUninitialized: false,
+    
+}));
+
+// Init passport authentication
 app.use(passport.initialize());
+// persistent login sessions
 app.use(passport.session());
-
-// Flash
+// flash messages
 app.use(flash());
 
 // Global variables
 app.use((req, res, next) => {
     res.locals.msg = req.flash('msg');
     res.locals.error = req.flash('error');
-    res.locals.user = req.user || null;
+    res.locals.loginuser = req.user || null;
     res.locals.items = req.items || null;
     next();
 });
 
-// Routes
-app.use('/', users)
+// Matthew's codes
+var auctions = require('./server/controllers/auction');
+var reviews = require('./server/controllers/review');
+var reports = require('./server/controllers/report');
+var items = require('./server/controllers/items');
+var mail = require('./server/controllers/mail');
+
 app.use('/items', items)
 app.use('/reviews', reviews)
 app.use('/reports', reports)
 app.use('/auctions', auctions)
+app.use('/mail', mail)
 
-app.get('/test', (req, res) => {
-    res.render("auctionItem");
-})
+//Eugene's code
+// Logout Page
+app.get('/logout', auth.logout);
 
+app.get('/login', auth.loginCheck, auth.signin);
+app.post('/login',passport.authenticate('local-login', {
+    failureRedirect: '/',
+    failureFlash: true
+}), function(req,res){
+    res.status(200).send({message: req.user.TwoFA}); 
+}
+);
 
-// io.on('connection', function (socket) {
-//     console.log('sss connected');
-//     socket.on('testA', (data) => {
-//         io.emit('replayFromServer', { msg: data });
-//     })
-// });
+app.post('/verifyOTP', auth.verifyOTP)
 
-app.use((req, res, next) => {
-    res.status(404).render('pagenotfound', { title: "Sorry, page not found" });
-    next();
-})
+app.get('/signup', auth.isLoggedInV2, auth.signup);
+app.post('/signup', passport.authenticate('local-signup', {
+    successRedirect: '/logout',
+    failureRedirect: '/signup',
+    failureFlash: true
+}));
 
-howMany = [];
-var testAC = io.of('/testAC');
-testAC.on('connection', function (socket) {
-    howMany.push(socket);
-    console.log('Connected: %s sockets connected', howMany.length);
+app.post('/checkTFA', auth.checkTFA);
 
-    socket.on('disconnect', (data) => {
-        howMany.splice(howMany.indexOf(socket), 1);
-        console.log('Disconnected: %s sockets connected', howMany.length);
-    })
+app.get('/profile/:username', auth.isLoggedIn, auth.profilepage);
 
-    socket.on('testA', (data) => {
-        console.log(data);
-        testAC.emit('replayFromServer', { msg: data });
-    })
+//edit profile info
+app.get('/edit' + '/profile', auth.isLoggedIn, auth.editProfile);
+app.post('/uploadImage', upload.single('image'), auth.uploadImage);
+app.post('/updateProfile', auth.saveChanges);
+
+//forget username/password
+app.get('/forgetpass', auth.isLoggedInV2, auth.forgetPass);
+app.post('/forgetpass', auth.setSendPass);
+app.get('/forgetusername', auth.isLoggedInV2, auth.forgetUsername);
+app.post('/forgetusername', auth.sendUsername);
+
+//Change pass
+app.get('/changePassword', auth.isLoggedIn, auth.changePass);
+app.post('/changePassword',auth.isLoggedIn, auth.savePassword);
+
+//2-Factor Auth
+app.get('/2FA', auth.isLoggedIn, auth.TwoFactorAuth);
+app.post('/googleauth', auth.isLoggedIn, auth.saveGoogleAuth);
+app.post('/disableTFA', auth.isLoggedIn, auth.disableTFA);
+
+//Google Sign In
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read' ] } ));
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    var day = 86400000;
+    req.session.cookie.expires = new Date(Date.now() + day);
+    req.session.cookie.maxAge = day;
+    res.redirect('/');
 });
 
-server.listen(process.env.PORT || 4300);
+
+//Rayson's code
+
+// Set Storage Engine
+const storage = multer.diskStorage({
+    destination: './public/uploads',
+    filesname: function(req, file, cb){
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+//import shoppingCart controllers
+var products = require('./server/controllers/shoppingCart');
+
+//import shoppingCart controllers
+var checkout = require('./server/controllers/checkout');
+
+//import confirmation controllers
+var confirmation = require('./server/controllers/confirmation');
+
+//import Item Description controllers
+var itemDes = require('./server/controllers/itemDescrip');
+
+
+//import done 
+var done = require('./server/controllers/done');
+
+//import wishlist
+var wishList = require('./server/controllers/wishList');
+
+//import order tracking
+var orderTracking = require('./server/controllers/orderTracking');
+
+//import pending
+var pending = require('./server/controllers/pending');
+
+
+// Shopping Cart
+app.get('/shopping-cart', products.list);
+app.delete('/shopping-cart/:ProductID', products.delete);
+
+// Checkout 
+app.get('/checkout', auth.isLoggedIn, checkout.show);
+app.post("/checkout/:userID", checkout.insert);
+
+//Pending Page
+app.get('/pending', auth.isLoggedIn, pending.show)
+app.post("/pendingBankAnswer", pending.answer);
+
+//Confirmations
+app.get('/confirmation', auth.isLoggedIn, confirmation.show);
+
+//Items descrip
+app.get('/item', auth.isLoggedIn, itemDes.show);
+app.post("/item/macbook", auth.isLoggedIn, itemDes.insert);
+app.post("/add", auth.isLoggedIn, itemDes.add);
+
+//Done
+app.get('/done', auth.isLoggedIn, done.show);
+
+
+//Wish List
+app.get('/wishlist', auth.isLoggedIn, wishList.show)
+app.delete('/wishlist/:ProductID', auth.isLoggedIn, wishList.delete);
+app.post('/wishlist-Add/:ProductID', auth.isLoggedIn, wishList.addItems);
+
+//Order Tracking
+app.get('/order-tracking', auth.isLoggedIn, orderTracking.show)
+app.post('/feedback', auth.isLoggedIn, orderTracking.feedback)
+
+app.get('/', auth.index);
+
+server.listen(3100);

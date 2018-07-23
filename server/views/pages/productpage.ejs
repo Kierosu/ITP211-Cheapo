@@ -17,20 +17,20 @@
             <div style="margin:auto;height: 700px;width: 100%;border-radius: 10px;">
                 <div style="height: 100%;width: 50%;float: left;">
                     <div style="height: 55%;width: 100%;display: flex;">
-                        <img src="/imghere/<%= item.itemPic %>" style="margin: auto;height: 100%;width: 100%;" alt="ProductImg">
+                        <img src="/itemImg/<%= item.itemPic %>" style="margin: auto;height: 100%;width: 100%;" alt="ProductImg">
                     </div>
                     <div style="height: 45%;width: 100%;">
-                        <div style="height: 75%;width: 100%;background-color: rgb(226, 182, 152);overflow-y: auto">                            
+                        <div style="height: 75%;width: 100%;overflow-y: auto">                            
                             <% if (review.length > 0) { %>
                                 <% review.forEach(function(review){ %>
-                                    <div style="height: 25%;width: 100%;border: 1px solid grey;display: flex">
+                                    <div style="height: 25%;width: 100%;border: 1px solid grey;display: flex;border-radius: 7px;">
                                         <h2 style="margin: auto;"><%= review.itemReview %> </h2>
                                     </div>
                                     <% }); } else { %>
                                     no review, make one!
                             <% } %>                            
                         </div>
-                        <div style="height: 25%;width: 100%;background-color: bisque">
+                        <div style="height: 25%;width: 100%;background-color: rgb(250, 246, 242)">
                             <div style="height: 100%;width: 50%;float: left;display: flex">
                                 <button class="btn btn-warning" onclick="document.getElementById('reportForm').style.display='block'" style="margin:auto;height: 50%;width: 50%">Report</button>
                             </div>
@@ -112,7 +112,7 @@
                             <%= item.detail %>
                         </h1>
                     </div>
-                    <div style="height: 25%;width: 100%;background-color: aquamarine">
+                    <div style="height: 25%;width: 100%;">
                         <div style="height: 50%;width: 100%;display: flex">
                             <div style="margin:auto;height: 50%;width: 50%" class="btn btn-primary">Buy</div>
                         </div>

@@ -1,0 +1,145 @@
+<!doctype HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <% include ../partials/javascript %>
+        <% include ../partials/stylesheet %>
+        <% include ../partials/eugenecss %>
+        <title><%= title %></title>
+    </head>
+    <body>
+        <% include ../partials/header %>
+        <div class="body">
+        <div class="warningmsg">
+           <% if (message.length > 0) { %>
+            <div class="alert alert-warning" role="alert">
+                <strong>Oops!</strong> <%= message %>
+            </div>
+            <% } %> 
+        </div>
+        
+
+        <form class="form-signin form-horizontal" action="/signup" method="post">
+            <h2 class="form-signin-heading">Sign Up</h2>
+            
+            <label for="username" class="control-label col-sm-2">Username:</label>
+            <div style="position: relative; top: 26px; left:14px; width: 82%; margin: 0 0 25px 0;">
+                <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+            </div>
+
+            <label for="email" class="control-label col-sm-2">Email Address:</label>
+            <div style="position: relative; top: 26px; left:14px; width: 82%; margin: 0 0 25px 0;">
+                <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" required>
+            </div>
+
+            <label for="password" class="control-label col-sm-2">Password:</label>
+            <div style="position: relative; top: 25px; left:14px; width: 82%; margin: 0 0 30px 0;">
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+            </div>
+
+            <div class="textpass">
+            <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+            </div>
+            <div class="textpass" id="aligned2">
+            <p id="alphanum" class="invalid">Must be <b>alphanumeric</b> (At least 1 alphabet and number)</p>
+            </div>
+
+            <label for="repeatpass" class="control-label col-sm-2" id="displaced">Repeat Password:</label>
+            <div style="position: relative; top: 12px; left:14px; width: 82%; margin: 0 0 25px 0;">
+                <input type="password" id="repeatpass" name="repeatpass" class="form-control" placeholder="Repeat Password" required>
+            </div>
+
+            <div class="textpass" id="aligned">
+            <p id="same" class="valid"> Passwords Match</p>
+            </div>
+
+            <div class="col-sm-10" id = "tos">
+                <input type="checkbox" name="agreeTOS" id="agreeTOS" required/> 
+                <label for="agreeTOS">I have read and agree to the Terms and Conditions and Privacy Policy</label>
+            </div>
+            <button class="btn btn-primary" type="submit" id="createProfile">Sign Up</button>
+        </form>
+        <button class="btn" id="back">Back</button>
+        </div>
+        <% include ../partials/footer %>
+
+        <script>  
+        const password = $("#password");
+        const repeatpass = $("#repeatpass");
+        const length = $("#length");
+        const same = $("#same");
+        const alphanum = $("#alphanum");
+        const validChar = /^[a-zA-Z0-9]+$/;
+        const validNum = /\d/;
+        
+        password.keyup(function() {
+            // Validate length
+            if(password.val().length >= 8) {
+                length.removeClass("invalid");
+                length.addClass("valid");
+                if (repeatpass.val() === password.val()){
+                    same.removeClass("invalid");
+                    same.addClass("valid");
+                }else {
+                    same.removeClass("valid");
+                    same.addClass("invalid");
+                } 
+            }   
+            else {
+                length.removeClass("valid");
+                length.addClass("invalid");
+                if (repeatpass.val() === password.val()){
+                    same.removeClass("invalid");
+                    same.addClass("valid");
+                }else {
+                    same.removeClass("valid");
+                    same.addClass("invalid");
+                }
+            }
+            if(validChar.test(password.val()) && validNum.test(password.val())){
+                alphanum.removeClass("invalid");
+                alphanum.addClass("valid");  
+            }
+            else{
+                alphanum.removeClass("valid");
+                alphanum.addClass("invalid");
+            }
+        })
+        repeatpass.keyup(function() {	
+            if (repeatpass.val() === password.val()){
+                same.removeClass("invalid");
+                same.addClass("valid");
+            }else {
+                same.removeClass("valid");
+                same.addClass("invalid");
+            }
+        })
+        
+        $('#back').click(()=>{
+            location.href = "/login";
+        })
+        $(document).ready(function (){
+            validate();
+            $('#username, #email, #password, #repeatpass').keyup(validate);
+            $("#agreeTOS").click(validate);
+        });
+        function validate(){
+            if ($('#username').val().length > 0 && 
+            $('#email').val().length > 0 && 
+            $('#password').val().length > 0 && 
+            $('#repeatpass').val().length > 0 &&
+            password.val() === repeatpass.val() &&
+            $('#agreeTOS').prop("checked") == true &&
+            password.val().length >= 8 &&
+            validChar.test(password.val()) && validNum.test(password.val())
+            )
+            {
+                $("#createProfile").prop("disabled", false);
+            }
+            else {
+                $("#createProfile").prop("disabled", true);
+            }
+        }
+        </script>
+    </body>
+</html>

@@ -1,4 +1,5 @@
 /*
+
 Colors:
 	Body 		  : #4A4E5A
 	Headers 	: #30323A
@@ -810,9 +811,12 @@ textarea.input {
 ===========================================================*/
 
 #home .home-wrap {
-  margin-left: 0px;
+  margin-left: 270px;
 }
 
+#home-slick .banner {
+  margin: 0px;
+}
 
 /*=========================================================
 	06 -> PRODUCT
@@ -1721,3 +1725,5 @@ textarea.input {
     width: 100%;
   }
 }
+
+

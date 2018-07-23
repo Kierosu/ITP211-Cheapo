@@ -1,0 +1,320 @@
+.body{
+  margin-top:55px; 
+  overflow: hidden;
+}
+#head{
+  text-align: center;
+}
+#forget{
+  position: relative;
+  left: 38.2%;
+  margin: 20px 0 0 0;
+  font-size: 20px;
+}
+.warningmsg{
+    font-size: 26px;
+    text-align: center;
+}
+#warningmsg{
+  font-size: 26px;
+  text-align: center;
+  display: none;
+}
+.form-signin-heading{
+  text-align: center;
+}
+#loginButton, #createProfile, #signupButton, #resetPass, #findUsername{
+  font-size: 20px;
+  width: 23%;
+  position: relative;
+  left: 38.4%;
+  padding: 10px 50px;
+  background-color:#F8694A;
+  border-color:#F8694A;
+  color: white;
+}
+#comfirmOTP{
+  font-size: 20px;
+  width: 23%;
+  padding: 10px 50px;
+  margin: 25px 0 100px 0;
+  background-color:#F8694A;
+  border-color:#F8694A;
+  color: white;
+}
+#resetPass, #findUsername{
+  margin: 25px 0 25px 0;
+}
+#back{
+  background-color:#d9534f;
+  border-color:#d9534f;
+  color: white;
+  padding: 10px 153px;
+  font-size: 20px;
+  margin: 0 0 100px 0;
+  position: relative;
+  left: 38.4%;
+}
+#editprofile, #uploadBtn{
+  background-color:#F8694A;
+  border-color:#F8694A;
+  color: white;
+  font-size: 18px;
+}
+#saveChanges{
+  background-color:#5cb85c;
+  border-color:#5cb85c;
+  color: white;
+  padding: 6px 400px;
+  font-size: 20px;
+  margin: 0 0 20px 0;
+  position: relative;
+  left:350px;
+}
+#changepass{
+  background-color:#5cb85c;
+  border-color:#5cb85c;
+  color: white;
+  padding: 6px 350px;
+  font-size: 20px;
+  margin: 30px 0 30px 0;
+  position: relative;
+  left:350px;
+}
+#enableGoogleAuth, #disableTFA, #verifyOTP{
+  background-color:#5cb85c;
+  border-color:#5cb85c;
+  color: white;
+}
+
+#cancel{
+  background-color:#d9534f;
+  border-color:#d9534f;
+  color: white;
+  padding: 6px 391.8px;
+  font-size: 20px;
+  margin: 0 0 90px 0;
+  position: relative;
+  left:350px;
+}
+#cancelpass{
+  background-color:#d9534f;
+  border-color:#d9534f;
+  color: white;
+  padding: 6px 397.5px;
+  font-size: 20px;
+  margin: 0 0 90px 0;
+  position: relative;
+  left:350px;
+}
+.closeModal{
+  background-color:#d9534f;
+  border-color:#d9534f;
+  color: white;
+}
+#googlelogin{
+  font-size: 20px;
+  width: 23%;
+  position: relative;
+  left: 38.4%;
+  padding: 10px 50px;
+  background-color:#4885ed;
+  border-color:#4885ed;
+  color: white;
+  margin: 18px 0 16px 0;
+}
+#signupButton{
+  margin: 5px 0 100px 0;
+}
+#loginButton{
+  margin: 22px 0 0px 0;
+}
+#createProfile{
+  margin: 25px 0 25px 0;
+}
+#signupButton:hover, #loginButton:hover, #createProfile:hover, #editprofile:hover, #uploadBtn:hover, #saveChanges:hover, #cancel:hover,
+#resetPass:hover, #back:hover, #findUsername:hover, #changepass:hover, #cancelpass:hover, #save2FA:hover, 
+.closeModal:hover, #disableTFA:hover, #comfirmOTP:hover, #verifyOTP:hover, #enableGoogleAuth:hover, #googlelogin:hover{
+  background-color: white;
+  color: black;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  -webkit-transition-duration:0.4s;
+  transition-duration: 0.4s;
+}
+.form-control{
+  width: 50%;
+  position: relative;
+  left: 17%;
+  font-size: 18px;
+  height:50px;
+}
+.control-label {
+  position: relative;
+  margin: 33px 0 0 0;
+  left: 14.3%;
+  font-size: 18px;
+  text-align: right;
+}
+#displaced{
+  position: relative;
+  margin: 33px 0 0 0;
+  left: 14.3%;
+  font-size: 18px;
+  top: -14.5px;
+  text-align: right;
+}
+#p{
+  position: relative;
+  left: 36.5%;
+  font-size: 25px;
+}
+  
+#tos{
+  font-size: 19px;
+  position: relative;
+  left: 31.5%;
+  padding: 12px 0 0 0;
+}
+#uploadImageDiv{
+  position: relative;
+  top: 15px;
+  left: 33.7%; 
+}
+#imglist li{
+  display: inline-block;
+}
+#message{
+  display: none;
+  text-align: center;
+}
+
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+  color: green;
+  font-size:20px;
+  position: relative;
+  left:15px;
+  margin: 30px 0 -10px 0;
+}
+
+.valid:before {
+  position: relative;
+  left:-5px;
+  content: "✔";
+}
+
+/* Add a red text color and an "x" when the requirements are wrong */
+.invalid {
+  color: red;
+  font-size:20px;
+  position: relative;
+  left:15px;
+  margin: 30px 0 -10px 0;
+}
+.invalid:before {
+  position: relative;
+  left:-5px;
+  content: "✖";
+}
+#aligned{
+  bottom:14px;
+}
+#aligned2{
+  bottom:18px;
+  margin-bottom: -20px;
+}
+.textpass{
+  position: relative;
+  left: 470px;
+}
+
+/*side navbar*/
+.sidenav {
+  width: 155px;
+  position: absolute;
+  z-index: 1;
+  top: 220px;
+  left: 150px;
+  background: #eee;
+  overflow-x: hidden;
+  padding: 8px 0;
+
+}
+
+.sidenav a {
+  padding: 8px 10px 8px 14px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #2196F3;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #064579;
+}
+
+
+/*Custom radio button*/
+/* The container */
+.radioContainer {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.radioContainer input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radioContainer:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radioContainer input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radioContainer input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radioContainer .checkmark:after {
+ top: 9px;
+left: 9px;
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: white;
+}

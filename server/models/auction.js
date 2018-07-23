@@ -39,7 +39,7 @@ Auction.sync({ force: false, logging: console.log }).then(() => {
         basePrice: 12.50,
         highestPrice: 17.15,
         buyerID: 7, 
-        endDate: '2018-07-15T23:30:00'
+        endDate: '2019-09-15T23:30:00'
     });
     Auction.upsert({
         auctionID: 2,
@@ -47,7 +47,7 @@ Auction.sync({ force: false, logging: console.log }).then(() => {
         basePrice: 12.50,
         highestPrice: 17.15,
         buyerID: 8, 
-        endDate: '2018-07-15T23:30:00'
+        endDate: '2018-10-15T23:30:00'
     });
 });
 

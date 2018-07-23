@@ -1,23 +1,26 @@
-var { ensureAuthenticated } = require('../config/auth');
 var Review = require('../models/itemReview');
-var Acution = require('../models/auction');
-var Report = require('../models/reports');
-var Item = require('../models/items');
+var { auctionEXP } = require('./sendMails');
+var Auction = require('../models/auction');
+var Report = require('../models/report');
+var Item = require('../models/item');
 var database = require('./database');
 var User = require('../models/user');
 var sequelize = database.sequelize;
 var express = require('express');
+var auth = require('./profile');
 var multer = require('multer');
 var router = express.Router();
 var path = require('path');
+var fs = require('fs');
+
 
 // Item page
-router.get('/', ensureAuthenticated, (req, res) => {
+router.get('/', auth.isLoggedIn, auctionEXP, (req, res) => {
     if (req.user.userType === 'Admin') {
         Item.findAll({}).then((item) => {
             Report.findAll({}).then((report) => {
                 User.findAll({ where: { userType: 'Member' } }).then((user) => {
-                    Acution.findAll({}).then((auction) => {
+                    Auction.findAll({}).then((auction) => {
                         res.render('mainItem', {
                             item: item,
                             report: report,
@@ -29,10 +32,9 @@ router.get('/', ensureAuthenticated, (req, res) => {
                 })
             })
         })
-
     } else {
         sequelize.query('select * from Items where userID = ' + req.user.userID, { model: Item }).then((item) => {
-            Acution.findAll({}).then((auction) => {
+            Auction.findAll({}).then((auction) => {
                 res.render('mainItem', {
                     item: item,
                     auction: auction,
@@ -47,50 +49,14 @@ router.get('/', ensureAuthenticated, (req, res) => {
     }
 })
 
-// Edit item page
-router.get('/edit/:id', ensureAuthenticated, (req, res) => {
-    Item.findOne({ where: { itemID: req.params.id } }).then((item => {
-        res.render('itemEdit', {
-            item: item
-        })
-    }))
-})
-
-// Item edited
-router.post('/edit/:id', ensureAuthenticated, (req, res) => {
-    Item.findOne({ where: { itemID: req.params.id } }).then((item => {
-        item.name = req.body.name,
-            item.detail = req.body.detail,
-            item.price = req.body.price;
-
-        item.save().then(suc => {
-            req.flash('message', 'Item edited successfully'),
-                res.redirect('/items')
-        })
-    }))
-})
-
-// Item deleted
-router.get('/delete/:id', ensureAuthenticated, (req, res) => {
-    sequelize.query('DELETE from Reports WHERE itemID = ' + req.params.id + 'DELETE from Reviews WHERE itemID = ' + req.params.id + 'DELETE from Items WHERE itemID = ' + req.params.id, { model: Item }).then(() => {
-        req.flash('message', 'Item deleted successfully'),
-            res.redirect('/items')
-    }).catch((err) => {
-        return res.status(400).send({
-            message: err
-        });
-    })
-})
-
 // Add item page
-router.get('/add', ensureAuthenticated, (req, res) => {
+router.get('/add', auth.isLoggedIn, (req, res) => {
     res.render('itemsell')
 })
 
-
 // Set storage engine
 var storage = multer.diskStorage({
-    destination: './public/imghere/',
+    destination: './public/itemImg/',
     filename: (req, file, cb) => {
         cb(null, req.user.email + '-' + Date.now() + path.extname(file.originalname));
     }
@@ -120,8 +86,9 @@ function checkFileType(file, cb) {
     }
 }
 
+var { newItem } = require('./sendMails');
 // Add item
-router.post('/add', ensureAuthenticated, (req, res) => {
+router.post('/add', auth.isLoggedIn, (req, res) => {
     upload(req, res, (err) => {
         if (err) {
             res.render('itemSell', {
@@ -138,8 +105,8 @@ router.post('/add', ensureAuthenticated, (req, res) => {
             Item.create(itemData)
                 .then(() => {
                     req.flash('message', 'Item successfully added');
-                    res.redirect('/items')
-                    console.log(itemData)
+                    res.redirect('/items');
+                    newItem(req.user.userID, itemData.name);
                 }).catch((err) => {
                     console.log(err);
                     return;
@@ -148,7 +115,46 @@ router.post('/add', ensureAuthenticated, (req, res) => {
     })
 })
 
-router.get('/reactivate/:id', ensureAuthenticated, (req, res) => {
+// Edit item page
+router.get('/edit/:id', auth.isLoggedIn, (req, res) => {
+    Item.findOne({ where: { itemID: req.params.id } }).then((item => {
+        res.render('itemEdit', {
+            item: item
+        })
+    }))
+})
+
+// Item edited
+router.post('/edit/:id', auth.isLoggedIn, (req, res) => {
+    Item.findOne({ where: { itemID: req.params.id } }).then((item => {
+        item.name = req.body.name,
+            item.detail = req.body.detail,
+            item.price = req.body.price;
+
+        item.save().then(() => {
+            req.flash('message', 'Item edited successfully'),
+                res.redirect('/items')
+        })
+    }))
+})
+
+// Item deleted
+router.get('/delete/:id', auth.isLoggedIn, (req, res) => {
+    Item.findOne({ where: { itemID: req.params.id } }).then((item) => {
+        fs.unlinkSync('C:\\Users\\Matthew\\Desktop\\Merge\\public\\itemImg\\' + item.itemPic);
+        sequelize.query('DELETE from Reports WHERE itemID = ' + req.params.id + 'DELETE from Reviews WHERE itemID = ' + req.params.id + 'DELETE from Items WHERE itemID = ' + req.params.id, { model: Item }).then((deleteItem) => {
+            req.flash('message', 'Item deleted successfully'),
+                res.redirect('/items')
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
+        })
+    })
+})
+
+// Reactivate item
+router.get('/reactivate/:id', auth.isLoggedIn, (req, res) => {
     Item.findOne({ where: { itemID: req.params.id } }).then((item => {
         item.warnings = 'Final';
         item.status = 'Active';
@@ -157,6 +163,7 @@ router.get('/reactivate/:id', ensureAuthenticated, (req, res) => {
     }))
 })
 
+// Item details
 router.get('/list/:id', (req, res) => {
     Item.findOne({ where: { itemID: req.params.id } }).then((item => {
         Review.findAll({ where: { itemID: req.params.id } }).then((review => {
@@ -168,6 +175,7 @@ router.get('/list/:id', (req, res) => {
     }))
 })
 
+// Auction item page
 router.get('/auction/:id', (req, res) => {
     Item.findOne({ where: { itemID: req.params.id } }).then((item => {
         res.render('setAuction', {
@@ -175,9 +183,23 @@ router.get('/auction/:id', (req, res) => {
             msg: req.flash('message')
         })
     }))
-    console.log(req.params.id)
 })
 
+// Check if auction is past present date
+function checkExp(dDate) {
+    var now = new Date();
+    var utcString = now.toISOString().substring(0, 19);
+    var hour = (now.getHours());
+    var localDatetime = utcString.substring(0, 11) + (hour < 10 ? "0" + hour : hour) + utcString.substring(13, 19);
+    if (dDate > localDatetime) {
+        return null;
+    } else {
+        return !null;
+    }
+}
+
+// Set auction
+var { newAuction } = require('./sendMails');
 router.post('/auction/:id', (req, res) => {
     var auctionDetails = {
         itemAuctionID: req.params.id,
@@ -185,26 +207,49 @@ router.post('/auction/:id', (req, res) => {
         highestPrice: req.body.startPrice,
         endDate: req.body.endDate
     }
-    Acution.findOne({ where: { itemAuctionID: req.params.id } }).then((findAcu) => {
+    Auction.findOne({ where: { itemAuctionID: req.params.id } }).then((findAcu) => {
         if (findAcu) {
             req.flash('message', 'Your item already exist in the auction');
             res.redirect('/auctions')
         }
 
         if (!findAcu) {
-            Acution.create(auctionDetails).then(() => {
-                Item.findOne({ where: { itemID: req.params.id } }).then((item => {
-                    item.status = 'Auction';
-                    item.save().then(() => {
-                        req.flash('message', 'Item Auction successfully');
-                        res.redirect('/auctions')
-                    })
-                }))
-            }).catch((err) => {
-                console.log(err);
-                return;
-            });
+            if (checkExp(auctionDetails.endDate) == null) {
+                Auction.create(auctionDetails).then(() => {
+                    Item.findOne({ where: { itemID: req.params.id } }).then((item => {
+                        item.status = 'Auction';
+                        item.save().then(() => {
+                            newAuction(req.user.userID, item.name);
+                            req.flash('message', 'Item Auction successfully');
+                            res.redirect('/items')
+                        })
+                    }))
+                }).catch((err) => {
+                    console.log(err);
+                    return;
+                });
+            } else {
+                req.flash('message', 'Cannot auction past current date');
+                res.redirect('/items/auction/' + auctionDetails.itemAuctionID)
+            }
         }
+    })
+})
+
+// Delete auction
+router.get('/canAuction/:id', (req, res) => {
+    sequelize.query('DELETE from Auctions WHERE itemAuctionID = ' + req.params.id, { model: Auction }).then(() => {
+        Item.findOne({ where: { itemID: req.params.id } }).then((item => {
+            item.status = 'Active';
+            item.save().then(() => {
+                req.flash('message', 'Auction deleted successfully'),
+                    res.redirect('/items')
+            })
+        }))
+    }).catch((err) => {
+        return res.status(400).send({
+            message: err
+        });
     })
 })
 

@@ -15,20 +15,11 @@ const Reviews = sequelize.define('Reviews', {
     },
     itemID:{
         type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'Items',
-            key: 'itemID'
-        }
+        allowNull: false
     }
     ,
     userID:{
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'Users',
-            key: 'userID'
-        }
+        type: Sequelize.INTEGER
     }
 });
 

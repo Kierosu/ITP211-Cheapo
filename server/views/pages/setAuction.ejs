@@ -19,7 +19,7 @@
             <% if(item){ %>            
             <div style="width: 60%;height: 400px;display: flex;float: left;">
                 <div style="width: 95%;height: 95%;margin: auto;border: 1px solid rgb(197, 187, 187)">
-                    <img src="/img/<%= item.itemPic %>" style="height: 100%;width: 100%;" alt="item IMG">                    
+                    <img src="/itemImg/<%= item.itemPic %>" style="height: 100%;width: 100%;" alt="item IMG">                    
                 </div>
             </div>
             <div style="width: 40%;height: 400px;float: right;display: flex;">
@@ -50,7 +50,7 @@
                     </div>
                     <div style="height: 16%;width: 90%;margin: auto;">
                         <div style="height: 100%;width: 50%;float: left;display: flex;">
-                            <button type="reset" style="height: 80%;width: 85%;margin: auto 0;font-size: 23px;" class="btn btn-danger">Cancel</button>
+                            <button id="canAucBtn" type="button" onclick="goBackToItems()" style="height: 80%;width: 85%;margin: auto 0;font-size: 23px;" class="btn btn-danger">Cancel</button>
                         </div>
                         <div style="height: 100%;width: 50%;float: right;display: flex;">
                             <button type="submit" style="height: 80%;width: 85%;margin: auto;font-size: 23px;" class="btn btn-success">Auction</button>
@@ -66,8 +66,13 @@
         <script>
             window.onload = function() {
             var now = new Date();
-            var utcString = now.toISOString().substring(0,19);
-            var hour = now.getHours();
+            var utcString = now.toISOString().substring(0,19);            
+            var hour = (now.getHours()) + 1;
+            console.log(hour);
+            if (hour == 24){
+                hour = (now.getHours());
+            }
+            console.log(hour);
             var localDatetime = utcString.substring(0,11) + (hour < 10 ? "0" + hour : hour) + utcString.substring(13,19);
             var datetimeField = document.getElementById("myDatetimeField");
             datetimeField.value = localDatetime;

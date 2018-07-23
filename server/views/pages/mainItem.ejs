@@ -16,7 +16,7 @@
 
 		<div class="container">
 			<% if (item.length > 0) { %>
-				<% if(user.userType == 'Admin'){ %> 
+				<% if(loginuser.userType == 'Admin'){ %> 
 					<div style="height: 80px;width: 100%;">
 						<div style="height: 100%;width: 20%;float: left;display: flex">
 							<h1 style="margin: auto;">Listed Items</h1>
@@ -36,63 +36,111 @@
 					</div>
 					<div id="adminItems" style="display: none">
 						<% item.forEach(function(item){ %>						
-							<form action="/items/edit" method="post" disabled>
-								<div class="jumbotron jumbotron-fluid" <% if(item.status === 'Deactivated' ){%> style="background-color: rgb(226, 182, 152)"	<%}%> >
-									<div class="container" style="overflow: hidden">
-										<div style="height: 100px;width: 20%;float: left;display: flex;">
-											<h1 style="margin: auto;height: 100%;">
-												<img src="../imghere/<%= item.itemPic %>" style="height: 100%;width: 100%;" alt="TET">
-											</h1>
-										</div>
-										<div style="height: 100px;width: 15%;float: left;">
-											<div style="height: 100%; width: 100%;">
-												<div style="height: 50%;width: 100%;display: flex;">
-													<h2 style="margin: auto">
-														<%= item.name %>
-													</h2>
+							<% if(item.status == 'Auction'){ %>
+								<form action="/items/edit" method="post">
+									<div style="height: 245px;width: 100%;overflow: hidden;display: flex;">										
+										<div class="container" style="height: 95%;width: 100%;margin: auto;border: 1px solid rgb(176, 179, 172);border-radius: 7px;">
+											<div style="height: 100%;width: 30%;float: left;display: flex;">												
+												<img src="/itemImg/<%= item.itemPic %>" style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="img">												
+											</div>
+											<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
+												<div style="height: 55%;width: 100%;font-size: 32px;">
+													<div style="height: 33%;width: 100%;display: flex;">
+														<p style="margin: auto 0;">Name: <%= item.name %></p>
+													</div>						
+													<div style="height: 33%;width: 100%;display: flex;">
+														<p style="width: 50%;float: left;display: flex;">Starting Bid: $
+															<% auction.forEach(function(auction){%>
+																<% if(auction.itemAuctionID == item.itemID){ %>
+																	<%= auction.basePrice %>
+																<% } %>														
+															<%})%>
+														</p>
+														<p style="width: 50%;float: left;display: flex;">Current Bid: $
+															<% auction.forEach(function(auction){%>
+																<% if(auction.itemAuctionID == item.itemID){ %>
+																	<%= auction.highestPrice %>
+																<% } %>														
+															<%})%>	
+														</p>
+													</div>													
+													<div style="height: 33%;width: 100%;display: flex;">
+														<p style="margin: auto 0;">Status: <%= item.status %></p>
+													</div>
 												</div>
-												<div style="height: 50%;width: 100%;display: flex">
-													<h4 style="margin: auto">
-														$<%= item.price %>
-													</h4>
+												<div style="height: 45%;width: 100%;font-size: 23px;display: flex;">
+													<p style="height: 90%;width: 90%;margin: auto;text-align: justify;overflow-y: auto;border: 1px solid grey;border-radius: 7px;"><%= item.detail %></p>
 												</div>
 											</div>
-										</div>
-										<div style="height: 100px;width: 50%;float: left;display: flex;">
-											<h2 style="margin: auto">
-												<%= item.detail %>
-											</h2>
-										</div>
-										<div style="height: 100px;width: 15%;float: left;">
-											<% if(item.status === 'Deactivated' ){%> 
+											<div style="height: 100%;width: 15%;float: right;">
 												<div style="height: 100%; width: 100%;">
-													<div style="height: 33%;width: 100%;display: flex;">
-														<a href="items/edit/<%=item.itemID%>" style="margin: auto;width: 70%;" class="btn btn-primary btn-sm">Edit</a>
-													</div>
-													<div style="height: 34%;width: 100%;display: flex">
-														<a disable onclick="return confirm('Are you sure you want to delete?')" href="items/delete/<%=item.itemID%>" style="margin: auto;width: 70%;"
-															class="btn btn-primary btn-sm">Delete</a>
-													</div>
-													<div style="height: 33%;width: 100%;display: flex">
-														<a disable href="items/reactivate/<%=item.itemID%>" style="margin: auto;width: 70%;"
-															class="btn btn-primary btn-sm">Reactivate</a>
-													</div>													
-												</div>
-											<%} else { %> 
-												<div style="height: 100%; width: 100%;">
-													<div style="height: 50%;width: 100%;display: flex;">
-														<a href="items/edit/<%=item.itemID%>" style="margin: auto;width: 70%;" class="btn btn-primary btn-sm">Edit</a>
-													</div>
 													<div style="height: 50%;width: 100%;display: flex">
-														<a disable onclick="return confirm('Are you sure you want to delete?')" href="items/delete/<%=item.itemID%>" style="margin: auto;width: 70%;"
-														class="btn btn-primary btn-sm">Delete</a>
+														<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Cancel Auction</a>
+													</div>
+													<div style="height: 50%;width: 100%;display: flex;">
+													<a href="/hello" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Auction</a>
+													</div>		
+												</div>												
+											</div>
+										</div>
+									</div>									
+								</form>
+							<% } else { %>
+								<form action="/items/edit" method="post">
+									<div style="height: 245px;width: 100%;overflow: hidden;display: flex;">										
+										<div class="container" style="height: 95%;width: 100%;margin: auto;border: 1px solid rgb(176, 179, 172);border-radius: 7px;">
+											<div style="height: 100%;width: 30%;float: left;display: flex;">												
+												<img src="../itemImg/<%= item.itemPic %>" style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="itemImg">												
+											</div>
+											<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
+												<div style="height: 55%;width: 100%;font-size: 32px;">
+													<div style="height: 33%;width: 100%;display: flex;">
+														<p style="margin: auto 0;">Name: <%= item.name %></p>
+													</div>
+													<div style="height: 34%;width: 100%;display: flex;">
+														<p style="margin: auto 0;">Price: $<%= item.price %></p>
+													</div>
+													<div style="height: 33%;width: 100%;display: flex;">
+														<p style="margin: auto 0;<%if(item.status == 'Deactivated'){%>color:red;<%}%>">Status:<%= item.status %></p>
 													</div>
 												</div>
-											<% } %> 												
+												<div style="height: 45%;width: 100%;font-size: 23px;display: flex;">
+													<p style="height: 90%;width: 90%;margin: auto;text-align: justify;overflow-y: auto;border: 1px solid grey;border-radius: 7px;"><%= item.detail %></p>
+												</div>
+											</div>
+											<%if(item.status == 'Deactivated'){%>
+												<div style="height: 100%;width: 15%;float: right;">
+													<div style="height: 100%; width: 100%;">
+														<div style="height: 33%;width: 100%;display: flex">
+															<a href="/items/reactivate/<%= item.itemID %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Reactivate</a>
+														</div>
+														<div style="height: 34%;width: 100%;display: flex;">
+															<a href="items/edit/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Edit</a>
+														</div>												
+														<div style="height: 33%;width: 100%;display: flex">
+															<a onclick="return confirm('Are you sure you want to delete?')" href="items/delete/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Delete</a>
+														</div>
+													</div>												
+												</div>	
+											<%}else{%>
+												<div style="height: 100%;width: 15%;float: right;">
+													<div style="height: 100%; width: 100%;">
+														<div style="height: 33%;width: 100%;display: flex">
+															<a href="items/auction/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Auction</a>
+														</div>
+														<div style="height: 34%;width: 100%;display: flex;">
+															<a href="items/edit/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Edit</a>
+														</div>												
+														<div style="height: 33%;width: 100%;display: flex">
+															<a onclick="return confirm('Are you sure you want to delete?')" href="items/delete/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Delete</a>
+														</div>
+													</div>												
+												</div>	
+											<%}%>
 										</div>
-									</div>
-								</div>
-							</form>						
+									</div>									
+								</form>
+							<% } %>							
 						<% })%>
 					</div>
 					<div id="adminUsers" style="display: none">
@@ -102,7 +150,7 @@
 									<div class="container" style="overflow: hidden">
 										<div style="height: 100px;width: 20%;float: left;display: flex;">
 											<h1 style="margin: auto;height: 100%;">
-												<img src="../imghere/<%= users.profilePic %>" style="height: 100%;width: 100%;font-size: 23px" alt="User IMG">
+												<img src="../img/<%= users.profilePic %>" style="height: 100%;width: 85%;font-size: 23px" alt="User IMG">
 											</h1>
 										</div>
 										<div style="height: 100px;width: 15%;float: left;">
@@ -201,7 +249,7 @@
 									<div style="height: 245px;width: 100%;overflow: hidden;display: flex;">										
 										<div class="container" style="height: 95%;width: 100%;margin: auto;border: 1px solid rgb(176, 179, 172);border-radius: 7px;">
 											<div style="height: 100%;width: 30%;float: left;display: flex;">												
-												<img src="../imghere/<%= item.itemPic %>" style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="TET">												
+												<img src="../itemImg/<%= item.itemPic %>" style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="img">												
 											</div>
 											<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
 												<div style="height: 55%;width: 100%;font-size: 32px;">
@@ -234,15 +282,22 @@
 											</div>
 											<div style="height: 100%;width: 15%;float: right;">
 												<div style="height: 100%; width: 100%;">
-													<div style="height: 33%;width: 100%;display: flex">
-														<a href="items/auction/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Cancel Auction</a>
+													<div style="height: 50%;width: 100%;display: flex">
+														<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Cancel Auction</a>
 													</div>
-													<div style="height: 34%;width: 100%;display: flex;">
-													<a href="#" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Edit</a>
-													</div>												
-													<div style="height: 33%;width: 100%;display: flex">
-														<a href="#" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Delete</a>
-													</div>
+													<div style="height: 50%;width: 100%;display: flex;">
+													<a href="/auctions/
+													<% auction.forEach(function(auction){%>
+														<% if(auction.itemAuctionID == item.itemID){ %>
+															<%= auction.auctionID %>
+														<% } %>														
+													<%})%>/
+													<% auction.forEach(function(auction){%>
+														<% if(auction.itemAuctionID == item.itemID){ %>
+															<%= auction.itemAuctionID %>
+														<% } %>														
+													<%})%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Auction</a>
+													</div>		
 												</div>												
 											</div>
 										</div>
@@ -253,7 +308,7 @@
 									<div style="height: 245px;width: 100%;overflow: hidden;display: flex;">										
 										<div class="container" style="height: 95%;width: 100%;margin: auto;border: 1px solid rgb(176, 179, 172);border-radius: 7px;">
 											<div style="height: 100%;width: 30%;float: left;display: flex;">												
-												<img src="../imghere/<%= item.itemPic %>" style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="TET">												
+												<img src="../itemImg/<%= item.itemPic %>" style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="TET">												
 											</div>
 											<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
 												<div style="height: 55%;width: 100%;font-size: 32px;">
@@ -306,6 +361,7 @@
 				</div>	
 			<% } %>
 		</div>
+		<br>
 		<script>
 			function reportsF() { 
 				var i = document.getElementById("adminItems");
@@ -315,8 +371,8 @@
 				i.style.display = "none";
 				u.style.display = "none";
 				r.style.display = "block";
-				redBtn.innerHTML = "hmmm";
-				redBtn.href = "/reports/test";
+				redBtn.innerHTML = "";
+				redBtn.href = "#";
 			}			
 			function itemsF() { 
 				var i = document.getElementById("adminItems");

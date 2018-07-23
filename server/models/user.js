@@ -1,6 +1,10 @@
+
 var myDatabase = require('../controllers/database');
 var sequelize = myDatabase.sequelize;
 var Sequelize = myDatabase.Sequelize;
+const moment = require('moment');
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 const User = sequelize.define('User', {
     userID:{
@@ -29,109 +33,108 @@ const User = sequelize.define('User', {
     },
     joinDate: {
         type: Sequelize.DATEONLY,
-        defaultValue: Sequelize.NOW
+        defaultValue: Sequelize.NOW,
+        get: function() {
+            return moment.utc(this.getDataValue('regDate')).format('YYYY-MM-DD');
+        }
     },
     userType: {
         type: Sequelize.STRING,
         defaultValue: "Member"
     },
-    membership: {
+    TwoFA: {
         type: Sequelize.STRING,
-        defaultValue: "Bronze"
+        defaultValue: "disabled"
+    },
+    SecretToken: {
+        type: Sequelize.STRING,
+    },
+    valueRecieved:{
+        type: Sequelize.DECIMAL(10,2)
     }
 });
+
 
 User.sync({force: false, logging: console.log}).then(()=>{
     console.log("User table synced");
     User.upsert({
         userID: 1,
-        username: "Shafie",
-        email: "shafie@gmail.com",
-        password: "$2y$12$92KE.UCLVwJlLCQeuVcfVuDXT6PU1WSGtafBLxzWAz6fYvkcsL4wq",
-        userType: "Admin",
-        membership: "Gold"
+        username: "CheapSupport",
+        email: "CheapSupport@gmail.com",
+        password: "cheapo",
+        userType: "Admin"
     });
     User.upsert({
         userID: 2,
-        username: "Matthew",
-        email: "matthew@gmail.com",
-        password: "$2y$12$peVFN7CPvrqr6YZUozfQTeiUSaUOalkBFcmdaE/4gUeGHzz/AaXbe",
-        userType: "Admin",
-        membership: "Gold"
+        username: "Shafie",
+        email: "shafie@gmail.com",
+        password: "shafieMemeLord",
+        userType: "Admin"
     });
     User.upsert({
         userID: 3,
-        username: "Rayson",
-        email: "rayson@gmail.com",
-        password: "$2y$12$C4lTSl1DZ9qaGORW15EqJe9vOteBfB/Q4U/N6WuS/fmFa7cW0mf3W",
-        userType: "Admin",
-        membership: "Gold"
+        username: "Matthew",
+        email: "matthew@gmail.com",
+        password: "matthewMemeLord",
+        userType: "Admin"
     });
     User.upsert({
         userID: 4,
-        username: "Kierosu",
-        email: "eugenetan9134@gmail.com",
-        password: "$2y$12$cBhwdc2Wd9ietwssq7vCAeZDonEQdZzQw7WzMyARRio3smhGft8Yy",
-        profilePic: "ayaya.png",
-        userType: "Admin",
-        membership: "Gold"
+        username: "Rayson",
+        email: "rayson@gmail.com",
+        password: "raysonMemeLord",
+        userType: "Admin"
     });
     User.upsert({
         userID: 5,
-        username: "Teh Yang",
-        email: "tehyang@gmail.com",
-        password: "$2y$12$GMJL9AxLIhrg34NsN.HcK.ToLEVBtpe.GoDiF7If1pIEayHp0tGSC",
-        userType: "Admin",
-        membership: "Gold"
+        username: "Kierosu",
+        email: "eugenetan9134@gmail.com",
+        password: "WowWee123",
+        profilePic: "ayaya.png",
+        userType: "Admin"
     });
     User.upsert({
         userID: 6,
-        username: "Aang",
-        email: "aang@gmail.com",
-        password: "$2a$10$V5/nSU3KOAWzevPK/R.fMeVR9fOrgg141dzbn4grXglrSOtYF1l4C",
-        userType: "Member",
-        membership: "Bronze"
-    });
+        username: "Teh Yang",
+        email: "tehyang@gmail.com",
+        password: "tehyangMemeLord",
+        userType: "Admin"
+    }); 
     User.upsert({
         userID: 7,
-        username: "Zuko",
+        username: "zuko",
         email: "zuko@gmail.com",
-        password: "$2a$10$u4PtvJIn7dSvvdszj9Sza.DlTmznD39XMDJUHcgRZ4179l/bPsRlW",
-        userType: "Member",
-        membership: "Bronze"
+        password: "zuko",
+        userType: "Member"
     });
     User.upsert({
         userID: 8,
-        username: "Ozai",
-        email: "ozai@gmail.com",
-        password: "$2a$10$CFm4xqX8NqrxVYM6mKQVJO4gmaU4AJl8KI7cIFgmMe2/WzH3iDAE2",
-        userType: "Member",
-        membership: "Bronze"
+        username: "test",
+        email: "test@test.com",
+        password: "test",
+        userType: "Admin"
     });
     User.upsert({
         userID: 9,
-        username: "Toph",
-        email: "toph@gmail.com",
-        password: "$2a$10$O1HXAlR8oB8GV7NWRAB1XuNUhGpi/UQgYTZdSY7Bs3A2DQscqT9Qe",
-        userType: "Member",
-        membership: "Bronze"
+        username: "appa",
+        email: "appa@gmail.com",
+        password: "appa",
+        userType: "Member"
     });
     User.upsert({
         userID: 10,
-        username: "Azula",
-        email: "azula@gmail.com",
-        password: "$2a$10$LcrYG46Zcyk15PDojbHtruUZi7ttWBQi0PnYU9LAfU27MIT1AFHbG",
-        userType: "Member",
-        membership: "Bronze"
+        username: "toph",
+        email: "toph@gmail.com",
+        password: "toph",
+        userType: "Member"
     });
-    User.upsert({
-        userID: 11,
-        username: "test",
-        email: "test@test.com",
-        password: "$2a$10$gfQpc2oWirUCvFrXS73rUumSkna8R/J9OQIlYRSITJnVrpOYZs1IS",
-        userType: "Admin",
-        membership: "Gold"
-    });
+});
+
+User.beforeUpsert(function(user, options) {
+    bcrypt.hash(user.password, saltRounds, function(err, hash) {
+        var passEncrypt = {password: hash}
+        User.update(passEncrypt,{where:{userID:user.userID}});
+    })
 });
 
 module.exports = sequelize.model('User', User);

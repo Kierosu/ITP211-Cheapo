@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title><%= title %></title>
+	<!-- PayPal API -->
+	<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+	<script src="https://js.stripe.com/v3/"></script>
+	<script src="https://checkout.stripe.com/checkout.js"></script>bae
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
+	<script src="js/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="css/slick.css" />
+	<link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
+
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
+
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+
+	<!-- Custom stylesheet -->
+	<link type="text/css" rel="stylesheet" href="css/raysonStyle.css" />
+
+<style>
+	.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+
+<body>
+	<% include ../partials/header %>
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li>
+					<a href="#">Home</a>
+				</li>
+				<li class="active">Pending Request</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+
+	<!-- section -->
+	<center>
+		<div class="section">
+			<div class="checkout-panel">
+				<div class="panel-body">
+					<h2 class="title">Pending Request</h2>
+					<div class="alert alert-success hidden" id="green">
+						<strong>Success!</strong> Payment Complete! Redirecting you in 5 seconds.
+					  </div>
+					<div class="alert alert-danger  hidden" id="red">
+						<strong>Failed!</strong> <p id = "messageFailed" >Payment Failed! </p>
+					</div>
+					<div class="loader"></div>
+					<br>
+					<figcaption id="someText">Waiting For Connection...</figcaption>
+					<br>
+					<br>
+					<br>
+					</div>
+				</div>
+			</div>
+	</center>
+	<!-- /section -->
+
+	<script src="js/socket.io.js"></script>
+	<script>
+	var socket = io('http://localhost:3000');
+	socket.on('redirect', function(someData) {
+		function redirectPage (){
+			window.location.href = someData;
+		}
+		setTimeout(redirectPage, 5000)
+	});
+	socket.on('status', function(text) {
+		$("#someText").text(text);
+	});
+	function loadInfo (){
+		$("#someText").text("Connection Established! Waiting For Bank Reply...");		
+	}
+	setTimeout(loadInfo, 10000)
+	</script>
+	<% include ../partials/footer %>
+		<!-- jQuery Plugins -->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/slick.min.js"></script>
+		<script src="js/nouislider.min.js"></script>
+		<script src="js/jquery.zoom.min.js"></script>
+		<script src="js/main.js"></script>
+		<script src="js/backendcheckout.js"></script>
+		<script src="js/stripeCheckout.js"></script>
+		<script src="js/cleave.min.js"></script>
+		<script src="js/payform.min.js"></script>
+		<script src="js/jquery.payform.js"></script>
+</body>
+
+</html>
