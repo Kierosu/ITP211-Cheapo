@@ -13,7 +13,6 @@ var router = express.Router();
 var path = require('path');
 var fs = require('fs');
 
-
 // Item page
 router.get('/', auth.isLoggedIn, auctionEXP, (req, res) => {
     if (req.user.userType === 'Admin') {
@@ -237,19 +236,31 @@ router.post('/auction/:id', (req, res) => {
 })
 
 // Delete auction
+var { ifAucExp } = require('./sendMails');
 router.get('/canAuction/:id', (req, res) => {
-    sequelize.query('DELETE from Auctions WHERE itemAuctionID = ' + req.params.id, { model: Auction }).then(() => {
-        Item.findOne({ where: { itemID: req.params.id } }).then((item => {
-            item.status = 'Active';
-            item.save().then(() => {
+    Auction.findOne({ where: { itemAuctionID: req.params.id } }).then((selectedAuction) => {
+        if (selectedAuction.buyerID != null) {
+            selectedAuction.endDate = '2017-07-00T07:00:00';
+            selectedAuction.save().then(() => {
+                ifAucExp(selectedAuction.auctionID, selectedAuction.buyerID, selectedAuction.highestPrice);
                 req.flash('message', 'Auction deleted successfully'),
                     res.redirect('/items')
             })
-        }))
-    }).catch((err) => {
-        return res.status(400).send({
-            message: err
-        });
+        } else {
+            sequelize.query('DELETE from Auctions WHERE itemAuctionID = ' + req.params.id, { model: Auction }).then(() => {
+                Item.findOne({ where: { itemID: req.params.id } }).then((item => {
+                    item.status = 'Active';
+                    item.save().then(() => {
+                        req.flash('message', 'Auction deleted successfully'),
+                            res.redirect('/items')
+                    })
+                }))
+            }).catch((err) => {
+                return res.status(400).send({
+                    message: err
+                });
+            })
+        }
     })
 })
 

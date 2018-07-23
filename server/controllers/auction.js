@@ -5,6 +5,7 @@ var auth = require('./profile');
 var express = require('express');
 var router = express.Router();
 
+// Show auction page
 router.get('/', auctionEXP, (req, res) => {
     Item.findAll({}).then((item) => {
         Auction.findAll({}).then((auction) => {
@@ -17,6 +18,7 @@ router.get('/', auctionEXP, (req, res) => {
     })
 })
 
+// Show auction item
 router.get('/:aucId/:itemId', (req, res) => {
     Auction.findOne({ where: { auctionID: req.params.aucId } }).then((auction) => {
         Item.findOne({ where: { itemID: req.params.itemId } }).then((item) => {
@@ -29,6 +31,7 @@ router.get('/:aucId/:itemId', (req, res) => {
     })
 })
 
+// Bid auction
 router.post('/:aucId/:itemId', auth.isLoggedIn, (req, res) => {
     Auction.findOne({ where: { auctionID: req.params.aucId } }).then((auction) => {
         Item.findOne({ where: { itemID: req.params.itemId } }).then((item) => {

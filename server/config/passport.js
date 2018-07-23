@@ -58,7 +58,7 @@ module.exports = function (passport) {
                                         return done(null, false);
                                     }
                                     if (newUser) {
-                                        console.log(newUser.userID);
+                                        newAccount(newUser.userID);
                                         return done(null, newUser);
                                     }
                                 })
@@ -187,8 +187,6 @@ module.exports = function (passport) {
                         })
                     })
                 }
-                
-                console.log(name);
             });     
         });
     }

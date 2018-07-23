@@ -8,7 +8,7 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 exports.ioExports = io;
 
-const upload = multer({dest: './public/uploads/', limits: {fileSize: 1000000, files:1} });
+const upload = multer({ dest: './public/uploads/', limits: { fileSize: 1000000, files: 1 } });
 
 const auth = require('./server/controllers/profile');
 
@@ -28,7 +28,6 @@ app.set("views", path.join(__dirname, "server/views/pages"));
 // view engine setup
 app.set("view engine", "ejs");
 
-
 // Passport configuration
 require("./server/config/passport")(passport);
 
@@ -47,7 +46,7 @@ app.use(expressSession({
     store: sequelizeSessionStore,
     resave: false,
     saveUninitialized: false,
-    
+
 }));
 
 // Init passport authentication
@@ -84,11 +83,11 @@ app.use('/mail', mail)
 app.get('/logout', auth.logout);
 
 app.get('/login', auth.loginCheck, auth.signin);
-app.post('/login',passport.authenticate('local-login', {
+app.post('/login', passport.authenticate('local-login', {
     failureRedirect: '/',
     failureFlash: true
-}), function(req,res){
-    res.status(200).send({message: req.user.TwoFA}); 
+}), function (req, res) {
+    res.status(200).send({ message: req.user.TwoFA });
 }
 );
 
@@ -118,7 +117,7 @@ app.post('/forgetusername', auth.sendUsername);
 
 //Change pass
 app.get('/changePassword', auth.isLoggedIn, auth.changePass);
-app.post('/changePassword',auth.isLoggedIn, auth.savePassword);
+app.post('/changePassword', auth.isLoggedIn, auth.savePassword);
 
 //2-Factor Auth
 app.get('/2FA', auth.isLoggedIn, auth.TwoFactorAuth);
@@ -127,23 +126,22 @@ app.post('/disableTFA', auth.isLoggedIn, auth.disableTFA);
 
 //Google Sign In
 app.get('/auth/google',
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read' ] } ));
-app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    var day = 86400000;
-    req.session.cookie.expires = new Date(Date.now() + day);
-    req.session.cookie.maxAge = day;
-    res.redirect('/');
-});
-
+    passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.profile.emails.read'] }));
+app.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    function (req, res) {
+        var day = 86400000;
+        req.session.cookie.expires = new Date(Date.now() + day);
+        req.session.cookie.maxAge = day;
+        res.redirect('/');
+    });
 
 //Rayson's code
 
 // Set Storage Engine
 const storage = multer.diskStorage({
     destination: './public/uploads',
-    filesname: function(req, file, cb){
+    filesname: function (req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
 });
@@ -160,7 +158,6 @@ var confirmation = require('./server/controllers/confirmation');
 //import Item Description controllers
 var itemDes = require('./server/controllers/itemDescrip');
 
-
 //import done 
 var done = require('./server/controllers/done');
 
@@ -172,7 +169,6 @@ var orderTracking = require('./server/controllers/orderTracking');
 
 //import pending
 var pending = require('./server/controllers/pending');
-
 
 // Shopping Cart
 app.get('/shopping-cart', products.list);
@@ -196,7 +192,6 @@ app.post("/add", auth.isLoggedIn, itemDes.add);
 
 //Done
 app.get('/done', auth.isLoggedIn, done.show);
-
 
 //Wish List
 app.get('/wishlist', auth.isLoggedIn, wishList.show)

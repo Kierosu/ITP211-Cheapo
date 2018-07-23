@@ -1,11 +1,15 @@
 var Auction = require('../models/auction');
 var Item = require('../models/item');
 var Mail = require('../models/mail');
+var User = require('../models/user');
 
-var now = new Date();
-var utcString = now.toISOString().substring(0, 19);
-var hour = (now.getHours());
-var localDatetime = utcString.substring(0, 11) + (hour < 10 ? "0" + hour : hour) + utcString.substring(13, 19);
+function timeNow() {
+    var now = new Date();
+    var utcString = now.toISOString().substring(0, 19);
+    var hour = (now.getHours());
+    var localDatetime = utcString.substring(0, 11) + (hour < 10 ? "0" + hour : hour) + utcString.substring(13, 19);
+    return localDatetime;
+}
 
 function mailExpAuc(auctionID, itemID) {
     Auction.destroy({ where: { auctionID: auctionID } }).then(() => {
@@ -21,6 +25,7 @@ function mailExpAuc(auctionID, itemID) {
                 item.status = 'Active';
                 item.save();
                 Mail.create(alertExpAuction);
+                console.log('An act has expired')
             } catch (err) {
                 console.log(err);
             }
@@ -28,8 +33,39 @@ function mailExpAuc(auctionID, itemID) {
     })
 }
 
+function mailSoldAuc(aucID, buyerID, price) {
+    Auction.findOne({ where: { auctionID: aucID } }).then((auction) => {
+        Item.findOne({ where: { itemID: auction.itemAuctionID } }).then((item) => {
+            User.findOne({ where: { userID: buyerID } }).then((user) => {
+                var soldAucSeller = {
+                    sender: 1,
+                    receiver: item.userID,
+                    title: 'Auction expired',
+                    message: 'Auction, ' + item.name + ' has ended being bought from buyer, ' + user.username + ' at $' + price,
+                    status: 'notSeen'
+                }
+                var soldAucBuyer = {
+                    sender: 1,
+                    receiver: buyerID,
+                    title: 'Auction Won',
+                    message: 'You have won Auction, ' + item.name + ' . Please click the following link to pay $' +  price + ' to complete the auction. <br><a style="color:green;" href="#">Click ME</a>',
+                    status: 'notSeen'
+                }
+                try {                    
+                    Mail.create(soldAucSeller);
+                    Mail.create(soldAucBuyer);
+                    auction.destroy();
+                    item.destroy();
+                } catch (err) {
+                    console.log(err);
+                }
+            })
+        })
+    })    
+}
+
 module.exports = {
-    newAccount:(user)=>{
+    newAccount: (user) => {
         var newUser = {
             sender: 1,
             receiver: user,
@@ -72,9 +108,13 @@ module.exports = {
         }
     },
     auctionEXP: (req, res, next) => {
-        Auction.findAll({ where: { endDate: { lte: localDatetime } }, raw: true }).then((expAuc) => {
+        Auction.findAll({ where: { endDate: { lte: timeNow() } }, raw: true }).then((expAuc) => {
             for (var i = 0; i < expAuc.length; i++) {
-                mailExpAuc(expAuc[i].auctionID, expAuc[i].itemAuctionID)
+                if (expAuc[i].buyerID == null) {
+                    mailExpAuc(expAuc[i].auctionID, expAuc[i].itemAuctionID);
+                } else {
+                    mailSoldAuc(expAuc[i].auctionID, expAuc[i].buyerID, expAuc[i].highestPrice);
+                }
             }
         })
         return next();
@@ -141,5 +181,8 @@ module.exports = {
                 }
             }
         })
+    },
+    ifAucExp: (aucID, aucBuyer, aucPrice) => {
+        mailSoldAuc(aucID, aucBuyer, aucPrice);
     }
 };

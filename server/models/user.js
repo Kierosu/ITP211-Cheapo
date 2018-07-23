@@ -109,10 +109,10 @@ User.sync({force: false, logging: console.log}).then(()=>{
     });
     User.upsert({
         userID: 8,
-        username: "test",
-        email: "test@test.com",
-        password: "test",
-        userType: "Admin"
+        username: "lee",
+        email: "lee@gmail.com",
+        password: "lee",
+        userType: "Member"
     });
     User.upsert({
         userID: 9,
@@ -127,6 +127,13 @@ User.sync({force: false, logging: console.log}).then(()=>{
         email: "toph@gmail.com",
         password: "toph",
         userType: "Member"
+    });
+    User.upsert({
+        userID: 11,
+        username: "test",
+        email: "test@test.com",
+        password: "test",
+        userType: "Admin"
     });
 });
 

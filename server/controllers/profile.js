@@ -384,23 +384,36 @@ exports.checkTFA = (req, res) => {
 }
 
 var Item = require('../models/item');
-
+var Auction = require('../models/auction');
+var sequelize = myDatabase.sequelize;
 //Index page
 exports.index = (req, res) => {
     if (req.user) {
         Item.findAll({}).then((item) => {
-            res.render('index', {
-                item: item,
-                email: req.user.email,
-                msg: req.flash('message')
-            });
+            sequelize.query("select * from(select top 7 * from Items where status = 'Active' order by itemID desc) s order by itemID asc", { model: Item }).then((selectedItems) => {
+                Auction.findAll({}).then((auction) => {
+                    res.render('index', {
+                        item: item,
+                        selectedItems: selectedItems,
+                        auction: auction,
+                        email: req.user.email,
+                        msg: req.flash('message')
+                    });
+                })
+            })
         })
     } else {
         Item.findAll({}).then((item) => {
-            res.render('index', {
-                item: item,
-                msg: req.flash('message')
-            });
+            sequelize.query("select * from(select top 7 * from Items where status = 'Active' order by itemID desc) s order by itemID asc", { model: Item }).then((selectedItems) => {
+                Auction.findAll({}).then((auction) => {
+                    res.render('index', {
+                        item: item,
+                        selectedItems: selectedItems,
+                        auction: auction,
+                        msg: req.flash('message')
+                    });
+                })
+            })
         })
     }
 }
