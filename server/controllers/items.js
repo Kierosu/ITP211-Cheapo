@@ -164,14 +164,21 @@ router.get('/reactivate/:id', auth.isLoggedIn, (req, res) => {
 
 // Item details
 router.get('/list/:id', (req, res) => {
-    Item.findOne({ where: { itemID: req.params.id } }).then((item => {
-        Review.findAll({ where: { itemID: req.params.id } }).then((review => {
-            res.render('productpage', {
-                item: item,
-                review: review
-            })
-        }))
-    }))
+    Item.findOne({ where: { itemID: req.params.id } }).then((item) => {
+        if (item) {
+            console.log('YES')
+            Review.findAll({ where: { itemID: req.params.id } }).then((review => {
+                res.render('productpage', {
+                    item: item,
+                    review: review
+                })
+            }))
+        }
+        if (!item) {
+            req.flash('message', 'Item does not exist');
+            res.redirect('/')
+        }
+    })
 })
 
 // Auction item page

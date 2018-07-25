@@ -20,14 +20,30 @@ router.get('/', auctionEXP, (req, res) => {
 
 // Show auction item
 router.get('/:aucId/:itemId', (req, res) => {
-    Auction.findOne({ where: { auctionID: req.params.aucId } }).then((auction) => {
-        Item.findOne({ where: { itemID: req.params.itemId } }).then((item) => {
-            res.render('auctionItem', {
-                item: item,
-                auction: auction,
-                msg: req.flash('message')
-            });
-        })
+    Auction.findOne({ where: { auctionID: req.params.aucId, itemAuctionID: req.params.itemId } }).then((auctionExist) => {
+        if (auctionExist) {
+            Auction.findOne({ where: { auctionID: req.params.aucId } }).then((auction) => {
+                Item.findOne({ where: { itemID: req.params.itemId } }).then((item) => {
+                    res.render('auctionItem', {
+                        item: item,
+                        auction: auction,
+                        msg: req.flash('message')
+                    });
+                })
+            })
+        }
+        if (!auctionExist) {
+            Item.findAll({}).then((item) => {
+                Auction.findAll({}).then((auction) => {
+                    req.flash('message', 'Auction does not exist');
+                    res.render('auctions', {
+                        item: item,
+                        auction: auction,
+                        msg: req.flash('message')
+                    });
+                })
+            })
+        }
     })
 })
 
