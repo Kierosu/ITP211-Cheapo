@@ -7,7 +7,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-	<title><%= title %></title>
+	<title>
+		<%= title %>
+	</title>
 	<!-- PayPal API -->
 	<script src="https://www.paypalobjects.com/api/checkout.js"></script>
 
@@ -34,171 +36,182 @@
 </head>
 
 <body>
-        <% include ../partials/header %>
-        <!-- BREADCRUMB -->
-        <div id="breadcrumb">
-            <div class="container">
-                <ul class="breadcrumb">
-                    <li>
-                        <a href="#">Home</a>
-                    </li>
-                    <li class="active"><Item Name></li>
-                </ul>
-            </div>
-        </div>
-        <!-- /BREADCRUMB -->
-        <!-- section -->
-        <center>
-        <!-- <form action="/insert" method="POST"> -->
-        <div class="section">
-        <div class="container-fluid">
-            <div class="row" >
-                <div class="col-sm-4">
-                    <img src="/img/macbookPro.jpg" alt="Macbook Pro '13 with Touch Bar" name="myImage" class="rounded" alt="...">
-                    <input type="hidden" name= "image" id="macbookImg"value= "/img/macbookPro.jpg ">
-                </div>
-                <div class="col-sm-8">.
-                            <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h2>Macbook Pro 13' with Touch Bar</h2>
-                            </div>
-                            <div class="panel-body">
-                                <h3 class="as-macbundle-modelvariationtitle">2.3GHz Processor&nbsp;<br />128&nbsp;GB Storage</h3>
-                                <p>2.3GHz dual-core 7th-generation Intel&nbsp;Core&nbsp;i5 processor</p>
-                                <p>Turbo Boost up to 3.6GHz</p>
-                                <p>8GB 2133MHz LPDDR3 memory</p>
-                                <p>128GB SSD storage<sup>1</sup></p>
-                                <p>Intel Iris Plus Graphics 640</p>
-                                <p>Two Thunderbolt 3 ports</p>
-                                <bold><h3 name="macbookPrice" id="macbookPro" value="S$1,898.00">S$1,898.00</h3></bold>
-                                <input type="hidden" id = "macbookPrice" name="macbookPrice2" value="1,898.00"> 
-                                <input type="hidden" id = "macbookName" name="macbookName" value="Macbook Pro 13' with Touch Bar">
-                            </div>
-                            <div class = "panel-footer">
-                                <br>
-                                <br>
-                                <br>
-                                    <center>
-                                        <button type="submit" onclick=addToData() class="creativeButton" data-toggle="modal" data-target="#addToCart">Add To Cart</button>
-                                        <button type="submit"  onclick=addToWish() class="creativeButton">
-                                            <i class="fa fa-heart-o" style="color:black"></i>
-                                        </button>
-                                    </center>
-                                <br>
-                                <br>
-                                <br>
-                            </div>
-                        </div>                
-                    </div>
-            </div>
-        </div>
-        </div>
-    <!-- </form> -->
-	</center>
-	<!-- /section -->
-        <div class="modal fade" id="addToCart" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Successfully added to cart!</h4>
-            </div>
-            <div class="modal-body">
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
-                    <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
-                    <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
-                  </svg>
-                  <br>
-                  <center><p class="success">Item added Successfully!</p></center>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn" data-dismiss="modal">Continue Shopping</button>
-                <button type="button" id="check" class="btn">Checkout</button>
-            </div>
-            </div>
-        </div>
-        </div>
-        	<!-- jQuery Plugins -->
-        <script src="js/jquery.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/slick.min.js"></script>
-        <script src="js/nouislider.min.js"></script>
-        <script src="js/jquery.zoom.min.js"></script>
-        <script src="js/main.js"></script>
-        <script src="js/item.js"></script>
-        <script>
-            
-        function addToData() {
-            var url = "<%=hostPath%>/item/macbook"; //Edit when database is implemented\
-            var products = {
-                UserId: '<%=userID%>',
-                sellerId: 4,
-                ProductName: $("#macbookName").val(),
-                ProductPrice: $("#macbookPrice").val(),
-                ProductDescription: "",
-                ProductImage: $("#macbookImg").val()
-            }
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: JSON.stringify(products),
-                dataType: "json",
-                contentType: "application/json",
-                success: function(result){
-                    alert("Item Posted Successfully!");
-                },
-                error: function(result){
-                    alert("Error Posting Item");
-                    discardAdd();
-                }
-            })
-        }
+	<% include ../partials/header %>
+		<!-- BREADCRUMB -->
+		<div id="breadcrumb">
+			<div class="container">
+				<ul class="breadcrumb">
+					<li>
+						<a href="#">Home</a>
+					</li>
+					<li class="active">
+						<Item Name>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- /BREADCRUMB -->
+		<!-- section -->
+		<center>
+			<!-- <form action="/insert" method="POST"> -->
+			<div class="section">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-sm-4">
+							<img src="/img/macbookPro.jpg" alt="Macbook Pro '13 with Touch Bar" name="myImage" class="rounded" alt="...">
+							<input type="hidden" name="image" id="macbookImg" value="/img/macbookPro.jpg ">
+						</div>
+						<div class="col-sm-8">.
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h2>Macbook Pro 13' with Touch Bar</h2>
+								</div>
+								<div class="panel-body">
+									<h3 class="as-macbundle-modelvariationtitle">2.3GHz Processor&nbsp;
+										<br />128&nbsp;GB Storage</h3>
+									<p>2.3GHz dual-core 7th-generation Intel&nbsp;Core&nbsp;i5 processor</p>
+									<p>Turbo Boost up to 3.6GHz</p>
+									<p>8GB 2133MHz LPDDR3 memory</p>
+									<p>128GB SSD storage
+										<sup>1</sup>
+									</p>
+									<p>Intel Iris Plus Graphics 640</p>
+									<p>Two Thunderbolt 3 ports</p>
+									<bold>
+										<h3 name="macbookPrice" id="macbookPro" value="S$1,898.00">S$1,898.00</h3>
+									</bold>
+									<input type="hidden" id="macbookPrice" name="macbookPrice2" value="1,898.00">
+									<input type="hidden" id="macbookName" name="macbookName" value="Macbook Pro 13' with Touch Bar">
+								</div>
+								<div class="panel-footer">
+									<br>
+									<br>
+									<br>
+									<center>
+										<button type="submit" onclick=addToData() class="creativeButton" data-toggle="modal" data-target="#addToCart">Add To Cart</button>
+										<button type="submit" onclick=addToWish() class="creativeButton">
+											<i class="fa fa-heart-o" style="color:black"></i>
+										</button>
+									</center>
+									<br>
+									<br>
+									<br>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- </form> -->
+		</center>
+		<!-- /section -->
+		<div class="modal fade" id="addToCart" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" id="myModalLabel">Successfully added to cart!</h4>
+					</div>
+					<div class="modal-body">
+						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+							<circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"
+							/>
+							<polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10"
+							 points="100.2,40.2 51.5,88.8 29.8,67.5 " />
+						</svg>
+						<br>
+						<center>
+							<p class="success">Item added Successfully!</p>
+						</center>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn" data-dismiss="modal">Continue Shopping</button>
+						<button type="button" id="check" class="btn">Checkout</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- jQuery Plugins -->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/slick.min.js"></script>
+		<script src="js/nouislider.min.js"></script>
+		<script src="js/jquery.zoom.min.js"></script>
+		<script src="js/main.js"></script>
+		<script src="js/item.js"></script>
+		<script>
 
-        function discardAdd() {
-            location.href = "<%=hostPath%>/item"
-        }
-        
-        $("#check").click( function()
-        {
-            window.location.replace("http://localhost:3000/shopping-cart");
-        })
+			function addToData() {
+				var url = "<%=hostPath%>/item/macbook"; //Edit when database is implemented\
+				var products = {
+					UserId: '<%=userID%>',
+					sellerId: 4,
+					ProductName: $("#macbookName").val(),
+					ProductPrice: $("#macbookPrice").val(),
+					ProductDescription: "",
+					ProductImage: $("#macbookImg").val()
+				}
+				$.ajax({
+					url: url,
+					type: "POST",
+					data: JSON.stringify(products),
+					dataType: "json",
+					contentType: "application/json",
+					success: function (result) {
+						alert("Item Posted Successfully!");
+					},
+					error: function (result) {
+						alert("Error Posting Item");
+						discardAdd();
+					}
+				})
+			}
 
-        function addToWish() {
-            var url = "<%=hostPath%>/add"; //Edit when database is implemented\
-            var products = {
-                UserId: '<%=userID%>',
-                sellerId: 3,
-                ProductName: $("#macbookName").val(),
-                ProductPrice: $("#macbookPrice").val(),
-                ProductDescription: "",
-                ProductImage: $("#macbookImg").val()
-            }
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: JSON.stringify(products),
-                dataType: "json",
-                contentType: "application/json",
-                success: function(result){
-                    window.location = "http://localhost:3000/wishlist"
-                },
-                error: function(result){
-                    discardAdd();
-                }
-            })
-        }
+			function discardAdd() {
+				location.href = "<%=hostPath%>/item"
+			}
 
-        function discardAdd() {
-            location.href = "<%=hostPath%>/item"
-        }
-        
-        $("#check").click( function()
-        {
-            window.location.replace("http://localhost:3000/shopping-cart");
-        })
+			$("#check").click(function () {
+				window.location.replace("http://localhost:3000/shopping-cart");
+			})
 
-        </script>
-	<% include ../partials/footer %>
+			function addToWish() {
+				var url = "<%=hostPath%>/add"; //Edit when database is implemented\
+				var products = {
+					UserId: '<%=userID%>',
+					sellerId: 3,
+					ProductName: $("#macbookName").val(),
+					ProductPrice: $("#macbookPrice").val(),
+					ProductDescription: "",
+					ProductImage: $("#macbookImg").val()
+				}
+				$.ajax({
+					url: url,
+					type: "POST",
+					data: JSON.stringify(products),
+					dataType: "json",
+					contentType: "application/json",
+					success: function (result) {
+						window.location = "http://localhost:3000/wishlist"
+					},
+					error: function (result) {
+						discardAdd();
+					}
+				})
+			}
+
+			function discardAdd() {
+				location.href = "<%=hostPath%>/item"
+			}
+
+			$("#check").click(function () {
+				window.location.replace("http://localhost:3000/shopping-cart");
+			})
+
+		</script>
+		<% include ../partials/footer %>
 </body>
 
 </html>

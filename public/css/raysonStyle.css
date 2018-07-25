@@ -2139,9 +2139,10 @@ body {
 .checkout-panel {
   display: flex;
   flex-direction: column;
-  width: 940px;
+  width: 100%;
   height: relative;
   background-color:  #f4f4f4;
+  overflow: hidden;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .2);
 }
 
@@ -2161,6 +2162,7 @@ body {
 .bar {
   display: flex;
   margin-bottom: 50px;
+  width: 100%;
   justify-content: space-between;
 }
 
@@ -2182,7 +2184,7 @@ body {
   z-index: -1;
   top: 5px;
   left: 22px;
-  width: 225px;
+  width: 1800%;
   height: 6px;
   content: '';
   background-color: #efefef;
@@ -2203,6 +2205,7 @@ body {
 }
 .step.active:after {
   background-color: #f62f5e;
+  width: 2000%;
 }
 .step.active:before {
   color: #f62f5e;

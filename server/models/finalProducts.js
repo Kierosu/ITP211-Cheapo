@@ -32,17 +32,17 @@ const finalProducts = sequelize.define('finalProducts', {
         type: Sequelize.DATE,
         field: 'createdAt',
     },
-      updatedAt: {
+    updatedAt: {
         type: Sequelize.DATE,
         field: 'updatedAt'
-      }
-    }, {
-      freezeTableName: true, // Model tableName will be the same as the model name
-      timestamps: false,
-      underscored: true
+    }
+}, {
+        freezeTableName: true, // Model tableName will be the same as the model name
+        timestamps: false,
+        underscored: true
     });
 // force: true will drop the table if it already exists
-finalProducts.sync({ force: false, logging: console.log}).then(() => {
+finalProducts.sync({ force: false, logging: console.log }).then(() => {
     // Table created
     console.log("Final Products table synced");
 });
