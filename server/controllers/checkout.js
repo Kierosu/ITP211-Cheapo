@@ -1,8 +1,6 @@
 //get gravatar icon from email
 var gravatar = require('gravatar');
 //get comments model
-var passport = require('passport');
-var fs = require('fs');
 var UserModel = require('../models/user');
 var Product = require('../models/products');
 var CardDetails = require('../models/cardDetails');

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title><%= title %></title>
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="css/slick.css" />
+	<link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
+
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
+
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+
+	<!-- Custom stylesheet -->
+	<link type="text/css" rel="stylesheet" href="css/raysonStyle.css" />
+
+ 
+</head>
+
+<body>
+<!-- HEADER -->
+<header>
+        <!-- top Header -->
+        <div id="top-header">
+            <div class="container">
+                <div class="pull-left">
+                    <span>Welcome to E-shop!</span>
+                </div>
+                <div class="pull-right">
+                    <ul class="header-top-links">
+                        <li><a href="#">Store</a></li>
+                        <li><a href="#">Newsletter</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li class="dropdown default-dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">ENG <i class="fa fa-caret-down"></i></a>
+                            <ul class="custom-menu">
+                                <li><a href="#">English </a></li>
+                                <li><a href="#">Malay </a></li>
+                                <li><a href="#">Chinese </a></li>
+                                <li><a href="#">Indian </a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown default-dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Feedback <i class="fa fa-caret-down"></i></a>
+                            <ul class="custom-menu">
+                                <li><a href="#">Send a message</a></li>
+                                <li><a href="#">Report </a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /top Header -->
+    <!-- section -->
+        <!-- header -->
+        <div id="header">
+                <div class="container">
+                    <div class="pull-left">
+                        <!-- Logo -->
+                        <div class="header-logo">
+                            <a class="logo" href="#">
+                                <img src="./img/logo.png" alt="">
+                            </a>
+                        </div>
+                        <!-- /Logo -->
+                    </div>
+                    <div class="pull-right">
+                        <ul class="header-btns">
+                            <li class="header-account dropdown default-dropdown">
+                            <!-- Account -->
+                            <% if(locals.loginuser) { %>
+                                <div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
+                                    <div class="header-btns-icon">
+                                        <img src="http://localhost:3000/img/<%= loginuser.profilePic %>" alt="Profile Picture" style="width:38.5px">
+                                    </div>
+                                    <strong class="text-uppercase"  style="top: 10.2px;position: relative;"><%= loginuser.username %> <i class="fa fa-caret-down"></i></strong>		
+                                </div>
+                                <ul class="custom-menu">
+                                    <li><a href="/profile/<%= loginuser.username %>"><i class="fa fa-user-o"></i> My Account</a></li>
+                                    <li><a href="#"><i class="fa fa-heart-o"></i> Orders</a></li>
+                                    <li><a href="/logout"><i class="fa fa-unlock-alt"></i> Logout</a></li>
+                                </ul>
+                                    
+                            <% } else { %>
+                            <div style="margin-top: 10.2px;">
+                            <a href="/login" class="text-uppercase"><strong>Login</strong></a> / <a href="/signup" class="text-uppercase"><strong>Join</strong></a>
+                            </div>
+                                
+                            <% } %>
+                            </li>
+                            <!-- /Account -->
+                            <!-- Mobile nav toggle-->
+                            <li class="nav-toggle">
+                                <button class="nav-toggle-btn main-btn icon-btn"><i class="fa fa-bars"></i></button>
+                            </li>
+                            <!-- / Mobile nav toggle -->
+                        </ul>
+                    </div>
+                </div>
+                <!-- header -->
+            </div> 
+	<center>
+	<div class="section">
+			<div class="checkout-panel">
+                <div class="panel-body">
+                <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Dropdown
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <button class="dropdown-item" type="button">Action</button>
+                    <button class="dropdown-item" type="button">Another action</button>
+                    <button class="dropdown-item" type="button">Something else here</button>
+                </div>
+                </div>
+				</div>
+			</div>
+				
+	</div>
+</center>
+	<!-- /section -->
+
+
+	<!-- jQuery Plugins -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/slick.min.js"></script>
+	<script src="js/nouislider.min.js"></script>
+	<script src="js/jquery.zoom.min.js"></script>
+	<script src="js/main.js"></script>
+
+<% include ../partials/footer %>
+<script>
+(function (global) {
+
+if(typeof (global) === "undefined")
+{
+	throw new Error("window is undefined");
+}
+
+var _hash = "!";
+var noBackPlease = function () {
+	global.location.href += "#";
+
+	// making sure we have the fruit available for juice....
+	// 50 milliseconds for just once do not cost much (^__^)
+	global.setTimeout(function () {
+		global.location.href += "!";
+	}, 50);
+};
+
+// Earlier we had setInerval here....
+global.onhashchange = function () {
+	if (global.location.hash !== _hash) {
+		global.location.hash = _hash;
+	}
+};
+
+global.onload = function () {
+	
+	noBackPlease();
+
+	// disables backspace on page except on input fields and textarea..
+	document.body.onkeydown = function (e) {
+		var elm = e.target.nodeName.toLowerCase();
+		if (e.which === 8 && (elm !== 'input' && elm  !== 'textarea')) {
+			e.preventDefault();
+		}
+		// stopping event bubbling up the DOM tree..
+		e.stopPropagation();
+	};
+	
+};
+
+})(window);
+</script>
+</body>
+
+</html>

@@ -50,7 +50,7 @@
 		<div class="container">
 			<ul class="breadcrumb">
 				<li><a href="#">Home</a></li>
-				<li class="active">Confirmation</li>
+				<li class="active">Order-Tracking</li>
 			</ul>
 		</div>
 	</div>
@@ -59,7 +59,7 @@
 	<!-- section -->
 	<center>
 	<div class="section">
-			<div class="checkout-panel">
+			<div class="checkout-panel">  
 					<div class="panel-body">
 					  <h2 class="title">Order Tracking</h2>
 						<div class="row"></div>
@@ -69,7 +69,7 @@
 							<div class="stepVer4"></div>
 							<div class="stepVer5"></div>
 						</div>
-							<div id="map" class="border border-dark rounded"></div>
+							<div id="map" class="border border-dark rounded" style = "border: 5px solid black";></div>
 							<div class="navigation1">
 								<strong><p>Instructions For Navigating:</p></strong>
 								<ul>
@@ -77,7 +77,7 @@
 									<li><kbd>Click on the markers to zoom in and see details about it.</kbd></li>
 								</ul>
 							</div>
-							<div class="done"><!--remember to add class hidden -->
+							<div class="done hidden"><!--remember to add class hidden -->
 								<fieldset>
 									<legend>Shipment Completed!</legend>
 									<p>Thanks for shopping with Cheapo!</p>
@@ -224,6 +224,13 @@ socket.on('receiveMoney', function(sellerMoney) {
 <script>
 var markers = [];
 var position = [parseFloat('<%= myLatitude %>'), parseFloat('<%= myLongitude %>')];
+var coordi = {};
+socket.on('sendingCoords', function(coords) { // fix stupid undefined coords
+	console.log("testing coords: " + coords.shippingAddressLatitude + " and " + coords.shippingAddressLongitude)
+	console.log("object" + coords)
+	coordi.shippingLatitude = coords.shippingAddressLatitude;
+	coordi.shippingLongitude = coords.shippingAddressLongitude;
+});
 
 function initMap(){
     var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
@@ -233,10 +240,8 @@ function initMap(){
         var lat = pos.coords.latitude,
             long = pos.coords.longitude,
 			coords = lat + " , " + long;
-
+		// });
 		//Shipment location
-		var lati = parseFloat(1.378949)
-		var longi = parseFloat(103.755845)
 
 		//Van location
 		var p1 = {
@@ -245,9 +250,16 @@ function initMap(){
 		}
 
 		var p2 = {
-			lat: parseFloat(lati), //in c thats why need shippingLacation and dont need c
-			lng: parseFloat(longi)
+			lat: parseFloat(coordi.shippingLatitude), //in c thats why need shippingLacation and dont need c
+			lng: parseFloat(coordi.shippingLongitude)
 		}
+
+
+		var homeMarker = new google.maps.Marker({
+			position: {lat: coordi.shippingLatitude, lng: coordi.shippingLongitude},
+			map:map
+		})
+
 		var rad = function(x) {
 			return x * Math.PI / 180;
 		};
@@ -264,21 +276,16 @@ function initMap(){
 		};
 
 		//Add marker function
-		var currentMarker = new google.maps.Marker({
-				position: {lat: lat, lng: long},
-				map:map
-			});
+		// var currentMarker = new google.maps.Marker({
+		// 		position: {lat: lat, lng: long},
+		// 		map:map
+		// 	});
 
 		var vanMarker = new google.maps.Marker({
 			position: {lat: parseFloat('<%= myLatitude %>'), lng: parseFloat('<%= myLongitude %>')},
 			map:map	
 		});
-		
-		var homeMarker = new google.maps.Marker({
-			position: {lat: 1.378949, lng: 103.755845},
-			map:map
-		})
-		
+
 		function notifyMe() {
 		if (!("Notification" in window)) {
 			alert("This browser does not support system notifications");
@@ -388,8 +395,9 @@ function initMap(){
 
 		//Codes to move markers
 		function movingMarkers() {
-			var result = [1.3329, 103.7436];
-        	transition(result);
+			var result = [parseFloat(coordi.shippingLatitude) - 0.02, parseFloat(coordi.shippingLongitude) - 0.02];
+			console.log("moving")
+			transition(result);
 		}
 
 		setTimeout (function() {
@@ -400,7 +408,9 @@ function initMap(){
 
 
 		function movingMarkers2nd() {
-			var result = [1.3590, 103.7637];
+			var finalLati = parseFloat(coordi.shippingLatitude) - 0.01;
+			var finalLongi = parseFloat(coordi.shippingLongitude) - 0.01
+			var result = [finalLati, finalLongi];
         	transition(result);
 		}
 
@@ -411,7 +421,7 @@ function initMap(){
 		//^^ Moving from jurong east to bukit batok
 
 		function movingMarkers3rd() {
-			var result = [lati, longi];
+			var result = [parseFloat(coordi.shippingLatitude), parseFloat(coordi.shippingLongitude)];
         	transition(result);
 		}
 
@@ -431,7 +441,6 @@ function initMap(){
 		//Adding animations to markers
         homeMarker.addListener('click', toggleBounce);
 		vanMarker.addListener('click', toggleBounce);
-		currentMarker.addListener('click', toggleBounce);
 		
 		//set current variables
 		var numDeltas = 100;
@@ -504,10 +513,10 @@ function initMap(){
             map.setCenter(vanMarker.getPosition());
 		})
 		
-		currentMarker.addListener('click', function(){
-            map.setZoom(14);
-            map.setCenter(currentMarker.getPosition());
-        })
+		// currentMarker.addListener('click', function(){
+        //     map.setZoom(14);
+        //     map.setCenter(currentMarker.getPosition());
+        // })
 	}
     
     var e = function(error) {

@@ -16,8 +16,8 @@ var randomstring = Math.random().toString(36).slice(-8);
 //Nodemailer
 let transporter = nodemailer.createTransport({
     service: "gmail",
-    secure: false,
     port: 25,
+    secure: false,
     auth: {
         user: "TheCheapoOnline@gmail.com",
         pass: "cheapo123"
@@ -37,20 +37,29 @@ exports.show = function (req, res){
         array.push(randomstring);
 
         // Genrate Email
-        let HelperOptions = {
+        
+        sequelize.query("select email from Users where UserID =" + req.user.userID, {model: UserModel}).then((test) => { 
+            var myEmail = ""
+            test.forEach(function(findingEmail){
+                console.log(findingEmail.dataValues.email);
+                myEmail = findingEmail.dataValues.email;
+            });
+            console.log(myEmail);
+            let HelperOptions = {
             from: '"Cheapo Online Shop" <TheCheapoOnline@gmail.com>',
-            to: "raysonkira@gmail.com",
+            to: myEmail,
             subject: "Cheapo's OTP",
             text: "OTP is: " + randomstring
         };
         transporter.sendMail(HelperOptions, (error, info) =>{
             if (error){
-                console.log(error);
+                console.log(error + HelperOptions.to);
             }
             else{
-            console.log("The message is sent!");
+            console.log("The message is sent!" + HelperOptions.to);
             console.log(info);
             }
+        });
         });
         //Calculating product total value
         var realQuantity = 0;

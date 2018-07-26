@@ -147,6 +147,8 @@ var confirmation = require('./server/controllers/confirmation');
 //import Item Description controllers
 var itemDes = require('./server/controllers/itemDescrip');
 
+//import driver page
+var driver = require('./server/controllers/driver');
 
 //import done 
 var done = require('./server/controllers/done');
@@ -184,6 +186,8 @@ app.post("/add", auth.isLoggedIn, itemDes.add);
 //Done
 app.get('/done', auth.isLoggedIn, done.show);
 
+//Driver 
+app.get('/driver', driver.show);
 
 //Wish List
 app.get('/wishlist', auth.isLoggedIn, wishList.show)
