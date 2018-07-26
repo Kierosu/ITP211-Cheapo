@@ -96,7 +96,6 @@ exports.feedback = function (req,res){
             //Add to database using seq
             sequelize.query("update Users set valueRecieved = " + sellerDollars + " where username = '" + seller + "';");
             console.log("Money Sent!")
-<<<<<<< HEAD
 		}
         console.log('Deleting Final Products Table')
         sequelize.query("delete from finalProducts where UserId = " + req.user.userID);
@@ -108,17 +107,6 @@ exports.show = function (req, res){
     //List all the products
     var coords = {};
     sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID, {model: Product}).then((products) => {     
-=======
-        }
-
-    });
-
-    res.status(200).send({ message: "Successfully released money of " + realTotalPrice + " to seller!" })
-}
-exports.show = function (req, res) {
-    //List all the products
-    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID, { model: Product }).then((products) => {
->>>>>>> a7d1742e53ce30c0f12ad0ebb2aedbc3f3994cab
         //sending money socket io
         ioCheck.on('connection', function (socket) {
             console.log("MoneyLoader connected!");
