@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cheapo</title>
+    <!-- css -->
+    <% include ../partials/stylesheet %>
+</head>
+
+<body>
+    <% include ../partials/header %>
+        <div class="container">
+            <div style="height: 400px;width: 75%;margin: auto;font-family: calibri;">
+                <div style="height: 100%;width: 25%;float: left;">
+                    <div style="height: 15%;width: 100%;background-color: rgb(209, 241, 159);display: flex;font-size: 35px;">
+                        <p style="margin: auto;">Cheap mail</p>
+                    </div>
+                    <div style="height: 85%;width: 100%;background-color: rgb(238, 235, 235);overflow-y: auto;font-size: 23px;">
+                        <% mail.forEach(function(mail){ %>
+                        <div style="height: 13%;width: 100%;display: flex;">
+                            <div id="mailSelection" onclick="showMailT(
+                            <% user.forEach(function(user){
+                                if(user.userID == mail.sender){ %>
+                                   '<%= user.email %>'
+                            <% }}) %>
+                            ,'<%= mail.message %>','<%= mail.mailID %>');" style="height: 90%;width: 95%;margin: auto;background-color: #F8694A;border-radius: 7px;display: flex;cursor: pointer;overflow: hidden;">
+                                <p style="margin: auto 0;padding-left: 5px;"><%= mail.title %></p>
+                            </div>
+                        </div>
+                        <% }) %>
+                    </div>
+                </div>
+                <div style="height: 100%;width: 75%;float: right;">
+                    <div style="height: 15%;width: 95%;background-color:#F8694A;margin: 0 auto;display: flex;">
+                        <div style="height: 100%;width: 30%;display: flex;margin: auto;">
+                            <button data-aID="" id="deleteMail" name="deleteMail" type="button" class="btn btn-lg btn-primary" style="height: 95;width: 95%;margin: auto;">Delete Mail</button>
+                        </div>
+                    </div>
+                    <div style="height: 80%;width: 95%;background-color: moccasin;margin: 0 auto;">
+                        <div style="height: 15%;width: 100%;background-color: rgb(238, 235, 235);display: flex;border-top-left-radius: 5px;border-top-right-radius: 5px;">
+                            <p id="fromText" style="margin: auto 0;padding-left: 5px;font-size: 32px;"></p>
+                        </div>
+                        <div style="height: 85%;width: 100%;background-color: rgb(250, 248, 248);display: flex;">
+                            <p id="messageText" style="padding-left: 5px;font-size: 23px;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% include ../partials/footer %>
+        <!-- jQuery Plugins -->
+        <% include ../partials/javascript %>
+        <script>
+            function showMailT(from,message,mID){
+                $('#deleteMail').attr("data-aID",mID);
+                var fromText = document.getElementById("fromText");
+                var messageText = document.getElementById("messageText");    
+                fromText.innerHTML = from;
+                messageText.innerHTML = message;
+            }
+
+            $("#deleteMail").click(function(){
+                var mID = $(this).attr('data-aID');
+                if (mID == ""){
+                    alert("Please pick a mail first");
+                } else{
+                    $.post("/mail/deleteMail",
+                        {
+                            mailID: mID
+                        });
+                        location.reload();
+                        alert("Mail has been deleted")
+                }       
+            });
+        </script>
+</body>
+
+</html>

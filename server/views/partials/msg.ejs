@@ -1,0 +1,23 @@
+<div class="container">
+    <% if (msg.length > 0) { %>
+        <div class="alert alert-warning alert-dismissible fade in" role="alert" style="text-align:center;font-size: 23px">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <b>
+                <%= msg %>
+            </b>
+        </div>
+        <% } %>
+            <% if (error.length > 0) { %>
+                <div class="alert alert-warning alert-dismissible fade in" role="alert" style="text-align:center;font-size: 23px">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <b>
+                        <%= error %>
+                    </b>
+                </div>
+                <% } %>
+
+</div>

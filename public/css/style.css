@@ -1,6 +1,4 @@
 /*
-Template Name: E-SHOP HTML E-Commerce Template
-Author: yaminncco
 
 Colors:
 	Body 		  : #4A4E5A
@@ -341,12 +339,11 @@ textarea.input {
 
 .header-logo {
   display: inline-block;
-  margin-right: 15px;
 }
 
 .header-logo .logo>img {
   width: 100%;
-  max-height: 70px;
+  max-height: 80px;
 }
 
 /*----------------------------*\
@@ -365,14 +362,14 @@ textarea.input {
 
 .header-search>form .search-input {
   padding-left: 150px;
-  padding-right: 45px;
+  padding-right: 5px;
 }
 
 .header-search>form .search-categories {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 135px;
+  width: 145px;
 }
 
 .header-search>form .search-btn {
