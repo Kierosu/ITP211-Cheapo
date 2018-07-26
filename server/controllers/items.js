@@ -1,5 +1,6 @@
 var Review = require('../models/itemReview');
 var { auctionEXP } = require('./sendMails');
+var Product = require('../models/products');
 var Auction = require('../models/auction');
 var Report = require('../models/report');
 var Item = require('../models/item');
@@ -20,12 +21,38 @@ router.get('/', auth.isLoggedIn, auctionEXP, (req, res) => {
             Report.findAll({}).then((report) => {
                 User.findAll({ where: { userType: 'Member' } }).then((user) => {
                     Auction.findAll({}).then((auction) => {
-                        res.render('mainItem', {
-                            item: item,
-                            report: report,
-                            users: user,
-                            auction: auction,
-                            msg: req.flash('message')
+                        sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
+                            //Calculating product total value
+                            var totalPrice = 0;
+                            var shippingFee = 0;
+                            var stripeTotal = 0;
+                            var realQuantity = 0;
+
+                            products.forEach(function (rayson) {
+                                totalPrice += rayson.ProductPrice;
+                                realQuantity += 1;
+                            });
+                            if (totalPrice > 50) {
+                                subtotal = totalPrice;
+                                stripeTotal = totalPrice;
+                            } else {
+                                subtotal = totalPrice;
+                                totalPrice += 5.00;
+                                shippingFee = 5.00;
+                                stripeTotal = totalPrice;
+                            }
+                            res.render('mainItem', {
+                                item: item,
+                                report: report,
+                                users: user,
+                                auction: auction,
+                                products: products,
+                                total: totalPrice,
+                                shippingFee: shippingFee,
+                                subtotal: subtotal,
+                                realQuantity: realQuantity,
+                                msg: req.flash('message')
+                            })
                         })
                     })
                 })
@@ -34,10 +61,36 @@ router.get('/', auth.isLoggedIn, auctionEXP, (req, res) => {
     } else {
         sequelize.query('select * from Items where userID = ' + req.user.userID, { model: Item }).then((item) => {
             Auction.findAll({}).then((auction) => {
-                res.render('mainItem', {
-                    item: item,
-                    auction: auction,
-                    msg: req.flash('message')
+                sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
+                    //Calculating product total value
+                    var totalPrice = 0;
+                    var shippingFee = 0;
+                    var stripeTotal = 0;
+                    var realQuantity = 0;
+
+                    products.forEach(function (rayson) {
+                        totalPrice += rayson.ProductPrice;
+                        realQuantity += 1;
+                    });
+                    if (totalPrice > 50) {
+                        subtotal = totalPrice;
+                        stripeTotal = totalPrice;
+                    } else {
+                        subtotal = totalPrice;
+                        totalPrice += 5.00;
+                        shippingFee = 5.00;
+                        stripeTotal = totalPrice;
+                    }
+                    res.render('mainItem', {
+                        item: item,
+                        auction: auction,
+                        products: products,
+                        total: totalPrice,
+                        shippingFee: shippingFee,
+                        subtotal: subtotal,
+                        realQuantity: realQuantity,
+                        msg: req.flash('message')
+                    })
                 })
             })
         }).catch((err) => {
@@ -50,7 +103,34 @@ router.get('/', auth.isLoggedIn, auctionEXP, (req, res) => {
 
 // Add item page
 router.get('/add', auth.isLoggedIn, (req, res) => {
-    res.render('itemsell')
+    sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
+        //Calculating product total value
+        var totalPrice = 0;
+        var shippingFee = 0;
+        var stripeTotal = 0;
+        var realQuantity = 0;
+
+        products.forEach(function (rayson) {
+            totalPrice += rayson.ProductPrice;
+            realQuantity += 1;
+        });
+        if (totalPrice > 50) {
+            subtotal = totalPrice;
+            stripeTotal = totalPrice;
+        } else {
+            subtotal = totalPrice;
+            totalPrice += 5.00;
+            shippingFee = 5.00;
+            stripeTotal = totalPrice;
+        }
+        res.render('itemsell', {
+            products: products,
+            total: totalPrice,
+            shippingFee: shippingFee,
+            subtotal: subtotal,
+            realQuantity: realQuantity,
+        })
+    })
 })
 
 // Set storage engine
@@ -117,8 +197,34 @@ router.post('/add', auth.isLoggedIn, (req, res) => {
 // Edit item page
 router.get('/edit/:id', auth.isLoggedIn, (req, res) => {
     Item.findOne({ where: { itemID: req.params.id } }).then((item => {
-        res.render('itemEdit', {
-            item: item
+        sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
+            //Calculating product total value
+            var totalPrice = 0;
+            var shippingFee = 0;
+            var stripeTotal = 0;
+            var realQuantity = 0;
+
+            products.forEach(function (rayson) {
+                totalPrice += rayson.ProductPrice;
+                realQuantity += 1;
+            });
+            if (totalPrice > 50) {
+                subtotal = totalPrice;
+                stripeTotal = totalPrice;
+            } else {
+                subtotal = totalPrice;
+                totalPrice += 5.00;
+                shippingFee = 5.00;
+                stripeTotal = totalPrice;
+            }
+            res.render('itemEdit', {
+                item: item,
+                products: products,
+                total: totalPrice,
+                shippingFee: shippingFee,
+                subtotal: subtotal,
+                realQuantity: realQuantity,
+            })
         })
     }))
 })
@@ -164,31 +270,113 @@ router.get('/reactivate/:id', auth.isLoggedIn, (req, res) => {
 
 // Item details
 router.get('/list/:id', (req, res) => {
-    Item.findOne({ where: { itemID: req.params.id } }).then((item) => {
-        if (item) {
-            console.log('YES')
-            Review.findAll({ where: { itemID: req.params.id } }).then((review => {
-                res.render('productpage', {
-                    item: item,
-                    review: review
-                })
-            }))
+    if (isNaN(req.params.id)) {
+        req.flash('message', 'Item does not exist');
+        res.redirect('/')
+    } else {
+        if (req.user) {
+            Item.findOne({ where: { itemID: req.params.id } }).then((item) => {
+                if (item) {
+                    Review.findAll({ where: { itemID: req.params.id } }).then((review => {
+                        sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
+                            //Calculating product total value
+                            var totalPrice = 0;
+                            var shippingFee = 0;
+                            var stripeTotal = 0;
+                            var realQuantity = 0;
+
+                            products.forEach(function (rayson) {
+                                totalPrice += rayson.ProductPrice;
+                                realQuantity += 1;
+                            });
+                            if (totalPrice > 50) {
+                                subtotal = totalPrice;
+                                stripeTotal = totalPrice;
+                            } else {
+                                subtotal = totalPrice;
+                                totalPrice += 5.00;
+                                shippingFee = 5.00;
+                                stripeTotal = totalPrice;
+                            }
+                            res.render('productpage', {
+                                item: item,
+                                review: review,
+                                products: products,
+                                total: totalPrice,
+                                shippingFee: shippingFee,
+                                subtotal: subtotal,
+                                realQuantity: realQuantity,
+                            })
+                        })
+                    }))
+                }
+                if (!item) {
+                    req.flash('message', 'Item does not exist');
+                    res.redirect('/')
+                }
+            })
+        } else {
+            Item.findOne({ where: { itemID: req.params.id } }).then((item) => {
+                if (item) {
+                    Review.findAll({ where: { itemID: req.params.id } }).then((review => {
+                        res.render('productpage', {
+                            item: item,
+                            review: review
+                        })
+                    }))
+                }
+                if (!item) {
+                    req.flash('message', 'Item does not exist');
+                    res.redirect('/')
+                }
+            })
         }
-        if (!item) {
-            req.flash('message', 'Item does not exist');
-            res.redirect('/')
-        }
-    })
+    }
 })
 
 // Auction item page
 router.get('/auction/:id', (req, res) => {
-    Item.findOne({ where: { itemID: req.params.id } }).then((item => {
-        res.render('setAuction', {
-            item: item,
-            msg: req.flash('message')
-        })
-    }))
+    if (req.user) {
+        Item.findOne({ where: { itemID: req.params.id } }).then((item => {
+            sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
+                //Calculating product total value
+                var totalPrice = 0;
+                var shippingFee = 0;
+                var stripeTotal = 0;
+                var realQuantity = 0;
+
+                products.forEach(function (rayson) {
+                    totalPrice += rayson.ProductPrice;
+                    realQuantity += 1;
+                });
+                if (totalPrice > 50) {
+                    subtotal = totalPrice;
+                    stripeTotal = totalPrice;
+                } else {
+                    subtotal = totalPrice;
+                    totalPrice += 5.00;
+                    shippingFee = 5.00;
+                    stripeTotal = totalPrice;
+                }
+                res.render('setAuction', {
+                    item: item,
+                    products: products,
+                    total: totalPrice,
+                    shippingFee: shippingFee,
+                    subtotal: subtotal,
+                    realQuantity: realQuantity,
+                    msg: req.flash('message')
+                })
+            })
+        }))
+    } else {
+        Item.findOne({ where: { itemID: req.params.id } }).then((item => {
+            res.render('setAuction', {
+                item: item,
+                msg: req.flash('message')
+            })
+        }))
+    }
 })
 
 // Check if auction is past present date
