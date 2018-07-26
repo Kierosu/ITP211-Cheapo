@@ -51,15 +51,6 @@ exports.show = function (req, res) {
             subject: "Cheapo's OTP",
             text: "OTP is: " + randomstring
         };
-<<<<<<< HEAD
-        transporter.sendMail(HelperOptions, (error, info) =>{
-            if (error){
-                console.log(error + HelperOptions.to);
-            }
-            else{
-            console.log("The message is sent!" + HelperOptions.to);
-            console.log(info);
-=======
         transporter.sendMail(HelperOptions, (error, info) => {
             if (error) {
                 console.log(error);
@@ -67,7 +58,6 @@ exports.show = function (req, res) {
             else {
                 console.log("The message is sent!");
                 console.log(info);
->>>>>>> c2ce9e5449b026c72467b3528f944c9ed40d3037
             }
         });
         });
@@ -109,7 +99,6 @@ exports.show = function (req, res) {
                     stripeTotal: stripeTotal * 100,
                     shippingFee: shippingFee,
                     subtotal: subtotal,
-                    gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro' }, true),
                     hostPath: req.protocol + "://" + req.get("host"),
                     urlPath: req.protocol + "://" + req.get('host') + req.url
                 });

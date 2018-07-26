@@ -40,7 +40,7 @@
                 <!-- Logo -->
                 <div class="header-logo">
                     <a class="logo" href="#">
-                        <img src="./img/logo.png" alt="">
+                        <img src="/img/logo.png" alt="">
                     </a>
                 </div>
                 <!-- /Logo -->
@@ -81,12 +81,11 @@
                     <% } else { %>
                     <div style="margin-top: 10.2px;">
                     <a href="/login" class="text-uppercase"><strong>Login</strong></a> / <a href="/signup" class="text-uppercase"><strong>Join</strong></a>
-                    </div>
-                        
+                    </div>    
                     <% } %>
                     </li>
                     <!-- /Account -->
-
+                    <% if(locals.loginuser) { %>
                     <!-- Cart -->
                     <li class="header-cart dropdown default-dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
@@ -139,7 +138,7 @@
                         </div>
                     </li>
                     <!-- /Cart -->
-
+                    <% } %>
                     <!-- Mobile nav toggle-->
                     <li class="nav-toggle">
                         <button class="nav-toggle-btn main-btn icon-btn"><i class="fa fa-bars"></i></button>
@@ -521,26 +520,26 @@
 		<!-- /container -->
 	</div>
 	<script>
-		<% if (locals.raysonCart){ %>
-			$('.cancel-btn').click(function () {
-			var ProductID = $(this).data("id");
-			$.ajax({
-				url: '<%-urlPath%>' + '/' + ProductID,
-				type: 'DELETE',
-				success: function (result) {
-					console.log(result.price);
-					var itemToRemove = '.product-widget[data-id=' + ProductID + ']';
-					$(itemToRemove).remove();
+		// <% if (locals.raysonCart){ %>
+		// 	$('.cancel-btn').click(function () {
+		// 	var ProductID = $(this).data("id");
+		// 	$.ajax({
+		// 		url: '<%-urlPath%>' + '/' + ProductID,
+		// 		type: 'DELETE',
+		// 		success: function (result) {
+		// 			console.log(result.price);
+		// 			var itemToRemove = '.product-widget[data-id=' + ProductID + ']';
+		// 			$(itemToRemove).remove();
 					
-					$('.totalMoney').text(result.price)
-				},
-				error: function (result) {
-					alert("Unable to delete Product.");
-					console.log(result);
-				}
-			});
-			});
-		<% } %>
+		// 			$('.totalMoney').text(result.price)
+		// 		},
+		// 		error: function (result) {
+		// 			alert("Unable to delete Product.");
+		// 			console.log(result);
+		// 		}
+		// 	});
+		// 	});
+		// <% } %>
 	</script>
 	<br>
 	<% include ../partials/msg %>

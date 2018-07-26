@@ -96,19 +96,6 @@ exports.feedback = function (req, res) {
             //Add to database using seq
             sequelize.query("update Users set valueRecieved = " + sellerDollars + " where username = '" + seller + "';");
             console.log("Money Sent!")
-<<<<<<< HEAD
-		}
-        console.log('Deleting Final Products Table')
-        sequelize.query("delete from finalProducts where UserId = " + req.user.userID);
-        });
-        
-        res.status(200).send({ message: "Successfully released money of " + realTotalPrice + " to seller!"})
-    }
-exports.show = function (req, res){
-    //List all the products
-    var coords = {};
-    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID, {model: Product}).then((products) => {     
-=======
         }
 
     });
@@ -118,7 +105,6 @@ exports.show = function (req, res){
 exports.show = function (req, res) {
     //List all the products
     sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID, { model: Product }).then((products) => {
->>>>>>> c2ce9e5449b026c72467b3528f944c9ed40d3037
         //sending money socket io
         ioCheck.on('connection', function (socket) {
             console.log("MoneyLoader connected!");
@@ -130,10 +116,7 @@ exports.show = function (req, res) {
             });
         });
 
-<<<<<<< HEAD
         sequelize.query("select shippingAddress from cardDetails where userID =" + req.user.userID, {model: cardDetails}).then((cardDetails) => {
-=======
->>>>>>> c2ce9e5449b026c72467b3528f944c9ed40d3037
         //Ip to lon and lat
         var shippingAddress = "";
         cardDetails.forEach(function(i, idx, CardData){
