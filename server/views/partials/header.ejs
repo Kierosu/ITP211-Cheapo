@@ -1,37 +1,5 @@
 <!-- HEADER -->
 <header>
-    <!-- top Header -->
-    <div id="top-header">
-        <div class="container">
-            <div class="pull-left">
-                <span>Welcome to E-shop!</span>
-            </div>
-            <div class="pull-right">
-                <ul class="header-top-links">
-                    <li><a href="#">Store</a></li>
-                    <li><a href="#">Newsletter</a></li>
-                    <li><a href="#">FAQ</a></li>
-                    <li class="dropdown default-dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">ENG <i class="fa fa-caret-down"></i></a>
-                        <ul class="custom-menu">
-                            <li><a href="#">English </a></li>
-                            <li><a href="#">Malay </a></li>
-                            <li><a href="#">Chinese </a></li>
-                            <li><a href="#">Indian </a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown default-dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Feedback <i class="fa fa-caret-down"></i></a>
-                        <ul class="custom-menu">
-                            <li><a href="#">Send a message</a></li>
-                            <li><a href="#">Report </a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <!-- /top Header -->
 
     <!-- header -->
     <div id="header">
@@ -72,8 +40,7 @@
                         </div>
                         <ul class="custom-menu">
                             <li><a href="/profile/<%= loginuser.username %>"><i class="fa fa-user-o"></i> My Account</a></li>
-                            <li><a href="#"><i class="fa fa-heart-o"></i> My Wishlist</a></li>
-                            <li><a href="#"><i class="fa fa-exchange"></i> Compare</a></li>
+                            <li><a href="#"><i class="fa fa-heart-o"></i> My Wishlist</a></li>  
                             <li><a href="#"><i class="fa fa-check"></i> Checkout</a></li>
                             <li><a href="/logout"><i class="fa fa-unlock-alt"></i> Logout</a></li>
                         </ul>
@@ -521,24 +488,24 @@
 	</div>
 	<script>
 		// <% if (locals.raysonCart){ %>
-		// 	$('.cancel-btn').click(function () {
-		// 	var ProductID = $(this).data("id");
-		// 	$.ajax({
-		// 		url: '<%-urlPath%>' + '/' + ProductID,
-		// 		type: 'DELETE',
-		// 		success: function (result) {
-		// 			console.log(result.price);
-		// 			var itemToRemove = '.product-widget[data-id=' + ProductID + ']';
-		// 			$(itemToRemove).remove();
+			$('.cancel-btn').click(function () {
+			var ProductID = $(this).data("id");
+			$.ajax({
+				url: '<%-urlPath%>' + '/' + ProductID,
+				type: 'DELETE',
+				success: function (result) {
+					console.log(result.price);
+					var itemToRemove = '.product-widget[data-id=' + ProductID + ']';
+					$(itemToRemove).remove();
 					
-		// 			$('.totalMoney').text(result.price)
-		// 		},
-		// 		error: function (result) {
-		// 			alert("Unable to delete Product.");
-		// 			console.log(result);
-		// 		}
-		// 	});
-		// 	});
+					$('.totalMoney').text(result.price)
+				},
+				error: function (result) {
+					alert("Unable to delete Product.");
+					console.log(result);
+				}
+			});
+			});
 		// <% } %>
 	</script>
 	<br>

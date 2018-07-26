@@ -423,7 +423,8 @@ exports.index = (req, res) => {
                         subtotal: subtotal,
                         realQuantity: realQuantity,
                         email: req.user.email,
-                        msg: req.flash('message')
+                        msg: req.flash('message'),
+                        urlPath: req.protocol + "://" + req.get('host') + req.url
                     });
                 })
             })
@@ -437,7 +438,8 @@ exports.index = (req, res) => {
                         item: item,
                         selectedItems: selectedItems,
                         auction: auction,
-                        msg: req.flash('message')
+                        msg: req.flash('message'),
+                        urlPath: req.protocol + "://" + req.get('host') + req.url
                     });
                 })
             })
