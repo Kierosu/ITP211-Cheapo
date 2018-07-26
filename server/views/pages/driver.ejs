@@ -182,18 +182,16 @@ window.onclick = function(event) {
             <h2>Items To Deliver:</h2>
             <p>Click on the button to open the dropdown menu.</p>
             <% finalProducts.forEach(function(finalProducts){ %>
-                <div class="dropdown">
-                <button onclick="myFunction()" class="dropbtn"><%= finalProducts.userName %></button>
-                <div id="myDropdown" class="dropdown-content">
-                    <a><%= finalProducts.finalProductName %></a>
-                </div>
-                </div>
+                <select class="dropbtn">
+                    <option class="dropdown-content"><%= finalProducts.dataValues.userName %></option>
+                    <option class="dropdown-content"><%= finalProducts.finalProductName %></option>
+                </select>
                 <br><br><br>
             <% }); %>
 	</div>
 </center>
 	<!-- /section -->
-<script>
+<!-- <script>
 /* When the user clicks on the button, 
 toggle between hiding and showing the dropdown content */
 function myFunction() {
@@ -214,7 +212,7 @@ window.onclick = function(event) {
     }
     }
 }
-</script>
+</script> -->
 
 	<!-- jQuery Plugins -->
 	<script src="js/jquery.min.js"></script>

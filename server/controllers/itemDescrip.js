@@ -15,7 +15,7 @@ exports.insert = function (req, res) {
     var products = {
         UserId: req.body.UserId,
         ProductName: req.body.ProductName,
-        ProductPrice: parseDecimalNumber(req.body.ProductPrice),
+        ProductPrice: parseFloat(req.body.ProductPrice),
         ProductDescription: req.body.ProductDescription,
         ProductImage: req.body.ProductImage,
         sellerId: req.body.sellerId
@@ -35,7 +35,7 @@ exports.add = function (req, res) {
     var wishlist = {
         UserId: req.body.UserId,
         ProductName: req.body.ProductName,
-        ProductPrice: parseDecimalNumber(req.body.ProductPrice),
+        ProductPrice: parseFloat(req.body.ProductPrice),
         ProductDescription: req.body.ProductDescription,
         ProductImage: req.body.ProductImage,
         sellerId: req.body.sellerId
