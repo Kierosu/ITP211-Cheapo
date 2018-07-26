@@ -99,7 +99,6 @@ exports.show = function (req, res) {
                     stripeTotal: stripeTotal * 100,
                     shippingFee: shippingFee,
                     subtotal: subtotal,
-                    gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro' }, true),
                     hostPath: req.protocol + "://" + req.get("host"),
                     urlPath: req.protocol + "://" + req.get('host') + req.url
                 });

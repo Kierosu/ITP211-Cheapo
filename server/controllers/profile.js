@@ -1,12 +1,17 @@
 const passport = require('passport');
 const fs = require('fs');
 const UserModel = require('../models/user');
+const Product = require('../models/products');
 const myDatabase = require('./database');
 const sequelizeInstance = myDatabase.sequelizeInstance;
 const generatePassword = require('password-generator');
 const nodemailer = require('nodemailer');
 const speakeasy = require('speakeasy');
 const QRCode = require('qrcode');
+var Item = require('../models/item');
+var Auction = require('../models/auction');
+var sequelize = myDatabase.sequelize;
+
 // set images file types
 var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 const bcrypt = require('bcrypt');
@@ -382,25 +387,48 @@ exports.verifyOTP = function (req, res) {
 exports.checkTFA = (req, res) => {
     res.status(200).send({ message: req.user.TwoFA });
 }
-
-var Item = require('../models/item');
-var Auction = require('../models/auction');
-var sequelize = myDatabase.sequelize;
 //Index page
 exports.index = (req, res) => {
     if (req.user) {
         Item.findAll({}).then((item) => {
             sequelize.query("select * from(select top 7 * from Items where status = 'Active' order by itemID desc) s order by itemID asc", { model: Item }).then((selectedItems) => {
+                sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
+                //Calculating product total value
+                var totalPrice = 0;
+                var shippingFee = 0;
+                var stripeTotal = 0;
+                var realQuantity = 0;
+
+                products.forEach(function (rayson) {
+                    totalPrice += rayson.ProductPrice;
+                    realQuantity += 1;
+                });
+                if (totalPrice > 50) {
+                    subtotal = totalPrice;
+                    stripeTotal = totalPrice;
+                } else {
+                    subtotal = totalPrice;
+                    totalPrice += 5.00;
+                    shippingFee = 5.00;
+                    stripeTotal = totalPrice;
+                }
                 Auction.findAll({}).then((auction) => {
                     res.render('index', {
                         item: item,
                         selectedItems: selectedItems,
                         auction: auction,
+                        products: products,
+                        total: totalPrice,
+                        shippingFee: shippingFee,
+                        subtotal: subtotal,
+                        realQuantity: realQuantity,
                         email: req.user.email,
-                        msg: req.flash('message')
+                        msg: req.flash('message'),
+                        urlPath: req.protocol + "://" + req.get('host') + req.url
                     });
                 })
             })
+        })
         })
     } else {
         Item.findAll({}).then((item) => {
@@ -410,7 +438,8 @@ exports.index = (req, res) => {
                         item: item,
                         selectedItems: selectedItems,
                         auction: auction,
-                        msg: req.flash('message')
+                        msg: req.flash('message'),
+                        urlPath: req.protocol + "://" + req.get('host') + req.url
                     });
                 })
             })
