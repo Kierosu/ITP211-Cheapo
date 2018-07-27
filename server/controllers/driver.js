@@ -21,7 +21,7 @@ exports.show = function (req, res){
                 var objectName = {};
                 console.log("checking from first:" + finalProductsLoop.userID);
                 objectName["UserId"] = finalProductsLoop.userID;
-                objectName["Name"] = "";
+                objectName["Name"] = [];
                 objectName["Product"] = [];
                 objectName["Price"] = 0;
                 differentAcc.push(objectName);
@@ -38,7 +38,7 @@ exports.show = function (req, res){
                 {
                     var objectName = {};
                     objectName["UserId"] = finalProductsLoop.userID;
-                    objectName["Name"] = "";
+                    objectName["Name"] = [];
                     objectName["Product"] = [];
                     objectName["Price"] = 0;
                     differentAcc.push(objectName);
@@ -58,13 +58,33 @@ exports.show = function (req, res){
             }
         }
     });
-    finalProducts.forEach(function(finalProductsLoop){
-        //loop to add names and products
+    finalProducts.forEach(function(names){
+        //loop to add names
+        for (var namelooparray in differentAcc){
+            if (names.userID == differentAcc[namelooparray]["UserId"]){
+                var objectArray = differentAcc[namelooparray]["Name"]
+                objectArray.push(names.dataValues.userName);
+                break;
+            }
+        }
+    });
+
+    finalProducts.forEach(function(prod){
+        //loop to add products
+        for (var prodlooparray in differentAcc){
+            if (prod.userID == differentAcc[prodlooparray]["UserId"]){
+                var objectArray = differentAcc[prodlooparray]["Product"]
+                objectArray.push(prod.finalProductName);
+                break;
+            }
+        }
     });
 
     differentAcc.forEach(function(test){
-        console.log("userid: " + test.UserId)
-        console.log("money: " + test.Price)
+        console.log("userid: " + test.UserId);
+        console.log("money: " + test.Price);
+        console.log("Name: " + test.Name);
+        console.log("Product: " + test.Product);
     })
     var id = req.params.userID;
     UserModel.findById(id).then(function() {
@@ -75,6 +95,7 @@ exports.show = function (req, res){
             email: req.user.email,
             userID: req.user.userID,
             finalProducts: finalProducts,
+            differentAcc: differentAcc,
             dateJoined: req.user.joinDate,
             type: req.user.userType,
             membership: req.user.membership,

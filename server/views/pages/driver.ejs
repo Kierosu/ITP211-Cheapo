@@ -181,11 +181,20 @@ window.onclick = function(event) {
 	<div class="section">
             <h2>Items To Deliver:</h2>
             <p>Click on the button to open the dropdown menu.</p>
-            <% finalProducts.forEach(function(finalProducts){ %>
-                <select class="dropbtn">
-                    <option class="dropdown-content"><%= finalProducts.dataValues.userName %></option>
-                    <option class="dropdown-content"><%= finalProducts.finalProductName %></option>
-                </select>
+            <% differentAcc.forEach(function(test){ %>
+                <% var count = 1 %>
+                <p class="dropbtn">User ID: <%= test.UserId %></p>
+                <hr>
+                <% for(var namesPrint = 0; namesPrint < (test.Name).length; namesPrint ++) { %>
+                    <p>Item Id: <%= count %></p>
+                    <p><%= test.Name[namesPrint]%></p>
+                    <hr>
+                    <p><bold>Items Bought:</bold></p>
+                    <p><%= test.Product[namesPrint] %></p>
+                    <hr>
+                    <% count = count + 1 %>
+                <% }; %>
+                    <button class="dropbtn" style="background-color: green">Amount to pay: $<%= test.Price %></button>
                 <br><br><br>
             <% }); %>
 	</div>
