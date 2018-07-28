@@ -71,7 +71,7 @@
                                 <p>Intel Iris Plus Graphics 640</p>
                                 <p>Two Thunderbolt 3 ports</p>
                                 <bold><h3 name="macbookPrice" id="macbookPro" value="S$1,898.00">S$1,898.00</h3></bold>
-                                <input type="hidden" id = "macbookPrice" name="macbookPrice2" value="1,898.00"> 
+                                <input type="hidden" id = "macbookPrice" name="macbookPrice2" value="1898.00"> 
                                 <input type="hidden" id = "macbookName" name="macbookName" value="Macbook Pro 13' with Touch Bar">
                             </div>
                             <div class = "panel-footer">
@@ -132,7 +132,7 @@
             var url = "<%=hostPath%>/item/macbook"; //Edit when database is implemented\
             var products = {
                 UserId: '<%=userID%>',
-                sellerId: 5,
+                sellerId: 1,
                 ProductName: $("#macbookName").val(),
                 ProductPrice: $("#macbookPrice").val(),
                 ProductDescription: "",
@@ -167,7 +167,7 @@
             var url = "<%=hostPath%>/add"; //Edit when database is implemented\
             var products = {
                 UserId: '<%=userID%>',
-                sellerId: 2,
+                sellerId: 4,
                 ProductName: $("#macbookName").val(),
                 ProductPrice: $("#macbookPrice").val(),
                 ProductDescription: "",
@@ -180,10 +180,9 @@
                 dataType: "json",
                 contentType: "application/json",
                 success: function(result){
-                    alert("Item Posted Successfully!");
+                    window.location = "http://localhost:3000/wishlist"
                 },
                 error: function(result){
-                    alert("Error Posting Item");
                     discardAdd();
                 }
             })

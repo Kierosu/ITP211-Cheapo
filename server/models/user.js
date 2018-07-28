@@ -59,27 +59,34 @@ User.sync({force: false, logging: console.log}).then(()=>{
     console.log("User table synced");
     User.upsert({
         userID: 1,
+        username: "CheapSupport",
+        email: "CheapSupport@gmail.com",
+        password: "cheapo",
+        userType: "Admin"
+    });
+    User.upsert({
+        userID: 2,
         username: "Shafie",
         email: "shafie@gmail.com",
         password: "shafieMemeLord",
         userType: "Admin"
     });
     User.upsert({
-        userID: 2,
+        userID: 3,
         username: "Matthew",
         email: "matthew@gmail.com",
         password: "matthewMemeLord",
         userType: "Admin"
     });
     User.upsert({
-        userID: 3,
+        userID: 4,
         username: "Rayson",
         email: "rayson@gmail.com",
         password: "raysonMemeLord",
         userType: "Admin"
     });
     User.upsert({
-        userID: 4,
+        userID: 5,
         username: "Kierosu",
         email: "eugenetan9134@gmail.com",
         password: "WowWee123",
@@ -87,10 +94,45 @@ User.sync({force: false, logging: console.log}).then(()=>{
         userType: "Admin"
     });
     User.upsert({
-        userID: 5,
+        userID: 6,
         username: "Teh Yang",
         email: "tehyang@gmail.com",
         password: "tehyangMemeLord",
+        userType: "Admin"
+    }); 
+    User.upsert({
+        userID: 7,
+        username: "zuko",
+        email: "zuko@gmail.com",
+        password: "zuko",
+        userType: "Member"
+    });
+    User.upsert({
+        userID: 8,
+        username: "lee",
+        email: "lee@gmail.com",
+        password: "lee",
+        userType: "Member"
+    });
+    User.upsert({
+        userID: 9,
+        username: "appa",
+        email: "appa@gmail.com",
+        password: "appa",
+        userType: "Member"
+    });
+    User.upsert({
+        userID: 10,
+        username: "toph",
+        email: "toph@gmail.com",
+        password: "toph",
+        userType: "Member"
+    });
+    User.upsert({
+        userID: 11,
+        username: "test",
+        email: "test@test.com",
+        password: "test",
         userType: "Admin"
     });
 });

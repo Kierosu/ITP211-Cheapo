@@ -146,8 +146,8 @@
                         <div class="panel-footer">
                                 <div class="promoCode">
                                         <label for="promo">Have A Promo Code?</label>
-                                        <input type="text" name="promo" placholder="Enter Code" />
-                                        <a href="#" class="btn"></a>
+                                        <input type="text" name="promo" class="promoCodeInput" placholder="Enter Code" />
+                                        <button class="btn btn-continue" style="margin-top: 2em; background-color: #82ca9c; color: whitesmoke" onclick="promoCode()"></button>
                                     </div>
                                     <div class="subtotal cf">
                                         <ul>
@@ -170,7 +170,7 @@
                                                                 </span>
                                                             </li>
                                                             <li class="totalRow">
-                                                                <a href="/confirmation" class="btn continue">Checkout</a>
+                                                                <a href="/confirmation" style="margin-bottom: 1em; background-color: #82ca9c"class="btn continue">Checkout</a>
                                                             </li>
                                         </ul>
                                     </div>
@@ -193,10 +193,10 @@
                         <label for="coup">Your Promo Code:</label>
                         <input id = "coup"class="form-control" type="text" value="<%=coupons%>" readonly>
                         <br>
-                        <center><button class="btn btn-primary" onclick="copyClipboard()">Copy text</button></center>
+                        <center><button class="btn btn-primary" id="notAvailable" onclick="copyClipboard()">Copy text</button></center>
                 </div>
                 <div class="modal-footer">
-                    <center><p id="itemNumber">Copy the promo code and apply it on your shopping cart!</p></center>
+                    <center><p class = "instructions" id="itemNumber">Copy the promo code and apply it on your shopping cart!</p></center>
                 </div>
                 </div>
             </div>
@@ -212,6 +212,27 @@
     <script src="/js/jquery.zoom.min.js"></script>
     <script src="/js/main.js"></script>
     <script>
+            function promoCode() {
+                var promoCode = $(".promoCodeInput").val();
+                alert(promoCode)
+                if (promoCode == $("#coup").val() && promoCode != 'Oops no coupons for you today!')
+                {
+                    alert("Correct Code")
+                    var promoCodeDsicount = 0.2;
+                    var totalPrice = $("#money").text();
+                    var sliced = parseInt(totalPrice.slice(1));
+                    $("#money").text("$" + (sliced * (1-promoCodeDsicount).toFixed(2)));        
+                } 
+                else if (promoCode == "")
+                {
+                    alert("Please Enter A Promo Code!")
+                }
+                else
+                {
+                    alert("Wrong Code Please Try Again!")
+                }
+            }
+
             function copyClipboard() {
                 /* Get the text field */
                 var copyText = document.getElementById("coup");
@@ -228,7 +249,27 @@
 
             $(window).load(function() {
             // executes when complete page is fully loaded, including all frames, objects and images
-            $('#exampleModalCenter').modal('toggle');
+
+            //remove the button and instructions 
+            if ("<%=announce%>" != "You cannot receive anymore coupons!")
+            {
+                //load the modal on load
+                if ("<%=announce%>" == "Oops better luck next time!")
+                {
+                    $("#notAvailable").prop('disabled',true);
+                    $(".instructions").addClass("hidden");
+                    $('#exampleModalCenter').modal('toggle');
+                }
+                else
+                {
+                    $('#exampleModalCenter').modal('toggle');
+                }
+            }
+            else if ("<%=announce%>" == "Oops better luck next time!")
+            {
+                $(".btn btn-primary").addClass("hidden");
+                $(".instructions").addClass("hidden");
+            }
             });
 
             $('.remove').click(function () {
@@ -237,14 +278,14 @@
                     url: '<%-urlPath%>' + '/' + ProductID,
                     type: 'DELETE',
                     success: function (result) {
-                        console.log(result);
+                        console.log(result.message);
                         var itemToRemove = '.items even[data-id=' + ProductID + ']';
                         $(itemToRemove).remove();
                         location.reload(true);
                     },
                     error: function (result) {
                         alert("Unable to delete Product.");
-                        console.log(result);
+                        console.log(result.message);
                     }
                 });
             });

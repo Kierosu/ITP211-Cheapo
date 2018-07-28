@@ -7,7 +7,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-	<title><%= title %></title>
+	<title>
+		<%= title %>
+	</title>
 	<!-- PayPal API -->
 	<script src="https://www.paypalobjects.com/api/checkout.js"></script>
 	<script src="https://js.stripe.com/v3/"></script>
@@ -36,319 +38,314 @@
 
 <body>
 	<% include ../partials/header %>
-	<!-- BREADCRUMB -->
-	<div id="breadcrumb">
-		<div class="container">
-			<ul class="breadcrumb">
-				<li>
-					<a href="#">Home</a>
-				</li>
-				<li class="active">Shopping Cart</li>
-			</ul>
+		<!-- BREADCRUMB -->
+		<div id="breadcrumb">
+			<div class="container">
+				<ul class="breadcrumb">
+					<li>
+						<a href="#">Home</a>
+					</li>
+					<li class="active">Shopping Cart</li>
+				</ul>
+			</div>
 		</div>
-	</div>
-	<!-- /BREADCRUMB -->
+		<!-- /BREADCRUMB -->
 
-	<!-- section -->
-	<center>
-		<div class="section">
-			<div class="checkout-panel">
-				<div class="panel-body">
-					<h2 class="title">Step 3: Checkout</h2>
+		<!-- section -->
+		<center>
+			<div class="section">
+				<div class="checkout-panel">
+					<div class="panel-body">
+						<h2 class="title">Step 3: Checkout</h2>
 
-					<div class="bar">
-						<div class="step active"></div>
-						<div class="step active"></div>
-						<div class="step"></div>
-						<div class="step"></div>
-					</div>
-					<!-- <div id="charge-error" class="alert alert-danger">
+						<div class="bar">
+							<div class="step active"></div>
+							<div class="step active"></div>
+							<div class="step"></div>
+							<div class="step"></div>
+						</div>
+						<!-- <div id="charge-error" class="alert alert-danger">
 						
 					</div> -->
-					<div class="payment-method">
-						<label for="card" class="method card">
-							<div class="card-logos">
-								<img src="img/visa_logo.png" />
-								<img src="img/mastercard_logo.png" />
-							</div>
+						<div class="payment-method">
+							<label for="card" class="method card">
+								<div class="card-logos">
+									<img src="img/visa_logo.png" />
+									<img src="img/mastercard_logo.png" />
+								</div>
 
-							<div class="radio-input">
-								<input id="card" type="radio" name="payment"> Pay $<%= total %> with credit card
-							</div>
-						</label>
+								<div class="radio-input">
+									<input id="card" type="radio" name="payment"> Pay $
+									<%= total %> with credit card
+								</div>
+							</label>
 
-						<label for="paypal" class="method paypal">
-							<img src="img/paypal_logo.png" />
-							<div class="radio-input">
-								<input id="paypal" type="radio" name="payment"> Pay $<%= total %> with PayPal
-							</div>
-						</label>
-					</div>
-					<br><br>
-					<div class="alert alert-success hidden" id="green">
-						<strong>Success!</strong> Card Details Correct! Redirecting you for verifications with the bank in 5 seconds.
-					  </div>
-					<div class="alert alert-danger  hidden" id="red">
-						<strong>Failed!</strong> <p id = "messageFailed" >Payment Failed! </p>
-					</div>
-					<div id="paypal-button-container"></div>
-					<div class="stripe">
+							<label for="paypal" class="method paypal">
+								<img src="img/paypal_logo.png" />
+								<div class="radio-input">
+									<input id="paypal" type="radio" name="payment"> Pay $
+									<%= total %> with PayPal
+								</div>
+							</label>
+						</div>
+						<br>
+						<br>
+						<div class="alert alert-success hidden" id="green">
+							<strong>Success!</strong> Card Details Correct! Redirecting you for verifications with the bank in 5 seconds.
+						</div>
+						<div class="alert alert-danger  hidden" id="red">
+							<strong>Failed!</strong>
+							<p id="messageFailed">Payment Failed! </p>
+						</div>
+						<div id="paypal-button-container"></div>
+						<div class="stripe">
 							<div class="input-fields">
-									<div class="column-1">
-										<label for="cardholder">Cardholder's Name</label>
-										<input type="text" id="cardholder" name="nameCard"required/>
-								
-										<div class="small-inputs">
+								<div class="column-1">
+									<label for="cardholder">Cardholder's Name</label>
+									<input type="text" id="cardholder" name="nameCard" required/>
+
+									<div class="small-inputs">
 										<div>
 											<label for="date">Valid thru</label>
 											<input type="text" id="date" placeholder="MM / YY" required/>
 										</div>
-								
+
 										<div>
 											<label for="verification">CVV / CVC *</label>
-											<input autocomplete="off" type="text" id="verification"required/>
+											<input autocomplete="off" type="text" id="verification" required/>
 										</div>
 									</div>
-									</div>
+								</div>
+								<div class="column-2">
+									<label for="cardnumber">Card Number</label>
+									<input type="text" id="cardnumber" name="number" autocomplete="off" required/>
+									<label> Card Type:
+										<p id="ct"></p>
+									</label>
+									<span class="info">* CVV or CVC is the card security code, unique three digits number on the back of your card separate from its number.</span>
+								</div>
+							</div>
+							<br>
+							<br>
+							<div class="input-fields" style="padding-bottom: 2em">
+								<div class="column-1">
+									<label for="cardholder">Shipping Address:</label>
+									<input type="text" id="shippingAddress" autocomplete="off" placeholder="Ang Mo Kio Ave 5, Singapore" />
+								</div>
+								<center>
 									<div class="column-2">
-										<label for="cardnumber">Card Number</label>
-										<input type="text" id="cardnumber" name="number" autocomplete="off"required/>
-										<label> Card Type: <p id = "ct" ></p></label>
-										<span class="info">* CVV or CVC is the card security code, unique three digits number on the back of your card separate from its number.</span>
+										<label for="cardnumber">Block/Unit-Number</label>
+										<input type="text" autocomplete="off" id="blockUnit" placeholder="Blk 190, #01-123" />
 									</div>
-									</div>
-									<br>
-									<br>
-								<div class="input-fields" style="padding-bottom: 2em">
-										<div class="column-1">
-											<label for="cardholder">Shipping Address:</label>
-											<input type="text" id="shippingAddress" autocomplete="off" placeholder="Ang Mo Kio Ave 5, Singapore"/>
-										</div>
-										<center>
-										<div class="column-2">
-											<label for="cardnumber">Block/Unit-Number</label>
-											<input type="text" autocomplete="off" id="blockUnit" placeholder="Blk 190, #01-123"/>
-										</div><span class="info">Please make sure that all details are entered correctly!</span>
-										</center>
-					
-										</div>
-										</div>
-									</div>
-							<!-- <form action="/charge" method="POST">
-								<script
-								src = "https://checkout.stripe.com/checkout.js"
-								class = "stripe-button"
-								data-key = "pk_test_xaN8YLYB6jMqtqfguHvjft8f"
-								data-amount = "<%= stripeTotal %>"
-								data-name = "Credit Card Details"
-								data-description = "Items from Cheapo."
-								data-locale = "auto"
-								data-currency = "SGD"
-								></script> -->
-						<div class="panel-footer">
-							<button class="btn back-btn">Back</button>
-							<button class="btn next-btn" onclick="addDetails()">Next Step</button>
+									<span class="info">Please make sure that all details are entered correctly!</span>
+								</center>
+
+							</div>
 						</div>
-						</div>
-						<input type="hidden" name = "chargeAmount" value="<%= stripeTotal %>">
+					</div>
+					<div class="panel-footer">
+						<button class="btn back-btn">Back</button>
+						<button class="btn next-btn" onclick="addDetails()">Next Step</button>
 					</div>
 				</div>
-				<br>
-				<br>
-				<br>
-				<br>
+				<input type="hidden" name="chargeAmount" value="<%= stripeTotal %>">
+			</div>
+			</div>
+			<br>
+			<br>
+			<br>
+			<br>
 			</form>
 			</div>
 
-		</div>
-	</center>
-	<!-- /section -->
+			</div>
+		</center>
+		<!-- /section -->
 
-	<% include ../partials/footer %>
-		<!-- jQuery Plugins -->
-		<script src="js/jquery.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/slick.min.js"></script>
-		<script src="js/nouislider.min.js"></script>
-		<script src="js/jquery.zoom.min.js"></script>
-		<script src="js/main.js"></script>
-		<script src="js/backendcheckout.js"></script>
-		<script src="js/stripeCheckout.js"></script>
-		<script src="js/cleave.min.js"></script>
-		<script src="js/payform.min.js"></script>
-		<script src="js/jquery.payform.js"></script>
-	<script>
-	// if ("<%=query%>" == "reject")
-	// {
-	// 	alert("rejected")
-	// }
-	// else
-	// {
-	// 	alert("wrong")
-	// }
-	//Card Type shower
-	var type = document.getElementById("ct");
-	var ccnum = document.getElementById("cardnumber");
-	function updateType(e) {
-		var cardType = payform.parseCardType(e.target.value);
-		type.innerHTML = cardType || "Invalid Card!"
-	}
-
-	ccnum.addEventListener('input', updateType);
-
-
-	//Formatting Inputs
-	var cleave = new Cleave('#date', {
-    date: true,
-    datePattern: ['m', 'y']
-	});
-	var selectedCardIcon = null;
-	var cleave = new Cleave('#cardnumber', {
-    creditCard: true,
-    onCreditCardTypeChanged: function (type) {
-		// update UI ...
-		type = type.split('15')[0];
-		
-    }
-	});
-
-	//Inserting Data with ajax
-	function addDetails() {
-		var url = "<%=hostPath%>/checkout/<%= userID%>"; //Edit when database is added
-		var cardDetails = {
-			userID: "<%= userID %>",
-			cardName: $("#cardholder").val(),
-			cardNumber: $("#cardnumber").val(),
-			expiryDate: $("#date").val(),
-			verification: $("#verification").val(),
-			shippingAddress: $("#shippingAddress").val(),
-			blockUnit: $("#blockUnit").val()
-		}
-
-		$.ajax({
-			url: url,
-			type: "POST",
-			data: JSON.stringify(cardDetails),
-			dataType: "json",
-			contentType: "application/json",
-			success: function(result){
-				$("#red").addClass("hidden");
-				$("#green").removeClass("hidden");
-				setTimeout(function myTimer(){
-					location.href  = "<%=hostPath%>/pending";
-				},5000)
-			},
-			error: function(result){
-				alert("Card Details Failed")
-				$("#red").removeClass("hidden");
-				console.log("testing validation");
-				validationshow();
-				// discardDetails();
-			}
-		})
-	}
-
-
-	function discardDetails() {
-		location.href = "<%=hostPath%>/checkout"
-	}
-	
-	function validationshow() {
-		// var cardNoValidation = payform.cardNumberInput($("#cardnumber").val());
-		// var date = payform.expiryInput($("#date").val());
-		// var cvcValidation = payform.cvcInput($("#verification").val());
-		// console.log(cardNoValidation, cardValidateExpiry, cvcValidation)
-
-		var isCardValid = $.payform.validateCardNumber($("#cardnumber").val());
-		var date = $("#date").val();
-		var month = date[0] + date[1];
-    	var year = date[3] + date[4];
-		var finalDate = $.payform.validateCardExpiry(month, year);
-        var isCvvValid = $.payform.validateCardCVC($("#verification").val());
-
-        if($("#cardholder").val().length < 5){
-            alert("Wrong owner name");
-
-        } else if (!isCardValid) {
-			var messageId = document.getElementById("messageFailed");
-			var textAdded = document.createTextNode("Invalid Card Number");
-			messageId.appendChild(textAdded);
-
-        } else if (!isCvvValid) {
-			var messageId = document.getElementById("messageFailed");
-			var textAdded = document.createTextNode("Invalid CVV");
-			messageId.appendChild(textAdded);
-        } else if (!finalDate) {
-			var messageId = document.getElementById("messageFailed");
-			var textAdded = document.createTextNode("Invalid Date");
-			messageId.appendChild(textAdded);
-		} else if ($("#cardholder").val().length < 5 || !isCardValid) {
-			var messageId = document.getElementById("messageFailed");
-			var textAdded = document.createTextNode("Invalid Name and Invalid Card");
-			messageId.appendChild(textAdded);
-		}
-		else {
-			var messageId = document.getElementById("messageFailed");
-			var textAdded = document.createTextNode("Invalid Name, Invalid Date, Invalid CVV, ");
-			messageId.appendChild(textAdded);
-        }
-	}
-	</script>
-	<script>
-
-    // Render the PayPal button
-	var realTotal = parseFloat('<%= total %>');
-	paypal.Button.render({
-
-		env: 'sandbox', // sandbox | production
-
-		style: {
-            label: 'paypal',
-            size:  'medium',    // small | medium | large | responsive
-            shape: 'rect',     // pill | rect
-            color: 'blue',     // gold | blue | silver | black
-            tagline: false    
-        },
-
-		// PayPal Client IDs - replace with your own
-		// Create a PayPal app: https://developer.paypal.com/developer/applications/create
-		client: {
-			sandbox:    'AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R',
-			production: '<insert production client id>'
-		},
-
-		// Show the buyer a 'Pay Now' button in the checkout flow
-		commit: true,
-
-		// payment() is called when the button is clicked
-		payment: function(data, actions) {
-
-			// Make a call to the REST api to create the payment
-			return actions.payment.create({
-				payment: {
-					transactions: [
-						{
-							amount: { total: realTotal, currency: 'SGD' }
-						}
-					]
+		<% include ../partials/footer %>
+			<!-- jQuery Plugins -->
+			<script src="js/jquery.min.js"></script>
+			<script src="js/bootstrap.min.js"></script>
+			<script src="js/slick.min.js"></script>
+			<script src="js/nouislider.min.js"></script>
+			<script src="js/jquery.zoom.min.js"></script>
+			<script src="js/main.js"></script>
+			<script src="js/backendcheckout.js"></script>
+			<script src="js/stripeCheckout.js"></script>
+			<script src="js/cleave.min.js"></script>
+			<script src="js/payform.min.js"></script>
+			<script src="js/jquery.payform.js"></script>
+			<script>
+				// if ("<%=query%>" == "reject")
+				// {
+				// 	alert("rejected")
+				// }
+				// else
+				// {
+				// 	alert("wrong")
+				// }
+				//Card Type shower
+				var type = document.getElementById("ct");
+				var ccnum = document.getElementById("cardnumber");
+				function updateType(e) {
+					var cardType = payform.parseCardType(e.target.value);
+					type.innerHTML = cardType || "Invalid Card!"
 				}
-			});
-		},
 
-		// onAuthorize() is called when the buyer approves the payment
-		onAuthorize: function(data, actions) {
+				ccnum.addEventListener('input', updateType);
 
-			// Make a call to the REST api to execute the payment
-			return actions.payment.execute().then(function() {
-				window.alert('Payment Complete!');
-				window.location.replace("http://localhost:3000/done");
-			});
-		}
 
-		}, '#paypal-button-container');
+				//Formatting Inputs
+				var cleave = new Cleave('#date', {
+					date: true,
+					datePattern: ['m', 'y']
+				});
+				var selectedCardIcon = null;
+				var cleave = new Cleave('#cardnumber', {
+					creditCard: true,
+					onCreditCardTypeChanged: function (type) {
+						// update UI ...
+						type = type.split('15')[0];
 
-	</script>
+					}
+				});
+
+				//Inserting Data with ajax
+				function addDetails() {
+					var url = "<%=hostPath%>/checkout/<%= userID%>"; //Edit when database is added
+					var cardDetails = {
+						userID: "<%= userID %>",
+						cardName: $("#cardholder").val(),
+						cardNumber: $("#cardnumber").val(),
+						expiryDate: $("#date").val(),
+						verification: $("#verification").val(),
+						shippingAddress: $("#shippingAddress").val(),
+						blockUnit: $("#blockUnit").val()
+					}
+
+					$.ajax({
+						url: url,
+						type: "POST",
+						data: JSON.stringify(cardDetails),
+						dataType: "json",
+						contentType: "application/json",
+						success: function (result) {
+							$("#red").addClass("hidden");
+							$("#green").removeClass("hidden");
+							setTimeout(function myTimer() {
+								location.href = "<%=hostPath%>/pending";
+							}, 5000)
+						},
+						error: function (result) {
+							alert("Card Details Failed")
+							$("#red").removeClass("hidden");
+							console.log("testing validation");
+							validationshow();
+							// discardDetails();
+						}
+					})
+				}
+
+
+				function discardDetails() {
+					location.href = "<%=hostPath%>/checkout"
+				}
+
+				function validationshow() {
+					// var cardNoValidation = payform.cardNumberInput($("#cardnumber").val());
+					// var date = payform.expiryInput($("#date").val());
+					// var cvcValidation = payform.cvcInput($("#verification").val());
+					// console.log(cardNoValidation, cardValidateExpiry, cvcValidation)
+
+					var isCardValid = $.payform.validateCardNumber($("#cardnumber").val());
+					var date = $("#date").val();
+					var month = date[0] + date[1];
+					var year = date[3] + date[4];
+					var finalDate = $.payform.validateCardExpiry(month, year);
+					var isCvvValid = $.payform.validateCardCVC($("#verification").val());
+
+					if ($("#cardholder").val().length < 5) {
+						alert("Wrong owner name");
+
+					} else if (!isCardValid) {
+						var messageId = document.getElementById("messageFailed");
+						var textAdded = document.createTextNode("Invalid Card Number");
+						messageId.appendChild(textAdded);
+
+					} else if (!isCvvValid) {
+						var messageId = document.getElementById("messageFailed");
+						var textAdded = document.createTextNode("Invalid CVV");
+						messageId.appendChild(textAdded);
+					} else if (!finalDate) {
+						var messageId = document.getElementById("messageFailed");
+						var textAdded = document.createTextNode("Invalid Date");
+						messageId.appendChild(textAdded);
+					} else if ($("#cardholder").val().length < 5 || !isCardValid) {
+						var messageId = document.getElementById("messageFailed");
+						var textAdded = document.createTextNode("Invalid Name and Invalid Card");
+						messageId.appendChild(textAdded);
+					}
+					else {
+						var messageId = document.getElementById("messageFailed");
+						var textAdded = document.createTextNode("Invalid Name, Invalid Date, Invalid CVV, ");
+						messageId.appendChild(textAdded);
+					}
+				}
+			</script>
+			<script>
+
+				// Render the PayPal button
+				var realTotal = parseFloat('<%= total %>');
+				paypal.Button.render({
+
+					env: 'sandbox', // sandbox | production
+
+					style: {
+						label: 'paypal',
+						size: 'medium',    // small | medium | large | responsive
+						shape: 'rect',     // pill | rect
+						color: 'blue',     // gold | blue | silver | black
+						tagline: false
+					},
+
+					// PayPal Client IDs - replace with your own
+					// Create a PayPal app: https://developer.paypal.com/developer/applications/create
+					client: {
+						sandbox: 'AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R',
+						production: '<insert production client id>'
+					},
+
+					// Show the buyer a 'Pay Now' button in the checkout flow
+					commit: true,
+
+					// payment() is called when the button is clicked
+					payment: function (data, actions) {
+
+						// Make a call to the REST api to create the payment
+						return actions.payment.create({
+							payment: {
+								transactions: [
+									{
+										amount: { total: realTotal, currency: 'SGD' }
+									}
+								]
+							}
+						});
+					},
+
+					// onAuthorize() is called when the buyer approves the payment
+					onAuthorize: function (data, actions) {
+
+						// Make a call to the REST api to execute the payment
+						return actions.payment.execute().then(function () {
+							window.alert('Payment Complete!');
+							window.location.replace("http://localhost:3000/done");
+						});
+					}
+
+				}, '#paypal-button-container');
+
+			</script>
 </body>
 
 </html>
-

@@ -1,14 +1,12 @@
 //get gravatar icon from email
 var gravatar = require('gravatar');
 //get comments model
-var passport = require('passport');
-var fs = require('fs');
 var UserModel = require('../models/user');
 var Product = require('../models/products');
 var CardDetails = require('../models/cardDetails');
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
-var payform = require('payform'); 
+var payform = require('payform');
 const http = require('http');
 const url = require('url');
 
@@ -20,8 +18,7 @@ exports.insert = function (req, res) {
     var year = date[3] + date[4];
     var cardValidateExpiry = payform.validateCardExpiry(month, year);
     var cvcValidation = payform.validateCardCVC(req.body.verification);
-    if (cardNoValidation == true && cardValidateExpiry == true && cvcValidation == true)
-    {
+    if (cardNoValidation == true && cardValidateExpiry == true && cvcValidation == true) {
         var cardDetails = {
             cardName: req.body.cardName,
             userID: req.body.userID,
@@ -36,17 +33,16 @@ exports.insert = function (req, res) {
         console.log(cardDetails);
         CardDetails.create(cardDetails).then((newRecord, created) => {
             if (!newRecord) {
-                return res.send (400, {
+                return res.send(400, {
                     message: "error"
                 });
             }
             res.status(200).send({ message: "Uploaded Card Details" + newRecord });
         })
 
-        sequelize.query("select CardID from cardDetails cd left outer join Users u on cd.UserId = u.userID where cd.UserId = " + req.user.userID, {model: CardDetails}).then((card) => {   
-            card.forEach(function(i, idx, CardData){
-                if (idx === CardData.length - 1)
-                {
+        sequelize.query("select CardID from cardDetails cd left outer join Users u on cd.UserId = u.userID where cd.UserId = " + req.user.userID, { model: CardDetails }).then((card) => {
+            card.forEach(function (i, idx, CardData) {
+                if (idx === CardData.length - 1) {
                     var finalInt = parseInt(idx) + 1 //getting last cardid index
                     var realCard = (i.CardID) + 1; //getting last cardid
                     global.realCard = realCard
@@ -63,11 +59,11 @@ exports.insert = function (req, res) {
                 cardType: payform.parseCardType(req.body.cardNumber),
                 blockUnit: req.body.blockUnit
             }
-            
+
             console.log(cardDetailsVer2);
 
             var postData = JSON.stringify({ user: cardDetailsVer2 });
-    
+
             const options = {
                 hostname: 'localhost',
                 port: 3001,
@@ -78,7 +74,7 @@ exports.insert = function (req, res) {
                     'accept': 'application/json'
                 }
             };
-    
+
             const httpreq = http.request(options, (res) => {
                 res.setEncoding('utf8');
                 res.on('data', (chuck) => {
@@ -88,69 +84,69 @@ exports.insert = function (req, res) {
                     console.log('No more data in response.');
                 });
             });
-    
+
             httpreq.on('error', (e) => {
                 console.error(`problem with request: ${e.message}`);
             })
-    
+
             //write data to request body
             httpreq.write(postData);
             httpreq.end();
         });
     }
-    else if (cardNoValidation == false)
-    {
+    else if (cardNoValidation == false) {
         console.log("Wrong card number");
         res.redirect('/checkout');
         // res.status(200).send( { message: 'Wrong Card Number!' } );
     }
-    else if (cardValidateExpiry == false)
-    {
+    else if (cardValidateExpiry == false) {
         console.log("Wrong Expiry Date Entered!")
         res.redirect('/checkout');
         // res.status(200).send( { message: 'Wrong Expiry Date Entered!' } );
     }
-    else if (cvcValidation == false)
-    {
+    else if (cvcValidation == false) {
         console.log("Wrong CVC entered!")
         res.redirect('/checkout');
         // res.status(200).send( { message: 'Wrong CVC entered' } );
     }
 }
-exports.show = function (req, res){
+exports.show = function (req, res) {
     //List all the products
-    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID, {model: Product}).then((products) => {   
-    //Calculating product total value
+    sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID, { model: Product }).then((products) => {
+        //Calculating product total value
         var totalPrice = 0;
         var shippingFee = 0;
         var stripeTotal = 0;
-        products.forEach(function(rayson) {
+        var realQuantity = 0;
+
+        products.forEach(function (rayson) {
             totalPrice += rayson.ProductPrice;
+            realQuantity += 1
         });
-        if (totalPrice >50){
+        if (totalPrice > 50) {
             subtotal = totalPrice;
             stripeTotal = totalPrice;
-        } else{
+        } else {
             subtotal = totalPrice;
             totalPrice += 5.00;
             shippingFee = 5.00;
             stripeTotal = totalPrice;
         }
-        if (subtotal != 0 )
-        {
+        if (subtotal != 0) {
             console.log(req.flash('info'));
             var id = req.params.userID;
-            UserModel.findById(id).then(function() {
+            UserModel.findById(id).then(function () {
                 res.render('checkOut', {
                     title: 'Cheapo - ' + req.user.username + '\'s Profile',
                     avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
-                    username : req.user.username,
+                    username: req.user.username,
                     email: req.user.email,
                     userID: req.user.userID,
                     dateJoined: req.user.joinDate,
                     type: req.user.userType,
                     membership: req.user.membership,
                     req: req,
+                    realQuantity: realQuantity,
                     message: req.flash('info'),
                     products: products,
                     total: totalPrice,
@@ -158,7 +154,7 @@ exports.show = function (req, res){
                     stripeTotal: stripeTotal * 100,
                     shippingFee: shippingFee,
                     subtotal: subtotal,
-                    gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro'}, true),
+                    gravatar: gravatar.url({ s: '80', r: 'x', d: 'retro' }, true),
                     hostPath: req.protocol + "://" + req.get("host"),
                     urlPath: req.protocol + "://" + req.get('host') + req.url
                 });
@@ -168,23 +164,22 @@ exports.show = function (req, res){
                 });
             });
         }
-        else
-        {
+        else {
             res.redirect("/shopping-cart");
         }
     });
 };
 
 // check if user is logged in
-exports.isLoggedIn = function(req, res, next) {
-    if (req.isAuthenticated()){
+exports.isLoggedIn = function (req, res, next) {
+    if (req.isAuthenticated()) {
         return next();
-    }    
+    }
     res.redirect('/login');
 };
-exports.isLoggedInV2 = function(req,res,next) {
-    if (!req.isAuthenticated()){
-        return next();    
+exports.isLoggedInV2 = function (req, res, next) {
+    if (!req.isAuthenticated()) {
+        return next();
     }
     res.redirect('/profile');
 };

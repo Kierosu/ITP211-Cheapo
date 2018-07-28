@@ -50,7 +50,7 @@
 		<div class="container">
 			<ul class="breadcrumb">
 				<li><a href="#">Home</a></li>
-				<li class="active">Confirmation</li>
+				<li class="active">Order-Tracking</li>
 			</ul>
 		</div>
 	</div>
@@ -59,7 +59,7 @@
 	<!-- section -->
 	<center>
 	<div class="section">
-			<div class="checkout-panel">
+			<div class="checkout-panel">  
 					<div class="panel-body">
 					  <h2 class="title">Order Tracking</h2>
 						<div class="row"></div>
@@ -69,7 +69,7 @@
 							<div class="stepVer4"></div>
 							<div class="stepVer5"></div>
 						</div>
-							<div id="map" class="border border-dark rounded"></div>
+							<div id="map" class="border border-dark rounded" style = "border: 5px solid black";></div>
 							<div class="navigation1">
 								<strong><p>Instructions For Navigating:</p></strong>
 								<ul>
@@ -77,14 +77,14 @@
 									<li><kbd>Click on the markers to zoom in and see details about it.</kbd></li>
 								</ul>
 							</div>
-							<div class="done hidden">
+							<div class="done hidden"><!--remember to add class hidden -->
 								<fieldset>
 									<legend>Shipment Completed!</legend>
 									<p>Thanks for shopping with Cheapo!</p>
-									<p>Please leave a feedback for our shopping site so as we can improve on our webpage!</p>
-									<br><br><br>
-									<legend>Feedback Form:</legend>
 									<div class="feedback">
+										<p>Please leave a feedback for our shopping site so as we can improve on our webpage!</p>
+										<br><br><br>
+										<legend>Feedback Form:</legend>
 										<label for="userrealname">User Name:</label>
 										<input id = "userrealname"class="form-control" type="text" placeholder="<%=username%>" readonly>
 										<br><br>
@@ -92,15 +92,20 @@
 											<label for="exampleFormControlTextarea1">Feedback:</label>
 											<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
 										  </div>
-										</form>
+										  <button class="btn btn-primary" id="addFeedback">Submit</button>
+									</div>
 									</div>
 								</fieldset>
-							</div>
+								</div>
+								<div class="sellermoney hidden">
+									<p class="changeMoney"></p>
+									<p class="listOfSellers"></p>
+								</div>
 							<br><br>
                         </div>
 						<div class="row">
 							<div class="col-sm-12">
-								<button id="backToShopping"class="btn">Back To Shopping</button>
+								<button id="backToShopping"class="btn hidden">Back To Shopping</button>
 							</div>
 						</div>
 				  </div>
@@ -115,14 +120,78 @@
 	<script src="js/nouislider.min.js"></script>
 	<script src="js/jquery.zoom.min.js"></script>
 	<script src="js/main.js"></script>
+	<script src="js/socket.io.js"></script>
 	<!-- <script src="js/progress-bar.js"></script>
 	<script src="js/appGress.js"></script> -->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSG_1ZKHdkjPhREhtUba47ZqCUMCzw61U&callback=initMap"
 async defer>
 </script>
 <script>
-	       function addToWish() {
-            var url = "<%=hostPath%>/feedback"; //Edit when database is implemented\
+var socket = io('http://localhost:3000');
+var uniqueAcc = [];
+socket.on('receiveMoney', function(sellerMoney) {
+
+		//sellerMoney[{SellerName:"Teh Yang",Money:"123"}]
+		
+		var accExist = false;
+
+		//Set unique Names
+		for (var objIndex in sellerMoney){
+			//Check unique arr empty
+			if(uniqueAcc.length<=0){
+				var objTemplate = {};
+				objTemplate ["SellerName"] = sellerMoney[objIndex]["SellerName"];
+				objTemplate["Money"] = 0
+				uniqueAcc.push(objTemplate);
+			}
+			//Loop through uniqueAcc for names
+			for(var uAccIndex in uniqueAcc){
+				//If name exist in uniqueAcc, 
+				if(sellerMoney[objIndex]["SellerName"] == uniqueAcc[uAccIndex]["SellerName"])
+					accExist = true;
+			}
+			//If account doesnt exist
+			if(!accExist){
+				var objTemplate = {};
+				objTemplate ["SellerName"] = sellerMoney[objIndex]["SellerName"];
+				objTemplate["Money"] = 0
+				uniqueAcc.push(objTemplate);
+			}
+			else{
+				accExist = false;
+			}
+		}
+
+		//Add all sums together
+		for(var objIndex in sellerMoney){
+			for(var uAccIndex in uniqueAcc){
+				if (sellerMoney[objIndex]["SellerName"] == uniqueAcc[uAccIndex]["SellerName"]){
+					uniqueAcc[uAccIndex]["Money"] += sellerMoney[objIndex]["Money"];
+					break;
+				}
+			}
+		}
+
+
+
+		var tempStringName = "";
+		var tempStringMoney = "";
+		for(uAccIndex in uniqueAcc){
+			tempStringName += "Seller's Name: " + uniqueAcc[uAccIndex]["SellerName"];
+			tempStringMoney += "\nMoney Received: $" + uniqueAcc[uAccIndex]["Money"];
+		}
+
+
+	$(".listOfSellers").html(tempStringName + '<br>' + tempStringMoney);
+	uniqueAcc = [];
+
+	$(".sellermoney").removeClass("hidden");
+	$(".changeMoney").text("Thanks for giving us your feedback! Cheapo has released the amount of : ");
+	
+});
+
+		$("#addFeedback").click(function(){
+			var url = "<%=hostPath%>/feedback"; //Edit when database is implemented\
             var feedback = {
 				UserId: '<%=userID%>',
 				userName: $('#userrealname').val(),
@@ -133,32 +202,35 @@ async defer>
             $.ajax({
                 url: url,
                 type: "POST",
-                data: JSON.stringify(products),
+                data: JSON.stringify(feedback),
                 dataType: "json",
                 contentType: "application/json",
                 success: function(result){
-                    alert("Item Posted Successfully!");
+					alert("Delivery Completed!");
+					console.log(result.message);
+					$(".feedback").addClass("hidden");
+					$("#backToShopping").removeClass("hidden");
+
+
+
                 },
                 error: function(result){
-                    alert("Error Posting Item");
-                    discardAdd();
+                    alert("Delivery Failed");
                 }
-            })
-        }
-
-        function discardAdd() {
-            location.href = "<%=hostPath%>/item"
-        }
-        
-        $("#check").click( function()
-        {
-            window.location.replace("http://localhost:3000/shopping-cart");
-        })
+			})
+		})
 </script>
 
 <script>
 var markers = [];
 var position = [parseFloat('<%= myLatitude %>'), parseFloat('<%= myLongitude %>')];
+var coordi = {};
+socket.on('sendingCoords', function(coords) { // fix stupid undefined coords
+	console.log("testing coords: " + coords.shippingAddressLatitude + " and " + coords.shippingAddressLongitude)
+	console.log("object" + coords)
+	coordi.shippingLatitude = coords.shippingAddressLatitude;
+	coordi.shippingLongitude = coords.shippingAddressLongitude;
+});
 
 function initMap(){
     var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
@@ -168,10 +240,8 @@ function initMap(){
         var lat = pos.coords.latitude,
             long = pos.coords.longitude,
 			coords = lat + " , " + long;
-
+		// });
 		//Shipment location
-		var lati = parseFloat(1.378949)
-		var longi = parseFloat(103.755845)
 
 		//Van location
 		var p1 = {
@@ -180,14 +250,22 @@ function initMap(){
 		}
 
 		var p2 = {
-			lat: parseFloat(lati), //in c thats why need shippingLacation and dont need c
-			lng: parseFloat(longi)
+			lat: parseFloat(coordi.shippingLatitude), //in c thats why need shippingLacation and dont need c
+			lng: parseFloat(coordi.shippingLongitude)
 		}
+
+
+		var homeMarker = new google.maps.Marker({
+			position: {lat: coordi.shippingLatitude, lng: coordi.shippingLongitude},
+			map:map
+		})
+
 		var rad = function(x) {
 			return x * Math.PI / 180;
 		};
 
 		var getDistance = function(p1, p2) {
+			//haversine formula
 			var R = 6378137; // Earth’s mean radius in meter
 			var dLat = rad(parseFloat(p2.lat) - parseFloat(p1.lat));
 			var dLong = rad(p2.lng - p1.lng);
@@ -198,21 +276,16 @@ function initMap(){
 		};
 
 		//Add marker function
-		var currentMarker = new google.maps.Marker({
-				position: {lat: lat, lng: long},
-				map:map
-			});
+		// var currentMarker = new google.maps.Marker({
+		// 		position: {lat: lat, lng: long},
+		// 		map:map
+		// 	});
 
 		var vanMarker = new google.maps.Marker({
 			position: {lat: parseFloat('<%= myLatitude %>'), lng: parseFloat('<%= myLongitude %>')},
 			map:map	
 		});
-		
-		var homeMarker = new google.maps.Marker({
-			position: {lat: 1.378949, lng: 103.755845},
-			map:map
-		})
-		
+
 		function notifyMe() {
 		if (!("Notification" in window)) {
 			alert("This browser does not support system notifications");
@@ -322,8 +395,9 @@ function initMap(){
 
 		//Codes to move markers
 		function movingMarkers() {
-			var result = [1.3329, 103.7436];
-        	transition(result);
+			var result = [parseFloat(coordi.shippingLatitude) - 0.02, parseFloat(coordi.shippingLongitude) - 0.02];
+			console.log("moving")
+			transition(result);
 		}
 
 		setTimeout (function() {
@@ -334,7 +408,9 @@ function initMap(){
 
 
 		function movingMarkers2nd() {
-			var result = [1.3590, 103.7637];
+			var finalLati = parseFloat(coordi.shippingLatitude) - 0.01;
+			var finalLongi = parseFloat(coordi.shippingLongitude) - 0.01
+			var result = [finalLati, finalLongi];
         	transition(result);
 		}
 
@@ -345,7 +421,7 @@ function initMap(){
 		//^^ Moving from jurong east to bukit batok
 
 		function movingMarkers3rd() {
-			var result = [lati, longi];
+			var result = [parseFloat(coordi.shippingLatitude), parseFloat(coordi.shippingLongitude)];
         	transition(result);
 		}
 
@@ -365,7 +441,6 @@ function initMap(){
 		//Adding animations to markers
         homeMarker.addListener('click', toggleBounce);
 		vanMarker.addListener('click', toggleBounce);
-		currentMarker.addListener('click', toggleBounce);
 		
 		//set current variables
 		var numDeltas = 100;
@@ -393,7 +468,6 @@ function initMap(){
 			var latlng = new google.maps.LatLng(newP1, p2);
 			vanMarker.setTitle('Delivery Van is ' + Math.round(getDistance(newP1,p2))  + 'm Away from you.') //Nan error
 			vanMarker.setPosition(latlng);
-			vanMarker.setAnimation(google.maps.Animation.BOUNCE);
 			// secondLocation(); //move from je to bukit batok
 			if(i!=numDeltas){
 				i++;
@@ -439,10 +513,10 @@ function initMap(){
             map.setCenter(vanMarker.getPosition());
 		})
 		
-		currentMarker.addListener('click', function(){
-            map.setZoom(14);
-            map.setCenter(currentMarker.getPosition());
-        })
+		// currentMarker.addListener('click', function(){
+        //     map.setZoom(14);
+        //     map.setCenter(currentMarker.getPosition());
+        // })
 	}
     
     var e = function(error) {
