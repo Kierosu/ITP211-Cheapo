@@ -193,10 +193,10 @@
                         <label for="coup">Your Promo Code:</label>
                         <input id = "coup"class="form-control" type="text" value="<%=coupons%>" readonly>
                         <br>
-                        <center><button class="btn btn-primary" onclick="copyClipboard()">Copy text</button></center>
+                        <center><button class="btn btn-primary" id="notAvailable" onclick="copyClipboard()">Copy text</button></center>
                 </div>
                 <div class="modal-footer">
-                    <center><p id="itemNumber">Copy the promo code and apply it on your shopping cart!</p></center>
+                    <center><p class = "instructions" id="itemNumber">Copy the promo code and apply it on your shopping cart!</p></center>
                 </div>
                 </div>
             </div>
@@ -249,7 +249,27 @@
 
             $(window).load(function() {
             // executes when complete page is fully loaded, including all frames, objects and images
-            $('#exampleModalCenter').modal('toggle');
+
+            //remove the button and instructions 
+            if ("<%=announce%>" != "You cannot receive anymore coupons!")
+            {
+                //load the modal on load
+                if ("<%=announce%>" == "Oops better luck next time!")
+                {
+                    $("#notAvailable").prop('disabled',true);
+                    $(".instructions").addClass("hidden");
+                    $('#exampleModalCenter').modal('toggle');
+                }
+                else
+                {
+                    $('#exampleModalCenter').modal('toggle');
+                }
+            }
+            else if ("<%=announce%>" == "Oops better luck next time!")
+            {
+                $(".btn btn-primary").addClass("hidden");
+                $(".instructions").addClass("hidden");
+            }
             });
 
             $('.remove').click(function () {
