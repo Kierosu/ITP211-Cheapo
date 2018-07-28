@@ -8,6 +8,40 @@ var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 var itemPostModel = require('../models/itemPost');
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
+var UserModel = require('../models/user');
+
+exports.list = function(req, res) {
+    
+    sequelize.query('select id, itemPic, title, price, brand, prodDesc, ownerName, sellerID from itemPosts', {model: itemPostModel}).then((itemPost) => {
+            res.render('itemPosted', {
+                title: 'Images Gallery',
+                itemPost: itemPost,
+                req: req,
+                urlPath: req.protocol + "://" + req.get("host") + req.url,
+            });
+
+            }).catch ((err) => {
+        return res.status(400).send({
+            message: err
+        });        
+    }); 
+};
+
+exports.show = function(req, res) {
+    
+    sequelize.query('select id, itemPic, title, price, brand, prodDesc, ownerName, sellerID from itemPosts', {model: itemPostModel}).then((itemPost) => {
+            res.render('userItems', {
+                title: 'Images Gallery',
+                itemPost: itemPost,
+                urlPath: req.protocol + "://" + req.get("host") + req.url,
+            });
+
+            }).catch ((err) => {
+        return res.status(400).send({
+            message: err
+        });        
+    }); 
+};
 
 // Add new item record to database
 exports.create = function (req, res) {
@@ -42,7 +76,9 @@ src.on('end', function () {
         title: req.body.title,
         price: req.body.price,
         brand: req.body.brand,
-        prodDesc: req.body.prodDesc
+        prodDesc: req.body.prodDesc,
+        ownerName: req.body.ownerName,
+        sellerID: req.user.userID
     }
 
     // Save to database
@@ -75,17 +111,30 @@ exports.showitem = function(req, res) {
     var idCheck = req.params.imageId   
     console.log("Viewing " + idCheck);
     itemPostModel.findOne({ where: {id: idCheck}}).then(productDetails => {
-        res.render("itemProduct", {
-            productImage: productDetails.itemPic,
-            productTitle: productDetails.title,
-            productPrice: productDetails.price,
-            productBrand: productDetails.brand,
-            productDesc: productDetails.prodDesc,
-            req: req,
-        });
-    }).catch((err) => {
-        return res.status(400).send({
-            message: err
+        var id = req.params.userID;
+        UserModel.findById(id).then(function() {
+            res.render("itemProduct", {
+                ownerName: productDetails.ownerName,
+                productImage: productDetails.itemPic,
+                productTitle: productDetails.title,
+                productPrice: productDetails.price,
+                productBrand: productDetails.brand,
+                productDesc: productDetails.prodDesc,
+                avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
+                username : req.user.username,
+                email: req.user.email,
+                userID: req.user.userID,
+                sellerID: productDetails.sellerID,
+                dateJoined: req.user.joinDate,
+                type: req.user.userType,
+                membership: req.user.membership,
+                req: req,
+                hostPath: req.protocol + "://" + req.get("host"),
+            });
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
         });
     });
 };
@@ -97,7 +146,6 @@ exports.editProduct = function (req, res) {
         res.render('editProduct', {
             title: "Practical 5 Database Node JS - Edit Student Record",
             item: itemRecord,
-            req: req,
             hostPath: req.protocol + "://" + req.get("host")
         });
     }).catch ((err) => {

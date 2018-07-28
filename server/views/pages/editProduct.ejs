@@ -62,7 +62,7 @@
                     contentType: "application/json",
                     success: function(result){
                         alert("Product updated successfully");
-                        location.href = "<%=hostPath%>/itemPosted"
+                        location.href = "<%=hostPath%>/userItems"
                     },
                     error: function(result){
                         alert("Error updating student record");
@@ -72,7 +72,7 @@
             }
     
             function discardChanges() {
-                location.href = "<%=hostPath%>/itemPosted"
+                location.href = "<%=hostPath%>/userItems"
             }
         </script>
     </body>

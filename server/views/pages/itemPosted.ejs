@@ -33,21 +33,19 @@
 	<!-- section -->
 	<div class="section">
 		<!-- container -->
-		<div class="container-fluid">
+		<div class="container">
 			<!-- row -->
 			<div class="row">    
-				<% itemPost.forEach(function(itemPost){ %>
+					<% itemPost.forEach(function(itemPost){ %>
 					<div class="col-md-3" style="border-style: solid; text-align: center; box-sizing: border-box;">	
 						<div class="classWithPad">
+							<label style="float: left;"> By: <%= itemPost.ownerName %></label> <br>
 							<img src="images/<%= itemPost.itemPic %>" class="figure-img img-fluid img-rounded" style="height:200px; width: 200px;"> <br>
 							<h2> <%= itemPost.title %> </h2> <br>
 							<label id="productFont"> S$<%= itemPost.price %> </label><br>
 							<label id="productFont"> Brand: <%= itemPost.brand %> </label> <br>
 							<label id="productFont"> Details: <%= itemPost.prodDesc %> </label> <br>
-							<button class="wishlistBtn"> Save to Wishlist</button>
-							<button class="productBtn" data-id="<%= itemPost.id%>">Product</button>
-							<button class="btn btn-secondary pull-right deleteBtn" type="button" data-id="<%= itemPost.id%>"> Delete </button>
-							<button class="btn btn-secondary pull-left editBtn" type="button" data-id="<%= itemPost.id%>"> Edit</button>
+							<button class="productBtn" data-id="<%= itemPost.id%>">View Product</button>
 						</div>
 					</div>
 				<% }) %>					
@@ -63,23 +61,6 @@
 
 	<% include ../partials/footer %>
 	<script>
-		$('.deleteBtn').click(function() {
-			var item_id = $(this).data('id');
-			$.ajax({
-				url: '<%-urlPath%>' + '/' + item_id,
-				type: 'DELETE',
-				success: function(result) {
-					console.log(result);
-					var itemToRemove = '.list-group-item[data-id='+item_id+']';
-					$(itemToRemove).remove();
-					location.reload();
-				},
-				error: function(result){
-					alert("Unable to delete item.");
-					console.log(result);
-				}
-			});
-		})
 		$('.productBtn').click(function() {
 			var imageId = $(this).data('id');
 			window.location.replace("/itemProduct/" + imageId)
@@ -92,11 +73,6 @@
 				}
 			})
 		})
-		$('.editBtn').click(function () {
-			var record_num = $(this).data('id');
-			location.href = "http://localhost:3000/editProduct/" + record_num;
-			
-		});
 
 	</script>
 </body>

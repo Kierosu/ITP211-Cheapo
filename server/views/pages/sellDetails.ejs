@@ -54,7 +54,8 @@
                     <div class="form-group">
                         <h3> Description </h3>
                         <textarea class="form-control" rows="5" id="prodDesc" placeholder="Describe what you are selling, including details that might be interesting to the buyer" name="prodDesc" required></textarea>
-                        </div>
+												</div>
+												<input type="text" hidden="true" name="ownerName" value="<%= loginuser.username %>">
                     <button id="send" type="submit" class="uploadButton">Submit</button>
                 </form>
               </div>

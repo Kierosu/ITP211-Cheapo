@@ -31,15 +31,13 @@ const itemPost = sequelize.define('itemPost', {
     prodDesc: {
         type: Sequelize.STRING,
         defaultValue: "",
-    }  
-    // userID: {
-    //     type:Sequelize.INTEGER,
-    //     allowNull: false,
-    //     references: {
-    //         model:'Users',
-    //         key: 'userID'
-    //     }
-    // }
+    },  
+    ownerName: {
+        type:Sequelize.STRING,
+    },
+    sellerID: {
+        type: Sequelize.INTEGER,
+    }
 });
 
 // force: true will drop the table if it already exists

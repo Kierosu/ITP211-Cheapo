@@ -5,7 +5,6 @@ var Product = require('../models/products');
 var wishList = require('../models/wishList');
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
-var parseDecimalNumber = require('parse-decimal-number');
 var passport = require('passport');
 var fs = require('fs');
 var UserModel = require('../models/user');
@@ -15,7 +14,7 @@ exports.insert = function (req, res){
     var products = {
         UserId: req.body.UserId,
         ProductName: req.body.ProductName,
-        ProductPrice: parseDecimalNumber(req.body.ProductPrice),
+        ProductPrice: parseFloat(req.body.ProductPrice),
         ProductDescription: req.body.ProductDescription,
         ProductImage: req.body.ProductImage,
         sellerId: req.body.sellerId
@@ -35,7 +34,7 @@ exports.add = function (req, res){
     var wishlist = {
         UserId: req.body.UserId,
         ProductName: req.body.ProductName,
-        ProductPrice: parseDecimalNumber(req.body.ProductPrice),
+        ProductPrice: parseFloat(req.body.ProductPrice),
         ProductDescription: req.body.ProductDescription,
         ProductImage: req.body.ProductImage,
         sellerId: req.body.sellerId

@@ -36,7 +36,7 @@ exports.show = function (req, res){
         var randomstring = Math.random().toString(36).slice(-8);
         array.push(randomstring);
 
-        // Genrate Email
+        // Generate Email
         let HelperOptions = {
             from: '"Cheapo Online Shop" <TheCheapoOnline@gmail.com>',
             to: "raysonkira@gmail.com",

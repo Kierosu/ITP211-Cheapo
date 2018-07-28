@@ -10,6 +10,7 @@ var itemPostModel = require('../models/itemPost');
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
 
+
 exports.list = function(req, res) {
     
     sequelize.query('select id, itemPic, title, price, brand, prodDesc from itemPosts', {model: itemPostModel}).then((itemPost) => {
@@ -27,3 +28,19 @@ exports.list = function(req, res) {
     }); 
 };
 
+exports.show = function(req, res) {
+    
+    sequelize.query('select id, itemPic, title, price, brand, prodDesc from itemPosts', {model: itemPostModel}).then((itemPost) => {
+            res.render('userItems', {
+                title: 'Images Gallery',
+                itemPost: itemPost,
+                req: req,
+                urlPath: req.protocol + "://" + req.get("host") + req.url,
+            });
+
+            }).catch ((err) => {
+        return res.status(400).send({
+            message: err
+        });        
+    }); 
+};
