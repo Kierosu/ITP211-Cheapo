@@ -198,6 +198,7 @@ app.get('/done', auth.isLoggedIn, done.show);
 
 //Driver 
 app.get('/driver', driver.show);
+app.post('/remove', driver.remove);
 
 //Wish List
 app.get('/wishlist', auth.isLoggedIn, wishList.show)
