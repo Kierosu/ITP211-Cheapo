@@ -134,22 +134,22 @@ exports.show = function (req, res){
 };
 
 //completed page
-exports.show = function (req, res){
-    sequelize.query("select d.finalProductID, fp.finalProductName, fp.finalProductDescription, fp.finalProductPrice, fp.finalProductImage, fp.userID, fp.sellerId, (select username from Users where userID = fp.userID) As userName from finalProducts fp inner join Users u on u.userID = fp.userID", { model: finalProducts }).then((finalProducts) => {
+exports.com = function (req, res){
+    sequelize.query("select d.comItemID, d.comItemName, d.comItemDescription, d.comItemPrice, d.comItemImage, d.userID, d.sellerId, (select username from Users where userID = d.userID) As userName from driver d inner join Users u on u.userID = d.userID", { model: driver }).then((driverTable) => {
     //add names and prices and items into array
     
     //storing names, amount and items
     var differentAcc = [];
     var existance = false;
 
-    finalProducts.forEach(function(finalProductsLoop){
-            var nameToCheck = finalProductsLoop.dataValues.userName;
+    driverTable.forEach(function(driverTableLoop){
+            var nameToCheck = driverTableLoop.dataValues.userName;
             console.log("name: " + nameToCheck)
             if (differentAcc.length <= 0)
             {
                 var objectName = {};
-                console.log("checking from first:" + finalProductsLoop.userID);
-                objectName["UserId"] = finalProductsLoop.userID;
+                console.log("checking from first:" + driverTableLoop.userID);
+                objectName["UserId"] = driverTableLoop.userID;
                 objectName["Name"] = [];
                 objectName["Product"] = [];
                 objectName["IndiPrice"] = [];
@@ -160,14 +160,14 @@ exports.show = function (req, res){
             {
                 for(var uAccIndex in differentAcc)
                 {
-                    if (finalProductsLoop.userID == differentAcc[uAccIndex]["UserId"])
+                    if (driverTableLoop.userID == differentAcc[uAccIndex]["UserId"])
                         existance = true;
                 }
 
                 if(!existance)
                 {
                     var objectName = {};
-                    objectName["UserId"] = finalProductsLoop.userID;
+                    objectName["UserId"] = driverTableLoop.userID;
                     objectName["Name"] = [];
                     objectName["Product"] = [];
                     objectName["IndiPrice"] = [];
@@ -181,15 +181,15 @@ exports.show = function (req, res){
             }
     });
     // adding price together
-    finalProducts.forEach(function(objIndex){
+    driverTable.forEach(function(objIndex){
         for(var uAccIndex in differentAcc){
             if (objIndex.userID == differentAcc[uAccIndex]["UserId"]){
-                differentAcc[uAccIndex]["Price"] += objIndex.finalProductPrice;
+                differentAcc[uAccIndex]["Price"] += parseFloat(objIndex.comItemPrice);
                 break;
             }
         }
     });
-    finalProducts.forEach(function(names){
+    driverTable.forEach(function(names){
         //loop to add names
         for (var namelooparray in differentAcc){
             if (names.userID == differentAcc[namelooparray]["UserId"]){
@@ -200,23 +200,23 @@ exports.show = function (req, res){
         }
     });
 
-    finalProducts.forEach(function(prod){
+    driverTable.forEach(function(prod){
         //loop to add products
         for (var prodlooparray in differentAcc){
             if (prod.userID == differentAcc[prodlooparray]["UserId"]){
                 var objectArray = differentAcc[prodlooparray]["Product"]
-                objectArray.push(prod.finalProductName);
+                objectArray.push(prod.comItemName);
                 break;
             }
         }
     });
 
-    finalProducts.forEach(function(indi){
+    driverTable.forEach(function(indi){
         //loop to add indiprice
         for (var indilooparray in differentAcc){
             if (indi.userID == differentAcc[indilooparray]["UserId"]){
                 var objectArray = differentAcc[indilooparray]["IndiPrice"]
-                objectArray.push(indi.finalProductPrice);
+                objectArray.push(indi.comItemPrice);
                 break;
             }
         }
@@ -231,13 +231,13 @@ exports.show = function (req, res){
     })
     var id = req.params.userID;
     UserModel.findById(id).then(function() {
-        res.render('driver', {
+        res.render('driverComplete', {
             title: "Cheapo - Driver's Page",
             avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
             username : req.user.username,
             email: req.user.email,
             userID: req.user.userID,
-            finalProducts: finalProducts,
+            driverTable: driverTable,
             differentAcc: differentAcc,
             dateJoined: req.user.joinDate,
             type: req.user.userType,

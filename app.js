@@ -197,7 +197,8 @@ app.post("/add", auth.isLoggedIn, itemDes.add);
 app.get('/done', auth.isLoggedIn, done.show);
 
 //Driver 
-app.get('/driver', driver.show);
+app.get('/driver-incomplete', driver.show);
+app.get('/driver-complete', driver.com)
 app.post('/remove', driver.remove);
 
 //Wish List

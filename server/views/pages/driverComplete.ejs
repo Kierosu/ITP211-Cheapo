@@ -163,11 +163,11 @@ window.onclick = function(event) {
 	<center>
     <ul class="nav nav-tabs">
             <li role="presentation" class="disables"><a href="#">Home</a></li>
-            <li role="presentation" class="active"><a href="#">Incomplete</a></li>
-            <li role="presentation"><a href="http://localhost:3000/driver-complete">Completed</a></li>
+            <li role="presentation"><a href="http://localhost:3000/driver-incomplete">Incomplete</a></li>
+            <li role="presentation" class="active"><a href="#">Completed</a></li>
     </ul>
 	<div class="section">
-            <h2>Items To Deliver:</h2>
+            <h2>Items To Delivered:</h2>
             <p>Welcome Mr <%= username %>!</p>
             <% differentAcc.forEach(function(test){ %>
                 <div class="select" data-id="<%= test.UserId %>">
@@ -184,7 +184,7 @@ window.onclick = function(event) {
                     <hr>
                     <% count = count + 1 %>
                 <% }; %>
-                    <button class="dropbtn" data-id="<%= test.UserId %>" style="background-color: green">Amount to pay: $<%= test.Price %></button>
+                    <button class="dropbtn" data-id="<%= test.UserId %>" style="background-color: green">Amount paid by customer: $<%= test.Price %></button>
                 <br><br><br>
             </div>
             <% }); %>
@@ -198,35 +198,6 @@ window.onclick = function(event) {
 <script src="js/nouislider.min.js"></script>
 <script src="js/jquery.zoom.min.js"></script>
 <script src="js/main.js"></script>
-<script>
-           $('.dropbtn').click(function () {
-            alert("clicked")
-            var url = "<%=hostPath%>/remove"; //Edit when database is implemented\
-            var userID = $(this).data("id");
-            console.log("id is: " + userID);
-            var products = {
-                UserId: userID,
-            }
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: JSON.stringify(products),
-                dataType: "json",
-                contentType: "application/json",
-                success: function(result){
-                    alert("Deleted From Database!");
-                    console.log(result.message);
-                    var itemToRemove = '.select[data-id=' + userID + ']';
-                    console.log("id: " + itemToRemove)
-                    $(itemToRemove).remove()
-                },
-                error: function(result){
-                    alert("Unable to delete from database!");
-                    discardAdd();
-                }
-            })
-        });
-</script>
 
 <% include ../partials/footer %>
 <script>
