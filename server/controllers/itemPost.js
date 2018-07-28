@@ -114,7 +114,6 @@ exports.showitem = function(req, res) {
         var id = req.params.userID;
         UserModel.findById(id).then(function() {
             res.render("itemProduct", {
-                ownerName: productDetails.ownerName,
                 productImage: productDetails.itemPic,
                 productTitle: productDetails.title,
                 productPrice: productDetails.price,

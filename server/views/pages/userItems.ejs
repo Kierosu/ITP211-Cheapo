@@ -37,7 +37,23 @@
 			<!-- row -->
 			<div class="row">
 				
-
+				<h1>My Products</h1>
+					<% itemPost.forEach(function(itemPost){ 
+						if(itemPost.ownerName == loginuser.username){
+							%>
+					<div class="col-md-3" style="border-style: solid; text-align: center; box-sizing: border-box;">	
+						<div class="classWithPad">
+							<img src="images/<%= itemPost.itemPic %>" class="figure-img img-fluid img-rounded" style="height:200px; width: 200px;"> <br>
+							<h2> <%= itemPost.title %> </h2> <br>
+							<label id="productFont"> S$<%= itemPost.price %> </label><br>
+							<label id="productFont"> Brand: <%= itemPost.brand %> </label> <br>
+							<label id="productFont"> Details: <%= itemPost.prodDesc %> </label> <br>
+							<button class="btn btn-secondary pull-right deleteBtn" type="button" data-id="<%= itemPost.id%>"> Delete </button>
+							<button class="btn btn-secondary pull-left editBtn" type="button" data-id="<%= itemPost.id%>"> Edit</button>
+						</div>
+					</div>
+				<% }}); %>					
+			</div>
 			<div class="section">
 					<div class="container">
 						<br>
@@ -53,9 +69,9 @@
 																	<div class="cartSection">
 																		<img src="images/<%= itemPost.itemPic %>" alt="" class="itemImg" />																		<h3>
 																		
-																		<h3> 
+																		<h2> 
 																			<%= itemPost.title %> 
-																		</h3>
+																		</h2>
 																		
 																		<p>
 																			<%= itemPost.prodDesc %>
@@ -82,7 +98,6 @@
 						</div>
 					</div>
 			</div>
-		</div>
 			<!-- /row -->
 		</div>
 		<!-- /container -->

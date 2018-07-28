@@ -36,7 +36,6 @@ exports.show = function (req, res) {
         var randomstring = Math.random().toString(36).slice(-8);
         array.push(randomstring);
 
-        // Generate Email
         // Genrate Email
         
         sequelize.query("select email from Users where UserID =" + req.user.userID, {model: UserModel}).then((test) => { 
