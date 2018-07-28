@@ -36,10 +36,7 @@ exports.show = function (req, res) {
         var randomstring = Math.random().toString(36).slice(-8);
         array.push(randomstring);
 
-<<<<<<< HEAD
         // Generate Email
-        let HelperOptions = {
-=======
         // Genrate Email
         
         sequelize.query("select email from Users where UserID =" + req.user.userID, {model: UserModel}).then((test) => { 
@@ -50,7 +47,6 @@ exports.show = function (req, res) {
             });
             console.log(myEmail);
             let HelperOptions = {
->>>>>>> 86eba6928340edf2fa022c939410db296d3dd966
             from: '"Cheapo Online Shop" <TheCheapoOnline@gmail.com>',
             to: myEmail,
             subject: "Cheapo's OTP",
