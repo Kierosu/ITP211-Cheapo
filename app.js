@@ -215,15 +215,13 @@ app.get('/', auth.index);
 // Teh Yang's code
 
 // Import Item Posting controller
-var sellDetails = require('./server/controllers/sellDetails');
-var notificate = require('./server/controllers/notificate');
 var itemPost = require('./server/controllers/itemPost');
 var index = require('./server/controllers/index');
 
 // Creating Items
-app.get('/sellDetails', auth.isLoggedIn, sellDetails.list);
+app.get('/sellDetails', auth.isLoggedIn, itemPost.postItem);
 app.post('/posting', upload.single('image'), itemPost.create);
-app.get('/notificate', auth.isLoggedIn, notificate.list);
+app.get('/notificate', auth.isLoggedIn, itemPost.notificate);
 
 // Show Created Items
 app.get('/itemPosted', itemPost.list);
