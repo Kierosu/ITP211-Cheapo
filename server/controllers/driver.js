@@ -30,6 +30,7 @@ exports.show = function (req, res){
                 objectName["UserId"] = finalProductsLoop.userID;
                 objectName["Name"] = [];
                 objectName["Product"] = [];
+                objectName["Image"] = [];
                 objectName["IndiPrice"] = [];
                 objectName["Price"] = 0;
                 differentAcc.push(objectName);
@@ -48,6 +49,7 @@ exports.show = function (req, res){
                     objectName["UserId"] = finalProductsLoop.userID;
                     objectName["Name"] = [];
                     objectName["Product"] = [];
+                    objectName["Image"] = [];
                     objectName["IndiPrice"] = [];
                     objectName["Price"] = 0;
                     differentAcc.push(objectName);
@@ -89,6 +91,17 @@ exports.show = function (req, res){
         }
     });
 
+    finalProducts.forEach(function(img){
+        //loop to add products
+        for (var imglooparray in differentAcc){
+            if (img.userID == differentAcc[imglooparray]["UserId"]){
+                var objectArray = differentAcc[imglooparray]["Image"]
+                objectArray.push(img.finalProductImage);
+                break;
+            }
+        }
+    });
+
     finalProducts.forEach(function(indi){
         //loop to add indiprice
         for (var indilooparray in differentAcc){
@@ -105,6 +118,7 @@ exports.show = function (req, res){
         console.log("money: " + test.Price);
         console.log("Name: " + test.Name);
         console.log("Indi Product Price: " + test.IndiPrice);
+        console.log("Images: " + test.Image)
         console.log("Product: " + test.Product);
     })
     var id = req.params.userID;
@@ -152,6 +166,7 @@ exports.com = function (req, res){
                 objectName["UserId"] = driverTableLoop.userID;
                 objectName["Name"] = [];
                 objectName["Product"] = [];
+                objectName["Image"] = [];
                 objectName["IndiPrice"] = [];
                 objectName["Price"] = 0;
                 differentAcc.push(objectName);
@@ -170,6 +185,7 @@ exports.com = function (req, res){
                     objectName["UserId"] = driverTableLoop.userID;
                     objectName["Name"] = [];
                     objectName["Product"] = [];
+                    objectName["Image"] = [];
                     objectName["IndiPrice"] = [];
                     objectName["Price"] = 0;
                     differentAcc.push(objectName);
@@ -206,6 +222,17 @@ exports.com = function (req, res){
             if (prod.userID == differentAcc[prodlooparray]["UserId"]){
                 var objectArray = differentAcc[prodlooparray]["Product"]
                 objectArray.push(prod.comItemName);
+                break;
+            }
+        }
+    });
+
+    driverTable.forEach(function(img){
+        //loop to add products
+        for (var imglooparray in differentAcc){
+            if (img.userID == differentAcc[imglooparray]["UserId"]){
+                var objectArray = differentAcc[imglooparray]["Image"]
+                objectArray.push(img.comItemImage);
                 break;
             }
         }
