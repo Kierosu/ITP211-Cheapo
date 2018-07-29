@@ -166,6 +166,7 @@ exports.com = function (req, res){
                 objectName["UserId"] = driverTableLoop.userID;
                 objectName["Name"] = [];
                 objectName["Product"] = [];
+                objectName["Image"] = [];
                 objectName["IndiPrice"] = [];
                 objectName["Price"] = 0;
                 differentAcc.push(objectName);
@@ -184,6 +185,7 @@ exports.com = function (req, res){
                     objectName["UserId"] = driverTableLoop.userID;
                     objectName["Name"] = [];
                     objectName["Product"] = [];
+                    objectName["Image"] = [];
                     objectName["IndiPrice"] = [];
                     objectName["Price"] = 0;
                     differentAcc.push(objectName);
@@ -220,6 +222,17 @@ exports.com = function (req, res){
             if (prod.userID == differentAcc[prodlooparray]["UserId"]){
                 var objectArray = differentAcc[prodlooparray]["Product"]
                 objectArray.push(prod.comItemName);
+                break;
+            }
+        }
+    });
+
+    driverTable.forEach(function(img){
+        //loop to add products
+        for (var imglooparray in differentAcc){
+            if (img.userID == differentAcc[imglooparray]["UserId"]){
+                var objectArray = differentAcc[imglooparray]["Image"]
+                objectArray.push(img.comItemImage);
                 break;
             }
         }
