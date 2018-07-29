@@ -2018,7 +2018,7 @@ a.remove:hover {
 }
 .promoCode .btn {
   font-size: 0.85em;
-  paddding: 0.5em 2em;
+  padding: 0.5em 2em;
 }
 /* TOTAL AND CHECKOUT  */
 .subtotal {
@@ -2736,7 +2736,6 @@ a.add {
 a.add:hover {
   background: green;
 }
-<<<<<<< HEAD
 .tooltip {
   position: relative;
   display: inline-block;
@@ -2774,5 +2773,3 @@ a.add:hover {
   visibility: visible;
   opacity: 1;
   }
-=======
->>>>>>> 86eba6928340edf2fa022c939410db296d3dd966
