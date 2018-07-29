@@ -212,4 +212,30 @@ app.post('/feedback', auth.isLoggedIn, orderTracking.feedback)
 
 app.get('/', auth.index);
 
+// Teh Yang's code
+
+// Import Item Posting controller
+var sellDetails = require('./server/controllers/sellDetails');
+var notificate = require('./server/controllers/notificate');
+var itemPost = require('./server/controllers/itemPost');
+var index = require('./server/controllers/index');
+
+// Creating Items
+app.get('/sellDetails', auth.isLoggedIn, sellDetails.list);
+app.post('/posting', upload.single('image'), itemPost.create);
+app.get('/notificate', auth.isLoggedIn, notificate.list);
+
+// Show Created Items
+app.get('/itemPosted', itemPost.list);
+app.get('/itemProduct/:imageId', auth.isLoggedIn, itemPost.showitem);
+
+// Item Edit and Delete
+app.get('/editProduct/:id', auth.isLoggedIn, itemPost.editProduct);
+app.post('/edit/:id', auth.isLoggedIn, itemPost.update);
+
+// Test Specified User Items
+app.get('/userItems', auth.isLoggedIn, itemPost.show);
+
+app.delete('/itemPosted/:item_id', itemPost.delete);
+
 server.listen(3000);

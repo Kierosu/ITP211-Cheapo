@@ -142,6 +142,52 @@
                     });
                 });
 
+<<<<<<< HEAD
+        $('#saveChanges').click((e)=>{
+            e.preventDefault();
+            var newData = {};
+            var imgsrc, imagename;
+            if (uploaded == 0){
+                newData = {
+                    email: $("#email").val(),
+                    profilePic: originalimgname
+                }
+            }
+            else{
+                var imgsrc = $("#uploadImg").val();
+                var imagename = imgsrc.slice(imgsrc.lastIndexOf("\\")+1, imgsrc.length);
+                newData = {
+                    email: $("#email").val(),
+                    profilePic: imagename
+                }
+            }
+            $.ajax({
+                url: "/updateProfile",
+                type: "post",
+                data: JSON.stringify(newData),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(msg){
+                    $("#messageModal").modal("show");
+                    $("#msg").html(msg.message);
+                    $("#closeModal").click(()=>{
+                        location.href="/profile/<%= locals.loginuser.username %>"              
+                    });
+                },
+                error: function(result){
+                    $("#messageModal").modal("show");
+                    $("#msg").html(result.responseText);
+                    $("#closeModal").click(()=>{
+                        location.href="/profile/<%= locals.loginuser.username %>"
+                    });
+                }
+            })  
+            
+        })
+        $('#cancel').click(()=>{
+            location.href = "/profile/<%= locals.loginuser.username %>";
+        })
+=======
                 $('#saveChanges').click((e) => {
                     e.preventDefault();
                     var newData = {};
@@ -186,6 +232,7 @@
                 $('#cancel').click(() => {
                     location.href = "/profile/<%= locals.loginuser.username %>";
                 })
+>>>>>>> 86eba6928340edf2fa022c939410db296d3dd966
 
             </script>
 </body>
