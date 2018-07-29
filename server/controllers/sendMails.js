@@ -1,4 +1,7 @@
+var Product = require('../models/products');
 var Auction = require('../models/auction');
+var myDatabase = require('./database');
+var sequelize = myDatabase.sequelize;
 var Item = require('../models/item');
 var Mail = require('../models/mail');
 var User = require('../models/user');
