@@ -11,6 +11,7 @@ const QRCode = require('qrcode');
 var Item = require('../models/item');
 var Auction = require('../models/auction');
 var sequelize = myDatabase.sequelize;
+var { raysonCart } = require('./otherFunc');
 
 // set images file types
 var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
@@ -37,16 +38,23 @@ exports.signin = function (req, res) {
 // Profile 
 exports.profilepage = function (req, res) {
     var username = req.params.username;
-    UserModel.findOne({ where: { username: username } }).then(function (userprofile) {
-        res.render('Profile', {
-            user: userprofile
-        });
-    }).catch((err) => {
-        return res.status(400).send({
-            message: err
+    raysonCart(req.user).then((obj) => {
+        UserModel.findOne({ where: { username: username } }).then(function (userprofile) {
+            res.render('Profile', {
+                user: userprofile,
+                products: obj.products,
+                total: obj.total,
+                shippingFee: obj.shippingFee,
+                subtotal: obj.subtotal,
+                realQuantity: obj.realQuantity,
+                urlPath: req.protocol + "://" + req.get('host') + req.url
+            });
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
         });
     });
-
 };
 // Logout 
 exports.logout = function (req, res) {
@@ -79,17 +87,25 @@ exports.loginCheck = function (req, res, next) {
 // Edit profile page
 exports.editProfile = (req, res) => {
     var id = req.params.userID;
-    UserModel.findById(id).then(function () {
-        res.render('EditProfile', {
-            title: 'Cheapo - Edit Profile',
-            email: req.user.email,
-            avatarTemp: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
-            avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
-            hostPath: req.protocol + "://" + req.get("host"),
-        });
-    }).catch((err) => {
-        return res.status(400).send({
-            message: err
+    raysonCart(req.user).then((obj) => {
+        UserModel.findById(id).then(function () {
+            res.render('EditProfile', {
+                title: 'Cheapo - Edit Profile',
+                email: req.user.email,
+                avatarTemp: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
+                avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
+                hostPath: req.protocol + "://" + req.get("host"),
+                products: obj.products,
+                total: obj.total,
+                shippingFee: obj.shippingFee,
+                subtotal: obj.subtotal,
+                realQuantity: obj.realQuantity,
+                urlPath: req.protocol + "://" + req.get('host') + req.url
+            });
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
         });
     });
 }
@@ -268,9 +284,17 @@ exports.setSendPass = (req, res) => {
 
 //Change password
 exports.changePass = (req, res) => {
-    res.render('ChangePass', {
-        title: "Change Password"
-    })
+    raysonCart(req.user).then((obj) => {
+        res.render('ChangePass', {
+            title: "Change Password",
+            products: obj.products,
+            total: obj.total,
+            shippingFee: obj.shippingFee,
+            subtotal: obj.subtotal,
+            realQuantity: obj.realQuantity,
+            urlPath: req.protocol + "://" + req.get('host') + req.url
+        });
+    });
 }
 
 //Save changed password
@@ -307,11 +331,19 @@ exports.TwoFactorAuth = (req, res) => {
     urlpath = "otpauth://totp/" + req.user.username + "?secret=" + temp_secret + "&issuer=Cheapo%20Eshop";
     QRCode.toDataURL(urlpath, function (err, data_url) {
         // Display this data URL to the user in an <img> tag
-        res.render('2FA', {
-            title: "Two-Factor Authentication",
-            qrcode: data_url,
-            secretkey: "Something idk",
-            Select2FA: req.user.TwoFA
+        raysonCart(req.user).then((obj) => {
+            res.render('2FA', {
+                title: "Two-Factor Authentication",
+                qrcode: data_url,
+                secretkey: "Something idk",
+                Select2FA: req.user.TwoFA,
+                products: obj.products,
+                total: obj.total,
+                shippingFee: obj.shippingFee,
+                subtotal: obj.subtotal,
+                realQuantity: obj.realQuantity,
+                urlPath: req.protocol + "://" + req.get('host') + req.url
+            })
         })
     });
 }
@@ -387,48 +419,30 @@ exports.verifyOTP = function (req, res) {
 exports.checkTFA = (req, res) => {
     res.status(200).send({ message: req.user.TwoFA });
 }
+
 //Index page
 exports.index = (req, res) => {
     if (req.user) {
         Item.findAll({}).then((item) => {
             sequelize.query("select * from(select top 7 * from Items where status = 'Active' order by itemID desc) s order by itemID asc", { model: Item }).then((selectedItems) => {
-                sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
-                //Calculating product total value
-                var totalPrice = 0;
-                var shippingFee = 0;
-                var stripeTotal = 0;
-                var realQuantity = 0;
-
-                products.forEach(function (rayson) {
-                    totalPrice += rayson.ProductPrice;
-                    realQuantity += 1;
-                });
-                if (totalPrice > 50) {
-                    subtotal = totalPrice;
-                    stripeTotal = totalPrice;
-                } else {
-                    subtotal = totalPrice;
-                    totalPrice += 5.00;
-                    shippingFee = 5.00;
-                    stripeTotal = totalPrice;
-                }
-                Auction.findAll({}).then((auction) => {
-                    res.render('index', {
-                        item: item,
-                        selectedItems: selectedItems,
-                        auction: auction,
-                        products: products,
-                        total: totalPrice,
-                        shippingFee: shippingFee,
-                        subtotal: subtotal,
-                        realQuantity: realQuantity,
-                        email: req.user.email,
-                        msg: req.flash('message'),
-                        urlPath: req.protocol + "://" + req.get('host') + req.url
-                    });
+                raysonCart(req.user).then((obj) => {
+                    Auction.findAll({}).then((auction) => {
+                        res.render('index', {
+                            item: item,
+                            selectedItems: selectedItems,
+                            auction: auction,
+                            products: obj.products,
+                            total: obj.total,
+                            shippingFee: obj.shippingFee,
+                            subtotal: obj.subtotal,
+                            realQuantity: obj.realQuantity,
+                            email: req.user.email,
+                            msg: req.flash('message'),
+                            urlPath: req.protocol + "://" + req.get('host') + req.url
+                        });
+                    })
                 })
             })
-        })
         })
     } else {
         Item.findAll({}).then((item) => {
