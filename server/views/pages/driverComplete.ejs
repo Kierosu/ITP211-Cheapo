@@ -26,7 +26,8 @@
 	<link rel="stylesheet" href="css/font-awesome.min.css">
 
 	<!-- Custom stylesheet -->
-	<link type="text/css" rel="stylesheet" href="css/raysonStyle.css" />
+    <link type="text/css" rel="stylesheet" href="css/raysonStyle.css" />
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
  
 </head>
@@ -167,7 +168,17 @@ window.onclick = function(event) {
             <li role="presentation" class="active"><a href="#">Completed</a></li>
     </ul>
 	<div class="section">
-            <h2>Items To Delivered:</h2>
+            <!-- <div class="col-sm-3 col-md-3">
+                    <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                    </form>
+                </div> -->
+            <h2>Items Delivered:</h2>
             <p>Welcome Mr <%= username %>!</p>
             <% differentAcc.forEach(function(test){ %>
                 <div class="select" data-id="<%= test.UserId %>">
@@ -176,14 +187,16 @@ window.onclick = function(event) {
                 <hr>
                 <% for(var namesPrint = 0; namesPrint < (test.Name).length; namesPrint ++) { %>
                     <p style="color: orange">Item Id: <%= count %></p>
-                    <p><%= test.Name[namesPrint]%></p>
+                    <p><bold>Username: </bold><%= test.Name[namesPrint]%></p>
                     <hr>
                     <p><bold>Items Bought:</bold></p>
                     <div class="container" style="display: inline-block">
-                        <img src="<%= test.Image[namesPrint] %>" style="width: 20%; height: 20%; float: left" alt="">
-                        <p><%= test.Product[namesPrint] %></p>
-                    </div>
-                    <p>Price: $<%= test.IndiPrice[namesPrint] %></p>
+                            <img src="<%= test.Image[namesPrint] %>" style="width: 20%; height: 20%; float: left;" alt="">
+                            <div class="container" style="text-align: right;">
+                                <p><%= test.Product[namesPrint] %></p>
+                                <p>Price: $<%= test.IndiPrice[namesPrint] %></p>
+                            </div>
+                        </div>
                     <hr>
                     <% count = count + 1 %>
                 <% }; %>

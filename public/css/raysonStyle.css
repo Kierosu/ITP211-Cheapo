@@ -2018,7 +2018,7 @@ a.remove:hover {
 }
 .promoCode .btn {
   font-size: 0.85em;
-  padding: 0.5em 2em;
+  paddding: 0.5em 2em;
 }
 /* TOTAL AND CHECKOUT  */
 .subtotal {
@@ -2510,7 +2510,7 @@ p.error {
   z-index: -1;
   top: 5px;
   left: 22px;
-  width: 225px;
+  width: 2000%;
   height: 6px;
   content: '';
   background-color: #efefef;
@@ -2578,7 +2578,7 @@ p.error {
   z-index: -1;
   top: 5px;
   left: 22px;
-  width: 225px;
+  width: 2000%;
   height: 6px;
   content: '';
   background-color: #efefef;
@@ -2631,7 +2631,7 @@ p.error {
   z-index: -1;
   top: 5px;
   left: 22px;
-  width: 225px;
+  width: 2000%;
   height: 6px;
   content: '';
   background-color: #efefef;
@@ -2683,7 +2683,7 @@ p.error {
   z-index: -1;
   top: 5px;
   left: 22px;
-  width: 225px;
+  width: 2000%;
   height: 6px;
   content: '';
   background-color: #efefef;
