@@ -206,7 +206,6 @@ socket.on('receiveMoney', function(sellerMoney) {
                 dataType: "json",
                 contentType: "application/json",
                 success: function(result){
-					alert("Delivery Completed!");
 					console.log(result.message);
 					$(".feedback").addClass("hidden");
 					$("#backToShopping").removeClass("hidden");

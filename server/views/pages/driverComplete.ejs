@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title><%= title %></title>
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="css/slick.css" />
+	<link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
+
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
+
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+
+	<!-- Custom stylesheet -->
+    <link type="text/css" rel="stylesheet" href="css/raysonStyle.css" />
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+ 
+</head>
+
+<body>
+<style>
+.dropbtn {
+    background-color: #3498DB;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    width: 350px;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #2980B9;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    width: 350px;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown a:hover {background-color: #ddd;}
+
+.show {display: block;}
+</style>
+</style>
+<script>
+    /* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+function dropdrop() {
+    document.getElementById("myDropdown1").classList.toggle("show");
+}
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn1')) {
+
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+</script>
+<!-- HEADER -->
+<header >
+    <center>
+        <!-- top Header -->
+        <div id="top-header">
+            <div class="container">
+                <div class="pull-left">
+                    <span>Welcome to Cheapo!</span>
+                </div>
+                <div class="pull-right">
+                </div>
+            </div>
+        </div>
+        <!-- /top Header -->
+    <!-- section -->
+        <!-- header -->
+        <div id="header">
+                <div class="container">
+                    <div class="pull-left">
+                        <!-- Logo -->
+                        <div class="header-logo">
+                            <a class="logo" href="#">
+                                <img src="./img/logo.png" alt="">
+                            </a>
+                        </div>
+                        <!-- /Logo -->
+                    </div>
+                    <div class="pull-right">
+                        <ul class="header-btns">
+                            <li class="header-account dropdown default-dropdown">
+                            <!-- Account -->
+                            <% if(locals.loginuser) { %>
+                                <div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
+                                    <div class="header-btns-icon">
+                                        <img src="http://localhost:3000/img/<%= loginuser.profilePic %>" alt="Profile Picture" style="width:38.5px">
+                                    </div>
+                                    <strong class="text-uppercase"  style="top: 10.2px;position: relative;"><%= loginuser.username %> <i class="fa fa-caret-down"></i></strong>		
+                                </div>
+                                <ul class="custom-menu">
+                                    <li><a href="/profile/<%= loginuser.username %>"><i class="fa fa-user-o"></i> My Account</a></li>
+                                    <li><a href="#"><i class="fa fa-heart-o"></i> Orders</a></li>
+                                    <li><a href="/logout"><i class="fa fa-unlock-alt"></i> Logout</a></li>
+                                </ul>
+                                    
+                            <% } else { %>
+                            <div style="margin-top: 10.2px;">
+                            <a href="/login" class="text-uppercase"><strong>Login</strong></a> / <a href="/signup" class="text-uppercase"><strong>Join</strong></a>
+                            </div>
+                                
+                            <% } %>
+                            </li>
+                            <!-- /Account -->
+                            <!-- Mobile nav toggle-->
+                            <li class="nav-toggle">
+                                <button class="nav-toggle-btn main-btn icon-btn"><i class="fa fa-bars"></i></button>
+                            </li>
+                            <!-- / Mobile nav toggle -->
+                        </ul>
+                    </div>
+                </div>
+                <!-- header -->
+            </div>
+        </center>
+	<center>
+    <ul class="nav nav-tabs">
+            <li role="presentation" class="disables"><a href="#">Home</a></li>
+            <li role="presentation"><a href="http://localhost:3000/driver-incomplete">Incomplete</a></li>
+            <li role="presentation" class="active"><a href="#">Completed</a></li>
+    </ul>
+	<div class="section">
+            <!-- <div class="col-sm-3 col-md-3">
+                    <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                    </form>
+                </div> -->
+            <h2>Items Delivered:</h2>
+            <p>Welcome Mr <%= username %>!</p>
+            <% differentAcc.forEach(function(test){ %>
+                <div class="select" data-id="<%= test.UserId %>">
+                <% var count = 1 %>
+                <p class="dropbtn">User ID: <%= test.UserId %></p>
+                <hr>
+                <% for(var namesPrint = 0; namesPrint < (test.Name).length; namesPrint ++) { %>
+                    <p style="color: orange">Item Id: <%= count %></p>
+                    <p><bold>Username: </bold><%= test.Name[namesPrint]%></p>
+                    <hr>
+                    <p><bold>Items Bought:</bold></p>
+                    <div class="container" style="display: inline-block">
+                            <img src="<%= test.Image[namesPrint] %>" style="width: 20%; height: 20%; float: left;" alt="">
+                            <div class="container" style="text-align: right;">
+                                <p><%= test.Product[namesPrint] %></p>
+                                <p>Price: $<%= test.IndiPrice[namesPrint] %></p>
+                            </div>
+                        </div>
+                    <hr>
+                    <% count = count + 1 %>
+                <% }; %>
+                    <button class="dropbtn" data-id="<%= test.UserId %>" style="background-color: green">Amount paid by customer: $<%= test.Price %></button>
+                <br><br><br>
+            </div>
+            <% }); %>
+	</div>
+</center>
+    <!-- /section -->
+	<!-- jQuery Plugins -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/slick.min.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/jquery.zoom.min.js"></script>
+<script src="js/main.js"></script>
+
+<% include ../partials/footer %>
+<script>
+(function (global) {
+
+if(typeof (global) === "undefined")
+{
+	throw new Error("window is undefined");
+}
+
+var _hash = "!";
+var noBackPlease = function () {
+	global.location.href += "#";
+
+	// making sure we have the fruit available for juice....
+	// 50 milliseconds for just once do not cost much (^__^)
+	global.setTimeout(function () {
+		global.location.href += "!";
+	}, 50);
+};
+
+// Earlier we had setInerval here....
+global.onhashchange = function () {
+	if (global.location.hash !== _hash) {
+		global.location.hash = _hash;
+	}
+};
+
+global.onload = function () {
+	
+	noBackPlease();
+
+	// disables backspace on page except on input fields and textarea..
+	document.body.onkeydown = function (e) {
+		var elm = e.target.nodeName.toLowerCase();
+		if (e.which === 8 && (elm !== 'input' && elm  !== 'textarea')) {
+			e.preventDefault();
+		}
+		// stopping event bubbling up the DOM tree..
+		e.stopPropagation();
+	};
+	
+};
+
+})(window);
+</script>
+</body>
+
+</html>

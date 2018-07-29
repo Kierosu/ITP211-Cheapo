@@ -33,7 +33,7 @@
                         <!-- Account -->
                         <% if(locals.loginuser) { %>
                             <div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
-                                <div class="header-btns-icon">
+                                <div class="header-btns-icon" style="overflow: hidden;">
                                     <img src="http://localhost:3000/img/<%= loginuser.profilePic %>" alt="Profile Picture" style="width:38.5px">
                                 </div>
                                 <strong class="text-uppercase"  style="top: 10.2px;position: relative;"><%= loginuser.username %> <i class="fa fa-caret-down"></i></strong>		

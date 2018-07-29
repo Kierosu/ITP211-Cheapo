@@ -174,7 +174,7 @@ var orderTracking = require('./server/controllers/orderTracking');
 var pending = require('./server/controllers/pending');
 
 // Shopping Cart
-app.get('/shopping-cart', products.list);
+app.get('/shopping-cart', auth.isLoggedIn, products.list);
 app.delete('/shopping-cart/:ProductID', products.delete);
 
 // Checkout 
@@ -197,7 +197,9 @@ app.post("/add", auth.isLoggedIn, itemDes.add);
 app.get('/done', auth.isLoggedIn, done.show);
 
 //Driver 
-app.get('/driver', driver.show);
+app.get('/driver-incomplete', driver.show);
+app.get('/driver-complete', driver.com)
+app.post('/remove', driver.remove);
 
 //Wish List
 app.get('/wishlist', auth.isLoggedIn, wishList.show)
@@ -209,5 +211,29 @@ app.get('/order-tracking', auth.isLoggedIn, orderTracking.show)
 app.post('/feedback', auth.isLoggedIn, orderTracking.feedback)
 
 app.get('/', auth.index);
+
+// Teh Yang's code
+
+// Import Item Posting controller
+var itemPost = require('./server/controllers/itemPost');
+var index = require('./server/controllers/index');
+
+// Creating Items
+app.get('/sellDetails', auth.isLoggedIn, itemPost.postItem);
+app.post('/posting', upload.single('image'), itemPost.create);
+app.get('/notificate', auth.isLoggedIn, itemPost.notificate);
+
+// Show Created Items
+app.get('/itemPosted', itemPost.list);
+app.get('/itemProduct/:imageId', auth.isLoggedIn, itemPost.showitem);
+
+// Item Edit and Delete
+app.get('/editProduct/:id', auth.isLoggedIn, itemPost.editProduct);
+app.post('/edit/:id', auth.isLoggedIn, itemPost.update);
+
+// Test Specified User Items
+app.get('/userItems', auth.isLoggedIn, itemPost.show);
+
+app.delete('/itemPosted/:item_id', itemPost.delete);
 
 server.listen(3000);

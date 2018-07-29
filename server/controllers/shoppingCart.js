@@ -13,7 +13,7 @@ var cc = require('coupon-code');
 
 var checkCoupons = 0
 
-
+var numberOfVisits = [];
 
 //set iage file types 
 var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png']
@@ -30,21 +30,24 @@ exports.list = function (req, res) {
         }
         var random = rn(options) // example outputs → -187, 636
         console.log(random)
-        if (random == 7) {
+        if (random == 7 && numberOfVisits.length <= 0) {
             console.log("Congrates you got a coupon!");
             // generate a 3 part code
             var announce = "Congratulations! You got a Promo Code!"
             var coupons = cc.generate();
         }
-        else if (random != 7) {
+        else if (random != 7 && numberOfVisits.length <= 0) {
             console.log("Oops Better luck next time!");
             var coupons = "Oops no coupons for you today!"
             var announce = "Oops better luck next time!"
 
         }
-        else {
-
+        else if (numberOfVisits.length > 0) {
+            console.log("You cannot receive anymore coupons!");
+            var coupons = "You cannot receive anymore coupons!"
+            var announce = "You cannot receive anymore coupons!"
         }
+
         //Calculating product total value
         var totalPrice = 0;
         var shippingFee = 0;
@@ -93,6 +96,7 @@ exports.list = function (req, res) {
                 message: err
             });
         });
+        numberOfVisits.push("test");
     });
 };
 

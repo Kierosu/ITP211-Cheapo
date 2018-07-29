@@ -26,7 +26,8 @@
 	<link rel="stylesheet" href="css/font-awesome.min.css">
 
 	<!-- Custom stylesheet -->
-	<link type="text/css" rel="stylesheet" href="css/raysonStyle.css" />
+    <link type="text/css" rel="stylesheet" href="css/raysonStyle.css" />
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
  
 </head>
@@ -99,32 +100,14 @@ window.onclick = function(event) {
 </script>
 <!-- HEADER -->
 <header >
+    <center>
         <!-- top Header -->
         <div id="top-header">
             <div class="container">
                 <div class="pull-left">
-                    <span>Welcome to E-shop!</span>
+                    <span>Welcome to Cheapo!</span>
                 </div>
                 <div class="pull-right">
-                    <ul class="header-top-links">
-                        <li><a href="#">Items To Deliver</a></li>
-                        <li class="dropdown default-dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">ENG <i class="fa fa-caret-down"></i></a>
-                            <ul class="custom-menu">
-                                <li><a href="#">English </a></li>
-                                <li><a href="#">Malay </a></li>
-                                <li><a href="#">Chinese </a></li>
-                                <li><a href="#">Indian </a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown default-dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Feedback <i class="fa fa-caret-down"></i></a>
-                            <ul class="custom-menu">
-                                <li><a href="#">Send a message</a></li>
-                                <li><a href="#">Report </a></li>
-                            </ul>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -176,51 +159,94 @@ window.onclick = function(event) {
                     </div>
                 </div>
                 <!-- header -->
-            </div> 
+            </div>
+        </center>
 	<center>
+    <ul class="nav nav-tabs">
+            <li role="presentation" class="disables"><a href="#">Home</a></li>
+            <li role="presentation" class="active"><a href="#">Incomplete</a></li>
+            <li role="presentation"><a href="http://localhost:3000/driver-complete">Completed</a></li>
+    </ul>
 	<div class="section">
+            <!-- <div class="col-sm-3 col-md-3">
+                    <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input id="input" type="text" class="form-control" placeholder="Search" name="q" onkeyup="search()">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                    </form>
+                </div> -->
             <h2>Items To Deliver:</h2>
-            <p>Click on the button to open the dropdown menu.</p>
-            <% finalProducts.forEach(function(finalProducts){ %>
-                <select class="dropbtn">
-                    <option class="dropdown-content"><%= finalProducts.dataValues.userName %></option>
-                    <option class="dropdown-content"><%= finalProducts.finalProductName %></option>
-                </select>
+            <p>Welcome Mr <%= username %>!</p>
+            <% differentAcc.forEach(function(test){ %>
+                <div class="select" data-id="<%= test.UserId %>">
+                <% var count = 1 %>
+                <p class="dropbtn">User ID: <%= test.UserId %></p>
+                <hr>
+                <% for(var namesPrint = 0; namesPrint < (test.Name).length; namesPrint ++) { %>
+                    <p style="color: orange">Item Id: <%= count %></p>
+                    <p><bold>Username: </bold><%= test.Name[namesPrint]%></p>
+                    <hr>
+                    <p><bold>Items Bought:</bold></p>
+                    <div class="container" style="display: inline-block">
+                        <img src="<%= test.Image[namesPrint] %>" style="width: 20%; height: 20%; float: left;" alt="">
+                        <div class="container" style="text-align: right;">
+                            <p><%= test.Product[namesPrint] %></p>
+                            <p>Price: $<%= test.IndiPrice[namesPrint] %></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <% count = count + 1 %>
+                <% }; %>
+                    <button class="dropbtn" data-id="<%= test.UserId %>" style="background-color: green">Amount to pay: $<%= test.Price %></button>
                 <br><br><br>
+            </div>
             <% }); %>
 	</div>
 </center>
-	<!-- /section -->
-<!-- <script>
-/* When the user clicks on the button, 
-toggle between hiding and showing the dropdown content */
-function myFunction() {
-    document.getElementById("myDropdown").classList.toggle("show");
-}
-
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-    if (!event.target.matches('.dropbtn')) {
-
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-        var openDropdown = dropdowns[i];
-        if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-        }
-    }
-    }
-}
-</script> -->
-
+    <!-- /section -->
 	<!-- jQuery Plugins -->
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/slick.min.js"></script>
-	<script src="js/nouislider.min.js"></script>
-	<script src="js/jquery.zoom.min.js"></script>
-	<script src="js/main.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/slick.min.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/jquery.zoom.min.js"></script>
+<script src="js/main.js"></script>
+<script>
+           $('.dropbtn').click(function () {
+            var url = "<%=hostPath%>/remove"; //Edit when database is implemented\
+            var userID = $(this).data("id");
+            console.log("id is: " + userID);
+            var products = {
+                UserId: userID,
+            }
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: JSON.stringify(products),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(result){
+                    alert("Deleted From Database!");
+                    console.log(result.message);
+                    var itemToRemove = '.select[data-id=' + userID + ']';
+                    console.log("id: " + itemToRemove)
+                    $(itemToRemove).remove()
+                },
+                error: function(result){
+                    alert("Error!")
+                }
+            })
+        });
+        
+        // function search() {
+        //     var userID = $(this).data("id");
+        //     var sear = userID.search($("#input"));
+        //     console.log("search bar: " + sear)
+        // }
+</script>
 
 <% include ../partials/footer %>
 <script>

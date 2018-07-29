@@ -97,8 +97,6 @@ exports.feedback = function (req,res){
             sequelize.query("update Users set valueRecieved = " + sellerDollars + " where username = '" + seller + "';");
             console.log("Money Sent!")
 		}
-        console.log('Deleting Final Products Table')
-        sequelize.query("delete from finalProducts where UserId = " + req.user.userID);
         });
         
         res.status(200).send({ message: "Successfully released money of " + realTotalPrice + " to seller!"})
