@@ -178,12 +178,14 @@ window.onclick = function(event) {
                     <p style="color: orange">Item Id: <%= count %></p>
                     <p><%= test.Name[namesPrint]%></p>
                     <hr>
-                    <p><bold>Items Bought:</bold></p>
                     <div class="container" style="display: inline-block">
-                        <img src="<%= test.Image[namesPrint] %>" style="width: 20%; height: 20%; float: left" alt="">
-                        <p><%= test.Product[namesPrint] %></p>
+                        <img src="<%= test.Image[namesPrint] %>" style="width: 20%; height: 20%; float: left;" alt="">
+                        <div class="container" style="text-align: right;">
+                            <p><bold>Items Bought:</bold></p>
+                            <p><%= test.Product[namesPrint] %></p>
+                            <p>Price: $<%= test.IndiPrice[namesPrint] %></p>
+                        </div>
                     </div>
-                    <p>Price: $<%= test.IndiPrice[namesPrint] %></p>
                     <hr>
                     <% count = count + 1 %>
                 <% }; %>
