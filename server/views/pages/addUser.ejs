@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        Cheapo
+    </title>
+    <!-- css -->
+    <% include ../partials/stylesheet %>
+</head>
+
+<body>
+    <!-- header -->
+    <% include ../partials/header %>
+        <div class="container">
+            <div class="card card-body">
+                <h3 style="text-align: center">
+                    Add User
+                </h3>
+                <form action="/items/addUser" method="post" autocomplete="off">
+                    <div class="form-group">
+                        <label for="title">Username</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Password</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Confirm Password</label>
+                        <input type="password" name="cfmPassword" class="form-control" required>
+                    </div>
+                    <div style="height: 80px;width: 100%;">
+                        <a href="/items" class="btn btn-primary btn-lg" style="float: left;">Back</a>
+                        <button type="submit" class="btn btn-primary btn-lg" style="float: right;">Submit</button>
+                    </div>                    
+                </form>
+            </div>
+        </div>
+    <% include ../partials/footer %>
+    <!-- jQuery Plugins -->
+    <% include ../partials/javascript %>
+</body>
+
+</html>
