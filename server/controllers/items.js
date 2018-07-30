@@ -1,5 +1,6 @@
 var Review = require('../models/itemReview');
 var { auctionEXP } = require('./sendMails');
+var { raysonCart } = require('./otherFunc');
 var Product = require('../models/products');
 var Auction = require('../models/auction');
 var Report = require('../models/report');
@@ -21,36 +22,17 @@ router.get('/', auth.isLoggedIn, auctionEXP, (req, res) => {
             Report.findAll({}).then((report) => {
                 User.findAll({ where: { userType: 'Member' } }).then((user) => {
                     Auction.findAll({}).then((auction) => {
-                        sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
-                            //Calculating product total value
-                            var totalPrice = 0;
-                            var shippingFee = 0;
-                            var stripeTotal = 0;
-                            var realQuantity = 0;
-
-                            products.forEach(function (rayson) {
-                                totalPrice += rayson.ProductPrice;
-                                realQuantity += 1;
-                            });
-                            if (totalPrice > 50) {
-                                subtotal = totalPrice;
-                                stripeTotal = totalPrice;
-                            } else {
-                                subtotal = totalPrice;
-                                totalPrice += 5.00;
-                                shippingFee = 5.00;
-                                stripeTotal = totalPrice;
-                            }
+                        raysonCart(req.user).then((obj) => {
                             res.render('mainItem', {
                                 item: item,
                                 report: report,
                                 users: user,
                                 auction: auction,
-                                products: products,
-                                total: totalPrice,
-                                shippingFee: shippingFee,
-                                subtotal: subtotal,
-                                realQuantity: realQuantity,
+                                products: obj.products,
+                                total: obj.totalPrice,
+                                shippingFee: obj.shippingFee,
+                                subtotal: obj.subtotal,
+                                realQuantity: obj.realQuantity,
                                 msg: req.flash('message')
                             })
                         })
@@ -61,34 +43,15 @@ router.get('/', auth.isLoggedIn, auctionEXP, (req, res) => {
     } else {
         sequelize.query('select * from Items where userID = ' + req.user.userID, { model: Item }).then((item) => {
             Auction.findAll({}).then((auction) => {
-                sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
-                    //Calculating product total value
-                    var totalPrice = 0;
-                    var shippingFee = 0;
-                    var stripeTotal = 0;
-                    var realQuantity = 0;
-
-                    products.forEach(function (rayson) {
-                        totalPrice += rayson.ProductPrice;
-                        realQuantity += 1;
-                    });
-                    if (totalPrice > 50) {
-                        subtotal = totalPrice;
-                        stripeTotal = totalPrice;
-                    } else {
-                        subtotal = totalPrice;
-                        totalPrice += 5.00;
-                        shippingFee = 5.00;
-                        stripeTotal = totalPrice;
-                    }
+                raysonCart(req.user).then((obj) => {
                     res.render('mainItem', {
                         item: item,
                         auction: auction,
-                        products: products,
-                        total: totalPrice,
-                        shippingFee: shippingFee,
-                        subtotal: subtotal,
-                        realQuantity: realQuantity,
+                        products: obj.products,
+                        total: obj.totalPrice,
+                        shippingFee: obj.shippingFee,
+                        subtotal: obj.subtotal,
+                        realQuantity: obj.realQuantity,
                         msg: req.flash('message')
                     })
                 })
@@ -103,32 +66,13 @@ router.get('/', auth.isLoggedIn, auctionEXP, (req, res) => {
 
 // Add item page
 router.get('/add', auth.isLoggedIn, (req, res) => {
-    sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
-        //Calculating product total value
-        var totalPrice = 0;
-        var shippingFee = 0;
-        var stripeTotal = 0;
-        var realQuantity = 0;
-
-        products.forEach(function (rayson) {
-            totalPrice += rayson.ProductPrice;
-            realQuantity += 1;
-        });
-        if (totalPrice > 50) {
-            subtotal = totalPrice;
-            stripeTotal = totalPrice;
-        } else {
-            subtotal = totalPrice;
-            totalPrice += 5.00;
-            shippingFee = 5.00;
-            stripeTotal = totalPrice;
-        }
+    raysonCart(req.user).then((obj) => {
         res.render('itemsell', {
-            products: products,
-            total: totalPrice,
-            shippingFee: shippingFee,
-            subtotal: subtotal,
-            realQuantity: realQuantity,
+            products: obj.products,
+            total: obj.totalPrice,
+            shippingFee: obj.shippingFee,
+            subtotal: obj.subtotal,
+            realQuantity: obj.realQuantity
         })
     })
 })
@@ -197,33 +141,14 @@ router.post('/add', auth.isLoggedIn, (req, res) => {
 // Edit item page
 router.get('/edit/:id', auth.isLoggedIn, (req, res) => {
     Item.findOne({ where: { itemID: req.params.id } }).then((item => {
-        sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
-            //Calculating product total value
-            var totalPrice = 0;
-            var shippingFee = 0;
-            var stripeTotal = 0;
-            var realQuantity = 0;
-
-            products.forEach(function (rayson) {
-                totalPrice += rayson.ProductPrice;
-                realQuantity += 1;
-            });
-            if (totalPrice > 50) {
-                subtotal = totalPrice;
-                stripeTotal = totalPrice;
-            } else {
-                subtotal = totalPrice;
-                totalPrice += 5.00;
-                shippingFee = 5.00;
-                stripeTotal = totalPrice;
-            }
+        raysonCart(req.user).then((obj) => {
             res.render('itemEdit', {
                 item: item,
-                products: products,
-                total: totalPrice,
-                shippingFee: shippingFee,
-                subtotal: subtotal,
-                realQuantity: realQuantity,
+                products: obj.products,
+                total: obj.total,
+                shippingFee: obj.shippingFee,
+                subtotal: obj.subtotal,
+                realQuantity: obj.realQuantity
             })
         })
     }))
@@ -278,34 +203,15 @@ router.get('/list/:id', (req, res) => {
             Item.findOne({ where: { itemID: req.params.id } }).then((item) => {
                 if (item) {
                     Review.findAll({ where: { itemID: req.params.id } }).then((review => {
-                        sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
-                            //Calculating product total value
-                            var totalPrice = 0;
-                            var shippingFee = 0;
-                            var stripeTotal = 0;
-                            var realQuantity = 0;
-
-                            products.forEach(function (rayson) {
-                                totalPrice += rayson.ProductPrice;
-                                realQuantity += 1;
-                            });
-                            if (totalPrice > 50) {
-                                subtotal = totalPrice;
-                                stripeTotal = totalPrice;
-                            } else {
-                                subtotal = totalPrice;
-                                totalPrice += 5.00;
-                                shippingFee = 5.00;
-                                stripeTotal = totalPrice;
-                            }
+                        raysonCart(req.user).then((obj) => {
                             res.render('productpage', {
                                 item: item,
                                 review: review,
-                                products: products,
-                                total: totalPrice,
-                                shippingFee: shippingFee,
-                                subtotal: subtotal,
-                                realQuantity: realQuantity,
+                                products: obj.products,
+                                total: obj.total,
+                                shippingFee: obj.shippingFee,
+                                subtotal: obj.subtotal,
+                                realQuantity: obj.realQuantity
                             })
                         })
                     }))
@@ -319,9 +225,16 @@ router.get('/list/:id', (req, res) => {
             Item.findOne({ where: { itemID: req.params.id } }).then((item) => {
                 if (item) {
                     Review.findAll({ where: { itemID: req.params.id } }).then((review => {
-                        res.render('productpage', {
-                            item: item,
-                            review: review
+                        raysonCart(req.user).then((obj) => {
+                            res.render('productpage', {
+                                item: item,
+                                review: review,
+                                products: obj.products,
+                                total: obj.total,
+                                shippingFee: obj.shippingFee,
+                                subtotal: obj.subtotal,
+                                realQuantity: obj.realQuantity
+                            })
                         })
                     }))
                 }
@@ -338,33 +251,14 @@ router.get('/list/:id', (req, res) => {
 router.get('/auction/:id', (req, res) => {
     if (req.user) {
         Item.findOne({ where: { itemID: req.params.id } }).then((item => {
-            sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
-                //Calculating product total value
-                var totalPrice = 0;
-                var shippingFee = 0;
-                var stripeTotal = 0;
-                var realQuantity = 0;
-
-                products.forEach(function (rayson) {
-                    totalPrice += rayson.ProductPrice;
-                    realQuantity += 1;
-                });
-                if (totalPrice > 50) {
-                    subtotal = totalPrice;
-                    stripeTotal = totalPrice;
-                } else {
-                    subtotal = totalPrice;
-                    totalPrice += 5.00;
-                    shippingFee = 5.00;
-                    stripeTotal = totalPrice;
-                }
+            raysonCart(req.user).then((obj) => {
                 res.render('setAuction', {
                     item: item,
-                    products: products,
-                    total: totalPrice,
-                    shippingFee: shippingFee,
-                    subtotal: subtotal,
-                    realQuantity: realQuantity,
+                    products: obj.products,
+                    total: obj.total,
+                    shippingFee: obj.shippingFee,
+                    subtotal: obj.subtotal,
+                    realQuantity: obj.realQuantity,
                     msg: req.flash('message')
                 })
             })
