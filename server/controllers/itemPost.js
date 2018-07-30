@@ -173,43 +173,10 @@ src.on('end', function () {
                 message: "error"
             });
         }
-        res.redirect('notificate');
+        res.redirect('userItems');
         })
     });
 };
-
-exports.notificate = function(req, res) {
-    sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
-        var totalPrice = 0;
-        var shippingFee = 0;
-        var stripeTotal = 0;
-        var realQuantity = 0;
-
-        products.forEach(function (rayson) {
-            totalPrice += rayson.ProductPrice;
-            realQuantity += 1;
-        });
-        if (totalPrice > 50) {
-            subtotal = totalPrice;
-            stripeTotal = totalPrice;
-        } else {
-            subtotal = totalPrice;
-            totalPrice += 5.00;
-            shippingFee = 5.00;
-            stripeTotal = totalPrice;
-        }
-        res.render('notificate', {
-            title: "notification",
-            req: req,
-            urlPath: req.protocol + "://" + req.get("host") + req.url,
-            realQuantity: realQuantity,
-            products: products,
-            total: totalPrice,
-            subtotal: subtotal,
-            shippingFee: shippingFee,
-        });
-    });
-}
 
 // delete item from database
 exports.delete = function (req, res) {
@@ -250,7 +217,6 @@ exports.showitem = function(req, res) {
             shippingFee = 5.00;
             stripeTotal = totalPrice;
         }
-        console.log("ID is jfnzdjfndzn: " + productDetails.sellerID)
         UserModel.findById(id).then(function() {
             res.render("itemProduct", {
                 productImage: productDetails.itemPic,

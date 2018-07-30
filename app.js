@@ -221,7 +221,6 @@ var index = require('./server/controllers/index');
 // Creating Items
 app.get('/sellDetails', auth.isLoggedIn, itemPost.postItem);
 app.post('/posting', upload.single('image'), itemPost.create);
-app.get('/notificate', auth.isLoggedIn, itemPost.notificate);
 
 // Show Created Items
 app.get('/itemPosted', itemPost.list);
