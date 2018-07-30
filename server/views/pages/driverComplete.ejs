@@ -177,10 +177,11 @@ window.onclick = function(event) {
                 </div>
             <h2>Items Delivered:</h2>
             <p>Welcome Mr <%= username %>!</p>
-            <% differentAcc.forEach(function(test){ %>
-                <div class="select" id="test" data-id="<%= test.UserId %>">
+            <div class="yo" id="hello">
+                <% differentAcc.forEach(function(test){ %>
+                    <div class="select" id="test" data-id="<%= test.UserId %>">
                     <% var count = 1 %>
-                    <p class="dropbtn">User ID: <a><%= test.UserId %></a></p>
+                    <p class="dropbtn">User ID: <span class="line"><%= test.UserId %></span></p>
                     <hr>
                     <% for(var namesPrint = 0; namesPrint < (test.Name).length; namesPrint ++) { %>
                         <p style="color: orange">Item Id: <%= count %></p>
@@ -200,7 +201,8 @@ window.onclick = function(event) {
                         <button class="dropbtn" data-id="<%= test.UserId %>" style="background-color: green">Amount to pay: $<%= test.Price %></button>
                     <br><br><br>
                     </div>
-            <% }); %>
+                <% }); %>
+            </div>
 	</div>
 </center>
     <!-- /section -->
@@ -214,16 +216,18 @@ window.onclick = function(event) {
 
 <% include ../partials/footer %>
 <script>
-            function search() {
+        function search() {
             var input, filter, ul, li, a, i;
             input = document.getElementById("input");
             filter = input.value.toUpperCase();
-            ul = document.getElementById("test");
+            ul = document.getElementById("hello");
             var divClassName = $(".select");
-            li = ul.getElementsByTagName("p");
+            li = divClassName;
             console.log("length: " + divClassName.length)
             for (i = 0; i < divClassName.length; i++) {
-                a = li[i].getElementsByTagName("a")[0];
+                a = li[i].getElementsByClassName("line")[0];
+                console.log("inner " + a)
+                // alert("innerHTML: " + a.innerHTML.toUpperCase().indexOf(filter))
                 if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
                     divClassName[i].style.display = "";
                 } else {

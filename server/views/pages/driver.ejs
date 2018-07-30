@@ -181,7 +181,7 @@ window.onclick = function(event) {
             <% differentAcc.forEach(function(test){ %>
                 <div class="select" id="test" data-id="<%= test.UserId %>">
                 <% var count = 1 %>
-                <p class="dropbtn">User ID: <a><%= test.UserId %></a></p>
+                <p class="dropbtn">User ID: <span class="line"><%= test.UserId %></span></p>
                 <hr>
                 <% for(var namesPrint = 0; namesPrint < (test.Name).length; namesPrint ++) { %>
                     <p style="color: orange">Item Id: <%= count %></p>
@@ -246,10 +246,11 @@ window.onclick = function(event) {
             filter = input.value.toUpperCase();
             ul = document.getElementById("hello");
             var divClassName = $(".select");
-            li = ul.getElementsByTagName("div");
+            li = divClassName;
             console.log("length: " + divClassName.length)
             for (i = 0; i < divClassName.length; i++) {
-                a = li[i].getElementsByTagName("a")[i];
+                a = li[i].getElementsByClassName("line")[0];
+                console.log("inner " + a)
                 // alert("innerHTML: " + a.innerHTML.toUpperCase().indexOf(filter))
                 if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
                     divClassName[i].style.display = "";
