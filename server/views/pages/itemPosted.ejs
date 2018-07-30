@@ -11,7 +11,7 @@
 
 	<!-- Google font -->
 	<!-- Bootstrap -->
-	<link rel="stylesheet" href="/css/raysonStyle.css" />
+	<link type="text/css" rel="stylesheet" href="/css/raysonStyle.css" />
 	<% include ../partials/stylesheet %>
 
 </head>
@@ -48,7 +48,7 @@
 										<label id="productFont"> S$<%= itemPost.price %> </label><br>
 										<label id="productFont"> Brand: <%= itemPost.brand %> </label> <br>
 										<label id="productFont"> Details: <%= itemPost.prodDesc %> </label> <br>
-										<button class="productBtn" data-id="<%= itemPost.id%>">View Product</button>
+										<button class="productBtn btn" data-id="<%= itemPost.id%>">View Product</button>
 									</div>
 								</div>
 						 <% })
@@ -67,7 +67,7 @@
 											<label id="productFont"> S$<%= itemPost.price %> </label><br>
 											<label id="productFont"> Brand: <%= itemPost.brand %> </label> <br>
 											<label id="productFont"> Details: <%= itemPost.prodDesc %> </label> <br>
-											<button class="productBtn" data-id="<%= itemPost.id%>">View Product</button>
+											<button class="productBtn btn" data-id="<%= itemPost.id%>">View Product</button>
 										</div>
 									</div>
 							<% }} }) }%>
