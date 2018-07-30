@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>TET</title>
+	<title>Cheapo</title>
 	<!-- css -->
 	<% include ../partials/stylesheet %>
 </head>
@@ -34,7 +34,7 @@
 							<button onclick="usersF()" style="margin: auto" class="btn btn-lg btn-info">Users</button>
 						</div>						
 					</div>
-					<div id="adminItems" style="display: none">
+					<div id="adminItems" style="display: block">
 						<% item.forEach(function(item){ %>						
 							<% if(item.status == 'Auction'){ %>
 								<form action="/items/edit" method="post">
@@ -75,10 +75,20 @@
 											<div style="height: 100%;width: 15%;float: right;">
 												<div style="height: 100%; width: 100%;">
 													<div style="height: 50%;width: 100%;display: flex">
-														<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Cancel Auction</a>
+														<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%=item.itemID%>" style="margin: auto;" class="btn btn-primary btn-sm">Cancel Auction</a>
 													</div>
 													<div style="height: 50%;width: 100%;display: flex;">
-													<a href="/hello" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Auction</a>
+														<a href="/auctions/
+														<% auction.forEach(function(auction){%>
+															<% if(auction.itemAuctionID == item.itemID){ %>
+																<%= auction.auctionID %>
+															<% } %>														
+														<%})%>/
+														<% auction.forEach(function(auction){%>
+															<% if(auction.itemAuctionID == item.itemID){ %>
+																<%= auction.itemAuctionID %>
+															<% } %>														
+														<%})%>" style="margin: auto;" class="btn btn-primary btn-sm">View Auction</a>
 													</div>		
 												</div>												
 											</div>
@@ -144,97 +154,118 @@
 						<% })%>
 					</div>
 					<div id="adminUsers" style="display: none">
-						<% users.forEach(function(users){ %>						
-							<form action="/items/edit" method="post" disabled>
-								<div class="jumbotron jumbotron-fluid">
-									<div class="container" style="overflow: hidden">
-										<div style="height: 100px;width: 20%;float: left;display: flex;">
-											<h1 style="margin: auto;height: 100%;">
-												<img src="../img/<%= users.profilePic %>" style="height: 100%;width: 85%;font-size: 23px" alt="User IMG">
-											</h1>
-										</div>
-										<div style="height: 100px;width: 15%;float: left;">
-											<div style="height: 100%; width: 100%;">
-												<div style="height: 50%;width: 100%;display: flex;">
-													<h2 style="margin: auto;">
-														<%= users.username %>
-													</h2>
-												</div>
-												<div style="height: 50%;width: 100%;display: flex">
-													<h4 style="margin: auto">
-														<%= users.membership  %>
-													</h4>
-												</div>
+						<% users.forEach(function(users){ %>		
+							<div style="height: 245px;width: 100%;overflow: hidden;display: flex;">										
+								<div class="container" style="height: 95%;width: 100%;margin: auto;border: 1px solid rgb(176, 179, 172);border-radius: 7px;">
+									<div style="height: 100%;width: 30%;float: left;display: flex;">												
+										<img src="/img/<%= users.profilePic %>" style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="img">												
+									</div>
+									<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
+										<div style="height: 100%;width: 100%;font-size: 32px;">
+											<div style="height: 25%;width: 100%;display: flex;">
+												<p style="margin: auto 0;">Username: <b><%= users.username %></b></p>
+											</div>						
+											<div style="height: 25%;width: 100%;display: flex;">
+												<p style="width: 50%;float: left;display: flex;">Email: <b><%= users.email %></b></p>
+											</div>													
+											<div style="height: 25%;width: 100%;display: flex;">
+												<p style="margin: auto 0;">Type: <b><%= users.userType %></b></p>
+											</div>
+											<div style="height: 25%;width: 100%;display: flex;">
+												<p style="margin: auto 0;">2FA: <b><%= users.TwoFA %></b></p>
 											</div>
 										</div>
-										<div style="height: 100px;width: 50%;float: left;display: flex;">
-											<h2 style="margin: auto">
-												<%= users.email  %>
-											</h2>
-										</div>
-										<div style="height: 100px;width: 15%;float: left;">											
-											<div style="height: 100%; width: 100%;">
-												<div style="height: 50%;width: 100%;display: flex;">
-													<a href="user/edit/<%=users.userID%>" style="margin: auto;width: 50%;" class="btn btn-primary btn-sm">Edit</a>
-												</div>
-												<div style="height: 50%;width: 100%;display: flex">
-													<a disable onclick="return confirm('Are you sure you want to delete?')" href="user/delete/<%=users.userID%>" style="margin: auto;width: 50%;"
-													class="btn btn-primary btn-sm">Delete</a>
-												</div>
-											</div>												
-										</div>
+									</div>
+									<div style="height: 100%;width: 15%;float: right;">
+										<div style="height: 100%; width: 100%;">
+											<div style="height: 50%;width: 100%;display: flex">
+												<a href="#" style="margin: auto;" class="btn btn-primary btn-sm">Edit User</a>
+											</div>
+											<div style="height: 50%;width: 100%;display: flex;">
+												<a href="#" onclick="javascript:location.href='daw'" style="margin: auto;" class="btn btn-primary btn-sm">Delete User</a>
+											</div>		
+										</div>												
 									</div>
 								</div>
-							</form>						
+							</div>					
 						<% })%>
 					</div>
-					<div id="adminReports">
-						<% report.forEach(function(report){ %>												
-						<form action="#" method="post">
-								<div class="jumbotron jumbotron-fluid">
-									<div class="container" style="overflow: hidden">
-										<div style="height: 130px;width: 15%;float: left;display: flex">
-											<h3 style="margin: auto;">
-												By: <% users.forEach(function(users){ %>
-													<% if(users.userID == report.userID){ %>
-														<%= users.username %>
-													<% } %>
-													<% })%>
-											</h3>
-										</div>
-										<div style="height: 130px;width: 25%;float: left;display: flex;">
-											<h3 style="margin: auto">
-											To: <% item.forEach(function(item){ %>
-													<% if(item.itemID == report.itemID){ %>
-														<%= item.name %>																		
-														<% users.forEach(function(users){ %>
-															<% if(item.userID == users.userID){ %>
-															by	<%= users.username %> <%= item.warnings %>
+					<div id="adminReports" style="display: none">
+						<% report.forEach(function(report){ %>		
+							<div style="height: 245px;width: 100%;overflow: hidden;display: flex;">										
+								<div class="container" style="height: 95%;width: 100%;margin: auto;border: 1px solid rgb(176, 179, 172);border-radius: 7px;">
+									<div style="height: 100%;width: 30%;float: left;display: flex;">												
+										<img src="/itemImg/<% item.forEach(function(item){ %>
+																<% if(item.itemID == report.itemID){ %>
+																	<%= item.itemPic %>	
+																<% } %>
+															<% })%>" 
+										style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="img">												
+									</div>
+									<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
+										<div style="height: 55%;width: 100%;font-size: 32px;">
+											<div style="height: 33%;width: 100%;display: flex;">
+												<p style="margin: auto 0;">Item Name: 
+													<% item.forEach(function(item){ %>
+														<% if(item.itemID == report.itemID){ %>
+															<b><%= item.name %></b>	
+														<% } %>
+													 <% })%>	
+												</p>
+											</div>						
+											<div style="height: 33%;width: 100%;display: flex;">
+												<p style="width: 50%;float: left;display: flex;">Owner:&nbsp;
+														<% item.forEach(function(item){ %>
+															<% if(item.itemID == report.itemID){ %>																		
+																<% users.forEach(function(users){ %>
+																	<% if(item.userID == users.userID){ %>
+																	<b><%= users.username %></b>
+																	<% } %>
+																<% })%>
 															<% } %>
 														<% })%>
-													<% } %>
-												<% })%>														
-											</h3>
+												</p>
+												<p style="width: 50%;float: left;display: flex;">Warnings:&nbsp;
+														<% item.forEach(function(item){ %>
+															<% if(item.itemID == report.itemID){ %>																		
+																<b><%= item.warnings %></b>
+															<% } %>
+														<% })%>
+												</p>
+											</div>													
+											<div style="height: 33%;width: 100%;display: flex;">
+												<p style="margin: auto 0;">Reporter: 
+													<% users.forEach(function(users){ %>
+														<% if(users.userID == report.userID){ %>
+															<b><%= users.username %></b>
+														<% } %>
+													<% })%>
+												</p>
+											</div>
 										</div>
-										<div style="height: 130px;width: 45%;float: left;display: flex;">
-											<h4 style="margin: auto">
-												Report: <%= report.reportDetails %>
-											</h4>
-										</div>
-										<div style="height: 130px;width: 15%;float: left">											
-											<div style="height: 100%; width: 100%;background-color: bisque">												
-												<div style="height: 50%;width: 100%;display: flex;background-color: aquamarine">
-													<a href="reports/warn/<%= report.itemID %>/<%= report.reportID %>" style="margin: auto;"	class="btn btn-primary btn-sm">Warn</a>
-												</div>
-												<div style="height: 50%;width: 100%;display: flex">
-													<a onclick="return confirm('Are you sure you want to ignore?')" href="reports/delete/<%= report.reportID %>" style="margin: auto;"
-													class="btn btn-primary btn-sm">Ignore</a>
-												</div>
-											</div>												
+										<div style="height: 45%;width: 100%;font-size: 23px;display: flex;">
+											<p style="height: 90%;width: 90%;margin: auto;text-align: justify;overflow-y: auto;border: 1px solid grey;border-radius: 7px;">Report: <b><%= report.reportDetails %></b></p>
 										</div>
 									</div>
+									<div style="height: 100%;width: 15%;float: right;">
+										<div style="height: 100%; width: 100%;">
+											<div style="height: 33%;width: 100%;display: flex">
+												<a onclick="return confirm('Warn User?')" href="reports/warn/<%= report.itemID %>/<%= report.reportID %>" style="margin: auto;" class="btn btn-primary btn-sm">Warn User</a>
+											</div>
+											<div style="height: 34%;width: 100%;display: flex;">
+												<a onclick="return confirm('Ignore Report?')" href="reports/delete/<%= report.reportID %>" style="margin: auto;" class="btn btn-primary btn-sm">Ignore Report</a>
+											</div>		
+											<div style="height: 33%;width: 100%;display: flex;">
+												<a href="items/list/<% item.forEach(function(item){ %>
+																		<% if(item.itemID == report.itemID){ %>																		
+																			<%= item.itemID %>
+																		<% } %>
+																	<% })%>" style="margin: auto;" class="btn btn-primary btn-sm">View Item</a>
+											</div>		
+										</div>												
+									</div>
 								</div>
-							</form>							
+							</div>			
 						<% })%>
 					</div>
 				<% } else { %> 
@@ -283,7 +314,7 @@
 											<div style="height: 100%;width: 15%;float: right;">
 												<div style="height: 100%; width: 100%;">
 													<div style="height: 50%;width: 100%;display: flex">
-														<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Cancel Auction</a>
+														<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%=item.itemID%>" style="margin: auto;" class="btn btn-primary btn-sm">Cancel Auction</a>
 													</div>
 													<div style="height: 50%;width: 100%;display: flex;">
 													<a href="/auctions/
@@ -296,7 +327,7 @@
 														<% if(auction.itemAuctionID == item.itemID){ %>
 															<%= auction.itemAuctionID %>
 														<% } %>														
-													<%})%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Auction</a>
+													<%})%>" style="margin: auto;" class="btn btn-primary btn-sm">View Auction</a>
 													</div>		
 												</div>												
 											</div>
@@ -372,7 +403,7 @@
 				u.style.display = "none";
 				r.style.display = "block";
 				redBtn.innerHTML = "";
-				redBtn.href = "#";
+				redBtn.style.display = 'none';
 			}			
 			function itemsF() { 
 				var i = document.getElementById("adminItems");
@@ -383,6 +414,7 @@
 				r.style.display = "none";
 				redBtn.innerHTML = "Add an item";
 				redBtn.href = "items/add";
+				redBtn.style.display = 'block';
 			}			
 			function usersF() { 
 				var i = document.getElementById("adminItems");
@@ -392,7 +424,8 @@
 				u.style.display = "block";
 				r.style.display = "none";
 				redBtn.innerHTML = "Add an user";
-				redBtn.href = "register";
+				redBtn.href = "items/userAdd";
+				redBtn.style.display = 'block';
 			}			
 		</script>
 		<% include ../partials/footer %>
