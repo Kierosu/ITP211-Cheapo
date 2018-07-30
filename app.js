@@ -238,4 +238,16 @@ app.delete('/itemPosted/:item_id', itemPost.delete);
 app.get('/search', auth.isLoggedIn, itemPost.list);
 app.post('/search', auth.isLoggedIn, itemPost.list);
 
+app.use((req, res, next) => {
+    if (req.user) {
+        req.flash('message', 'Page does not exist');
+        res.status(404).redirect('/');
+        next();
+    } else {
+        req.flash('message', 'Page does not exist');
+        res.status(404).redirect('/');
+        next();
+    }
+})
+
 server.listen(3000);
