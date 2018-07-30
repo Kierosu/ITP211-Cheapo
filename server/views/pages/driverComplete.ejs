@@ -168,41 +168,38 @@ window.onclick = function(event) {
             <li role="presentation" class="active"><a href="#">Completed</a></li>
     </ul>
 	<div class="section">
-            <!-- <div class="col-sm-3 col-md-3">
+            <div class="col-sm-3 col-md-3">
                     <form class="navbar-form" role="search">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search" name="q">
-                        <div class="input-group-btn">
-                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                        </div>
+                        <input id="input" type="text" class="form-control" placeholder="Search" name="q" onkeyup="search()">
                     </div>
                     </form>
-                </div> -->
+                </div>
             <h2>Items Delivered:</h2>
             <p>Welcome Mr <%= username %>!</p>
             <% differentAcc.forEach(function(test){ %>
-                <div class="select" data-id="<%= test.UserId %>">
-                <% var count = 1 %>
-                <p class="dropbtn">User ID: <%= test.UserId %></p>
-                <hr>
-                <% for(var namesPrint = 0; namesPrint < (test.Name).length; namesPrint ++) { %>
-                    <p style="color: orange">Item Id: <%= count %></p>
-                    <p><bold>Username: </bold><%= test.Name[namesPrint]%></p>
+                <div class="select" id="test" data-id="<%= test.UserId %>">
+                    <% var count = 1 %>
+                    <p class="dropbtn">User ID: <a><%= test.UserId %></a></p>
                     <hr>
-                    <p><bold>Items Bought:</bold></p>
-                    <div class="container" style="display: inline-block">
+                    <% for(var namesPrint = 0; namesPrint < (test.Name).length; namesPrint ++) { %>
+                        <p style="color: orange">Item Id: <%= count %></p>
+                        <p><bold>Username: </bold><%= test.Name[namesPrint]%></p>
+                        <hr>
+                        <p><bold>Items Bought:</bold></p>
+                        <div class="container" style="display: inline-block">
                             <img src="<%= test.Image[namesPrint] %>" style="width: 20%; height: 20%; float: left;" alt="">
                             <div class="container" style="text-align: right;">
                                 <p><%= test.Product[namesPrint] %></p>
                                 <p>Price: $<%= test.IndiPrice[namesPrint] %></p>
                             </div>
                         </div>
-                    <hr>
-                    <% count = count + 1 %>
-                <% }; %>
-                    <button class="dropbtn" data-id="<%= test.UserId %>" style="background-color: green">Amount paid by customer: $<%= test.Price %></button>
-                <br><br><br>
-            </div>
+                        <hr>
+                        <% count = count + 1 %>
+                    <% }; %>
+                        <button class="dropbtn" data-id="<%= test.UserId %>" style="background-color: green">Amount to pay: $<%= test.Price %></button>
+                    <br><br><br>
+                    </div>
             <% }); %>
 	</div>
 </center>
@@ -216,6 +213,25 @@ window.onclick = function(event) {
 <script src="js/main.js"></script>
 
 <% include ../partials/footer %>
+<script>
+            function search() {
+            var input, filter, ul, li, a, i;
+            input = document.getElementById("input");
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("test");
+            var divClassName = $(".select");
+            li = ul.getElementsByTagName("p");
+            console.log("length: " + divClassName.length)
+            for (i = 0; i < divClassName.length; i++) {
+                a = li[i].getElementsByTagName("a")[0];
+                if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    divClassName[i].style.display = "";
+                } else {
+                    divClassName[i].style.display = "none";
+                }
+            }
+        }
+</script>
 <script>
 (function (global) {
 
