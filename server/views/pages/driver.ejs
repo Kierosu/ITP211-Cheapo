@@ -183,7 +183,7 @@ window.onclick = function(event) {
             <% differentAcc.forEach(function(test){ %>
                 <div class="select" data-id="<%= test.UserId %>">
                 <% var count = 1 %>
-                <p class="dropbtn">User ID: <%= test.UserId %></p>
+                <p class="dropbtn">User ID: <a><%= test.UserId %></p></a>
                 <hr>
                 <% for(var namesPrint = 0; namesPrint < (test.Name).length; namesPrint ++) { %>
                     <p style="color: orange">Item Id: <%= count %></p>
@@ -241,11 +241,11 @@ window.onclick = function(event) {
             })
         });
         
-        // function search() {
-        //     var userID = $(this).data("id");
-        //     var sear = userID.search($("#input"));
-        //     console.log("search bar: " + sear)
-        // }
+        function search() {
+            var userID = $(this).data("id");
+            var sear = userID.search($("#input"));
+            console.log("search bar: " + sear)
+        }
 </script>
 
 <% include ../partials/footer %>

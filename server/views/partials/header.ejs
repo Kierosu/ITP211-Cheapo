@@ -15,14 +15,14 @@
     
                     <!-- Search -->
                     <div class="header-search">
-                        <form>
-                            <input class="input search-input" type="text" placeholder="Enter your keyword">
+                        <form method="post" action="/search">
+                            <input class="input search-input" type="text" name="searchWord" placeholder="Enter your keyword">
                             <select class="input search-categories">
                                 <option value="0">All Categories</option>
                                 <option value="1">Category 01</option>
                                 <option value="1">Category 02</option>
                             </select>
-                            <button class="search-btn"><i class="fa fa-search"></i></button>
+                            <button type="submit" class="search-btn"><i class="fa fa-search"></i></button>
                         </form>
                     </div>
                     <!-- /Search -->
@@ -466,6 +466,9 @@
                                 </div>
                             </li>
                             <li>
+                                <a href="/itemPosted">Shop</a>
+                            </li>
+                            <li>
                                 <a href="/auctions">Auctions</a>
                             </li>
                             <li>
@@ -479,6 +482,9 @@
                                         <a href="/items">Items</a>
                                     <% } %>
                                 <% } %>
+                            </li>
+                            <li>
+                                <a href="/userItems"> My Products </a>
                             </li>
                         </ul>
                     </div>
