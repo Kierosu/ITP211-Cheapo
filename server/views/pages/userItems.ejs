@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title>E-SHOP HTML Template</title>
+
+	<!-- Google font -->
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="/css/raysonStyle.css" />
+	<% include ../partials/stylesheet %>
+
+</head>
+
+<body>
+
+	<% include ../partials/header %>
+
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb">
+		<div class="container">
+			<ul class="breadcrumb">
+				<li><a href='#'>Home</a></li>
+				<li class="active">Blank</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /BREADCRUMB -->
+
+	<!-- section -->
+	<div class="section">
+		<!-- container -->
+		<div class="container">
+			<!-- row -->
+			<h1> My Products </h1>
+			<button onclick="location.href = 'http://localhost:3000/sellDetails';" class="btn" style="float:right;">Post an Item</button>
+			<div class="section">
+					<div class="container">
+						<br>
+						<br>
+						<div class="panel panel-default">
+							<div class="panel-body">
+									<div class="cart">
+											<% itemPost.forEach(function(itemPost){ %>
+												<% if(itemPost.ownerName == loginuser.username){ %>
+													<ul class="cartWrap">
+															<li class="items even" data-id="<%= itemPost.id %>">
+																<div class="infoWrap">
+																	<div class="cartSection">
+																		<img src="images/<%= itemPost.itemPic %>" alt="" class="itemImg" />																		<h3>
+																		
+																		<h2> 
+																			<%= itemPost.title %> 
+																		</h2>
+																		
+																		<p>
+																			<%= itemPost.prodDesc %>
+																		</p>
+																		
+																	</div>
+																	<div class="prodTotal cartSection">
+																		<p>$<%= itemPost.price %>
+																		</p>
+																	</div>
+																	<div class="cartSection">
+																			<a class="editBtn btn"  style="float:right;" data-id="<%= itemPost.id%>">Edit</a> <br>
+																	</div>
+																	<div class="cartSection removeWrap">
+																		<a class="deleteBtn remove" data-id="<%= itemPost.id %>">x</a>
+																	</div>
+																</div>
+															</li>
+														</ul>
+												<% }; %>
+												<% }); %>
+										</div>
+							</div>
+						</div>
+					</div>
+			</div>
+			<!-- /row -->
+		</div>
+		<!-- /container -->
+	</div>
+	<!-- /section -->
+
+	<!-- jQuery Plugins -->
+    <% include ../partials/javascript %>
+    
+    <% include ../partials/footer %>
+    <script>
+        $('.deleteBtn').click(function() {
+			var item_id = $(this).data('id');
+			$.ajax({
+				url: 'http://localhost:3000/itemPosted/' + item_id,
+				type: 'DELETE',
+				success: function(result) {
+					console.log(result);
+					var itemToRemove = '.list-group-item[data-id=' + item_id + ']';
+					$(itemToRemove).remove();
+					location.reload();
+				},
+				error: function(result){
+					alert("Unable to delete item.");
+					console.log(result);
+				}
+			});
+		})
+		$('.editBtn').click(function () {
+			var record_num = $(this).data('id');
+			location.href = "http://localhost:3000/editProduct/" + record_num;
+		});
+
+    </script>
+</body>
+
+</html>

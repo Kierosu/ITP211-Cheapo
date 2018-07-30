@@ -1,138 +1,148 @@
 <!doctype HTML>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <% include ../partials/javascript %>
-    <% include ../partials/stylesheet %>
-    <% include ../partials/eugenecss %>
-    <title><%= title %></title>
+        <% include ../partials/stylesheet %>
+            <% include ../partials/eugenecss %>
+                <title>
+                    <%= title %>
+                </title>
 </head>
+
 <body>
     <% include ../partials/header %>
-    <div class="body">
+        <div class="body">
 
-        <div class="sidenav">
-            <a href="/profile/<%= locals.loginuser.username %>">Profile</a>
-            <a href="/edit/profile">Edit Profile</a>
-            <a href="/changePassword">Change Password</a>
-            <a href="/2FA">2-Factor Authentication</a>
-        </div>
-
-        <form class="form-signin form-horizontal" action="/updateProfile" method="post" enctype="multipart/form-data">
-            <h2 class="form-signin-heading">Edit Profile</h2>
-            <label for="email" class="control-label col-sm-2" >Email Address:</label>
-            <div style="position: relative; top: 12px; left:14px; width: 82%; margin: 25px 0 25px 0;">
-            <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" value="<%= email %>" required>
+            <div class="sidenav">
+                <a href="/profile/<%= locals.loginuser.username %>">Profile</a>
+                <a href="/edit/profile">Edit Profile</a>
+                <a href="/changePassword">Change Password</a>
+                <a href="/2FA">2-Factor Authentication</a>
             </div>
 
-            <div style="position: relative; top: 12px; left:373px; width: 82%; margin: 0 0 25px 0; font-size: 18px;">
-            <p style="display: inline; font-weight: bold;">Password: </p> &nbsp;
-            <a href="/changePassword" style="display: inline; text-decoration: underline; position: relative;left: 12px;">Change Password</a>    
-            </div>
-            
-            
-            <div id="uploadImageDiv">
-                <ul id="imglist">
-                <li><img src= "<%= avatarTemp %>" id="ImgTemp" alt="Profile Picture" width="184px" height="184px" style="border: 1px solid black;"></li>
-                </ul>
-                <label class="file">
-                  <input type="file" id="uploadImg" name="uploadImg" accept="image/*"/>
-                  <!-- Progress Bar -->
-                    <div class="row">
-                        <div class="col-md-12"><br>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                    <span class="sr-only"></span>
+            <form class="form-signin form-horizontal" action="/updateProfile" method="post" enctype="multipart/form-data">
+                <h2 class="form-signin-heading">Edit Profile</h2>
+                <label for="email" class="control-label col-sm-2">Email Address:</label>
+                <div style="position: relative; top: 12px; left:14px; width: 82%; margin: 25px 0 25px 0;">
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" value="<%= email %>" required>
+                </div>
+
+                <div style="position: relative; top: 12px; left:373px; width: 82%; margin: 0 0 25px 0; font-size: 18px;">
+                    <p style="display: inline; font-weight: bold;">Password: </p> &nbsp;
+                    <a href="/changePassword" style="display: inline; text-decoration: underline; position: relative;left: 12px;">Change Password</a>
+                </div>
+
+
+                <div id="uploadImageDiv">
+                    <ul id="imglist">
+                        <li>
+                            <img src="<%= avatarTemp %>" id="ImgTemp" alt="Profile Picture" width="184px" height="184px" style="border: 1px solid black;">
+                        </li>
+                    </ul>
+                    <label class="file">
+                        <input type="file" id="uploadImg" name="uploadImg" accept="image/*" />
+                        <!-- Progress Bar -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <br>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                                        style="width: 0%">
+                                        <span class="sr-only"></span>
+                                    </div>
                                 </div>
                             </div>
+                            <p style="position: relative; bottom: 41px; left: 280px; font-size: 17px; margin-bottom: -20px;" id="done">0%</p>
                         </div>
-                        <p style="position: relative; bottom: 41px; left: 280px; font-size: 17px; margin-bottom: -20px;" id="done">0%</p>
-                    </div>
-                  <button class="btn" id="uploadBtn" style="width: 85px; height: 40px;">Upload</button>
-                </label>   
-            </div>
-            <br><br>
-            <button class="btn" type="submit" id="saveChanges">Save</button>
+                        <button class="btn" id="uploadBtn" style="width: 85px; height: 40px;">Upload</button>
+                    </label>
+                </div>
+                <br>
+                <br>
+                <button class="btn" type="submit" id="saveChanges">Save</button>
             </form>
             <button class="btn" id="cancel" type="button">Cancel</button>
 
-    <!-- Modal To display success/error -->
-    <div class="modal fade" id="messageModal" role="dialog" >
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-            <div class="modal-header" style="background-color: #F8694A;">
-                <h4 class="modal-title" style="color: white;">Message</h4>
+            <!-- Modal To display success/error -->
+            <div class="modal fade" id="messageModal" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #F8694A;">
+                            <h4 class="modal-title" style="color: white;">Message</h4>
+                        </div>
+                        <div class="modal-body" style="font-size: 17px;" id="modalbodyMessage">
+                            <p id="msg"></p>
+                        </div>
+                        <div class="modal-footer" id="modalfooterMessage">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="closeModal" class="closeModal">Close</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body" style="font-size: 17px;" id="modalbodyMessage">    
-                <p id="msg"></p>
-            </div>
-            <div class="modal-footer" id="modalfooterMessage">   
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="closeModal" class="closeModal">Close</button> 
-            </div>
-        </div>           
+
         </div>
-    </div>
+        <% include ../partials/footer %>
+            <script>
+                var uploaded = 0;
+                var originalimgsrc = $('#ImgTemp').attr('src');
+                var originalimgname = originalimgsrc.slice(originalimgsrc.lastIndexOf("/") + 1, originalimgsrc.length);
+                function readFile(input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
 
-    </div>
-    <% include ../partials/footer %>
-    <script>
-        var uploaded = 0;
-        var originalimgsrc = $('#ImgTemp').attr('src');
-        var originalimgname = originalimgsrc.slice(originalimgsrc.lastIndexOf("/")+1, originalimgsrc.length);
-        function readFile(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function(e) {
-                    $('#ImgTemp').attr('src', e.target.result);
+                        reader.onload = function (e) {
+                            $('#ImgTemp').attr('src', e.target.result);
+                        }
+                        reader.readAsDataURL(input.files[0]);
+                    }
                 }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-        $("#uploadImg").change(function() {
-            $('.progress-bar').width('0%');
-            $("#done").html("0%");
-            readFile(this);
-        });
+                $("#uploadImg").change(function () {
+                    $('.progress-bar').width('0%');
+                    $("#done").html("0%");
+                    readFile(this);
+                });
 
-        $("#uploadBtn").click(function(e) {
-            e.preventDefault();
-            var formData = new FormData();
-            var fileData = $("#uploadImg").prop("files")[0]; 
-            formData.append('image', fileData);
-            $.ajax({
-                type: 'post',
-                url: '/uploadImage',
-                data: formData,
-                processData: false,
-                contentType: false,
-                xhr: function () {
-                    var xhr = new XMLHttpRequest();
-                    // Add progress event listener to the upload.
-                    xhr.upload.addEventListener('progress', function (event) {
-                        var progressBar = $('.progress-bar');
-                        if (event.lengthComputable) {
-                            var percent = (event.loaded / event.total) * 100;
-                            progressBar.width(percent + '%');
-                            $("#done").html(percent + '%');
-                            if (percent === 100) {
-                                progressBar.removeClass('active');
-                                $("#done").html("Completed");
-                            }
+                $("#uploadBtn").click(function (e) {
+                    e.preventDefault();
+                    var formData = new FormData();
+                    var fileData = $("#uploadImg").prop("files")[0];
+                    formData.append('image', fileData);
+                    $.ajax({
+                        type: 'post',
+                        url: '/uploadImage',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        xhr: function () {
+                            var xhr = new XMLHttpRequest();
+                            // Add progress event listener to the upload.
+                            xhr.upload.addEventListener('progress', function (event) {
+                                var progressBar = $('.progress-bar');
+                                if (event.lengthComputable) {
+                                    var percent = (event.loaded / event.total) * 100;
+                                    progressBar.width(percent + '%');
+                                    $("#done").html(percent + '%');
+                                    if (percent === 100) {
+                                        progressBar.removeClass('active');
+                                        $("#done").html("Completed");
+                                    }
+                                }
+                            });
+                            return xhr;
+                        },
+                        success: function (result) {
+                            uploaded = 1;
+                        },
+                        error: function (result) {
+                            alert('There is an error uploading');
                         }
                     });
-                    return xhr;
-                },
-                success: function (result) {
-                    uploaded = 1;
-                },
-                error: function(result){
-                    alert('There is an error uploading');
-                }
-            });
-        });
+                });
 
+<<<<<<< HEAD
         $('#saveChanges').click((e)=>{
             e.preventDefault();
             var newData = {};
@@ -161,7 +171,7 @@
                     $("#messageModal").modal("show");
                     $("#msg").html(msg.message);
                     $("#closeModal").click(()=>{
-                        location.href="/profile//<%= locals.loginuser.username %>"              
+                        location.href="/profile/<%= locals.loginuser.username %>"              
                     });
                 },
                 error: function(result){
@@ -177,6 +187,52 @@
         $('#cancel').click(()=>{
             location.href = "/profile/<%= locals.loginuser.username %>";
         })
+=======
+                $('#saveChanges').click((e) => {
+                    e.preventDefault();
+                    var newData = {};
+                    var imgsrc, imagename;
+                    if (uploaded == 0) {
+                        newData = {
+                            email: $("#email").val(),
+                            profilePic: originalimgname
+                        }
+                    }
+                    else {
+                        var imgsrc = $("#uploadImg").val();
+                        var imagename = imgsrc.slice(imgsrc.lastIndexOf("\\") + 1, imgsrc.length);
+                        newData = {
+                            email: $("#email").val(),
+                            profilePic: imagename
+                        }
+                    }
+                    $.ajax({
+                        url: "/updateProfile",
+                        type: "post",
+                        data: JSON.stringify(newData),
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (msg) {
+                            $("#messageModal").modal("show");
+                            $("#msg").html(msg.message);
+                            $("#closeModal").click(() => {
+                                location.href = "/profile/<%= locals.loginuser.username %>"
+                            });
+                        },
+                        error: function (result) {
+                            $("#messageModal").modal("show");
+                            $("#msg").html(result.responseText);
+                            $("#closeModal").click(() => {
+                                location.href = "/profile/<%= locals.loginuser.username %>"
+                            });
+                        }
+                    })
 
-    </script>
+                })
+                $('#cancel').click(() => {
+                    location.href = "/profile/<%= locals.loginuser.username %>";
+                })
+>>>>>>> 86eba6928340edf2fa022c939410db296d3dd966
+
+            </script>
 </body>

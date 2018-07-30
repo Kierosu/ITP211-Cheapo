@@ -1,4 +1,7 @@
+var Product = require('../models/products');
 var Auction = require('../models/auction');
+var myDatabase = require('./database');
+var sequelize = myDatabase.sequelize;
 var Item = require('../models/item');
 var Mail = require('../models/mail');
 var User = require('../models/user');
@@ -48,10 +51,10 @@ function mailSoldAuc(aucID, buyerID, price) {
                     sender: 1,
                     receiver: buyerID,
                     title: 'Auction Won',
-                    message: 'You have won Auction, ' + item.name + ' . Please click the following link to pay $' +  price + ' to complete the auction. <br><a style="color:green;" href="#">Click ME</a>',
+                    message: 'You have won Auction, ' + item.name + ' . Please click the following link to pay $' + price + ' to complete the auction. <br><a style="color:green;" href="#">Click ME</a>',
                     status: 'notSeen'
                 }
-                try {                    
+                try {
                     Mail.create(soldAucSeller);
                     Mail.create(soldAucBuyer);
                     auction.destroy();
@@ -61,7 +64,7 @@ function mailSoldAuc(aucID, buyerID, price) {
                 }
             })
         })
-    })    
+    })
 }
 
 module.exports = {

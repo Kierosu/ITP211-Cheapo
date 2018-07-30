@@ -1,5 +1,7 @@
 var Review = require('../models/itemReview');
 var { auctionEXP } = require('./sendMails');
+var { raysonCart } = require('./otherFunc');
+var Product = require('../models/products');
 var Auction = require('../models/auction');
 var Report = require('../models/report');
 var Item = require('../models/item');
@@ -20,12 +22,19 @@ router.get('/', auth.isLoggedIn, auctionEXP, (req, res) => {
             Report.findAll({}).then((report) => {
                 User.findAll({ where: { userType: 'Member' } }).then((user) => {
                     Auction.findAll({}).then((auction) => {
-                        res.render('mainItem', {
-                            item: item,
-                            report: report,
-                            users: user,
-                            auction: auction,
-                            msg: req.flash('message')
+                        raysonCart(req.user).then((obj) => {
+                            res.render('mainItem', {
+                                item: item,
+                                report: report,
+                                users: user,
+                                auction: auction,
+                                products: obj.products,
+                                total: obj.totalPrice,
+                                shippingFee: obj.shippingFee,
+                                subtotal: obj.subtotal,
+                                realQuantity: obj.realQuantity,
+                                msg: req.flash('message')
+                            })
                         })
                     })
                 })
@@ -34,10 +43,17 @@ router.get('/', auth.isLoggedIn, auctionEXP, (req, res) => {
     } else {
         sequelize.query('select * from Items where userID = ' + req.user.userID, { model: Item }).then((item) => {
             Auction.findAll({}).then((auction) => {
-                res.render('mainItem', {
-                    item: item,
-                    auction: auction,
-                    msg: req.flash('message')
+                raysonCart(req.user).then((obj) => {
+                    res.render('mainItem', {
+                        item: item,
+                        auction: auction,
+                        products: obj.products,
+                        total: obj.totalPrice,
+                        shippingFee: obj.shippingFee,
+                        subtotal: obj.subtotal,
+                        realQuantity: obj.realQuantity,
+                        msg: req.flash('message')
+                    })
                 })
             })
         }).catch((err) => {
@@ -50,7 +66,15 @@ router.get('/', auth.isLoggedIn, auctionEXP, (req, res) => {
 
 // Add item page
 router.get('/add', auth.isLoggedIn, (req, res) => {
-    res.render('itemsell')
+    raysonCart(req.user).then((obj) => {
+        res.render('itemsell', {
+            products: obj.products,
+            total: obj.totalPrice,
+            shippingFee: obj.shippingFee,
+            subtotal: obj.subtotal,
+            realQuantity: obj.realQuantity
+        })
+    })
 })
 
 // Set storage engine
@@ -117,8 +141,15 @@ router.post('/add', auth.isLoggedIn, (req, res) => {
 // Edit item page
 router.get('/edit/:id', auth.isLoggedIn, (req, res) => {
     Item.findOne({ where: { itemID: req.params.id } }).then((item => {
-        res.render('itemEdit', {
-            item: item
+        raysonCart(req.user).then((obj) => {
+            res.render('itemEdit', {
+                item: item,
+                products: obj.products,
+                total: obj.total,
+                shippingFee: obj.shippingFee,
+                subtotal: obj.subtotal,
+                realQuantity: obj.realQuantity
+            })
         })
     }))
 })
@@ -164,24 +195,82 @@ router.get('/reactivate/:id', auth.isLoggedIn, (req, res) => {
 
 // Item details
 router.get('/list/:id', (req, res) => {
-    Item.findOne({ where: { itemID: req.params.id } }).then((item => {
-        Review.findAll({ where: { itemID: req.params.id } }).then((review => {
-            res.render('productpage', {
-                item: item,
-                review: review
+    if (isNaN(req.params.id)) {
+        req.flash('message', 'Item does not exist');
+        res.redirect('/')
+    } else {
+        if (req.user) {
+            Item.findOne({ where: { itemID: req.params.id } }).then((item) => {
+                if (item) {
+                    Review.findAll({ where: { itemID: req.params.id } }).then((review => {
+                        raysonCart(req.user).then((obj) => {
+                            res.render('productpage', {
+                                item: item,
+                                review: review,
+                                products: obj.products,
+                                total: obj.total,
+                                shippingFee: obj.shippingFee,
+                                subtotal: obj.subtotal,
+                                realQuantity: obj.realQuantity
+                            })
+                        })
+                    }))
+                }
+                if (!item) {
+                    req.flash('message', 'Item does not exist');
+                    res.redirect('/')
+                }
             })
-        }))
-    }))
+        } else {
+            Item.findOne({ where: { itemID: req.params.id } }).then((item) => {
+                if (item) {
+                    Review.findAll({ where: { itemID: req.params.id } }).then((review => {
+                        raysonCart(req.user).then((obj) => {
+                            res.render('productpage', {
+                                item: item,
+                                review: review,
+                                products: obj.products,
+                                total: obj.total,
+                                shippingFee: obj.shippingFee,
+                                subtotal: obj.subtotal,
+                                realQuantity: obj.realQuantity
+                            })
+                        })
+                    }))
+                }
+                if (!item) {
+                    req.flash('message', 'Item does not exist');
+                    res.redirect('/')
+                }
+            })
+        }
+    }
 })
 
 // Auction item page
 router.get('/auction/:id', (req, res) => {
-    Item.findOne({ where: { itemID: req.params.id } }).then((item => {
-        res.render('setAuction', {
-            item: item,
-            msg: req.flash('message')
-        })
-    }))
+    if (req.user) {
+        Item.findOne({ where: { itemID: req.params.id } }).then((item => {
+            raysonCart(req.user).then((obj) => {
+                res.render('setAuction', {
+                    item: item,
+                    products: obj.products,
+                    total: obj.total,
+                    shippingFee: obj.shippingFee,
+                    subtotal: obj.subtotal,
+                    realQuantity: obj.realQuantity,
+                    msg: req.flash('message')
+                })
+            })
+        }))
+    } else {
+        Item.findOne({ where: { itemID: req.params.id } }).then((item => {
+            res.render('setAuction', {
+                item: item,
+                msg: req.flash('message')
+            })
+        }))
+    }
 })
 
 // Check if auction is past present date

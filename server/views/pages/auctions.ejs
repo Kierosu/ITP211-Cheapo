@@ -8,6 +8,7 @@
     <title>Cheapo</title>
     <!-- css -->
     <% include ../partials/stylesheet %>
+    <% include ../partials/javascript %>
 </head>
 
 <body>
@@ -16,14 +17,14 @@
             <div style="text-align: center;">
                 <h1>Cheapo Auctions</h1>
             </div>
-            <div style="height: 450px;width: 75%;margin: auto;border-radius: 15px;overflow: hidden;background-color: lightblue;position: relative;margin: 0 auto;">
+            <div style="height: 450px;width: 75%;margin: auto;border-radius: 15px;overflow: hidden;position: relative;margin: 0 auto;">
                 <img src="/img/banner01.jpg" style="width: 100%;height: 100%;vertical-align: middle" alt="rip">
                 <div class="content" style="position: absolute;padding: 15px;background: rgba(0, 0, 0, 0.5);color: aliceblue;width: 100%;bottom: 0;text-align: center;font-size: 32px;">
                     0 days 0 hours 0 mins 0 secs
                 </div>
             </div>
             <br>
-            <div style="width: 100%;background-color: antiquewhite;float: left;">
+            <div style="width: 100%;float: left;">
                 <% auction.forEach(function(auction){ %>
                 <div style="height: 280px;width: 25%;float: left;display: flex">
                     <div style="border: 1px solid rgb(197, 187, 187);width: 95%;height: 95%;margin: auto;border-radius: 5px;">
@@ -58,8 +59,6 @@
                 <% }) %>
             </div>
         </div>
-        <% include ../partials/footer %>
-        <!-- jQuery Plugins -->
-        <% include ../partials/javascript %>
+        <% include ../partials/footer %>        
 </body>
 </html>
