@@ -233,7 +233,10 @@ app.post('/edit/:id', auth.isLoggedIn, itemPost.update);
 
 // Test Specified User Items
 app.get('/userItems', auth.isLoggedIn, itemPost.show);
-
 app.delete('/itemPosted/:item_id', itemPost.delete);
+
+// Search
+app.get('/search', auth.isLoggedIn, itemPost.list);
+app.post('/search', auth.isLoggedIn, itemPost.list);
 
 server.listen(3000);

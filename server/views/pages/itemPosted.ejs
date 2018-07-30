@@ -11,6 +11,7 @@
 
 	<!-- Google font -->
 	<!-- Bootstrap -->
+	<link rel="stylesheet" href="/css/raysonStyle.css" />
 	<% include ../partials/stylesheet %>
 
 </head>
@@ -35,20 +36,32 @@
 		<!-- container -->
 		<div class="container">
 			<!-- row -->
-			<div class="row">    
-					<% itemPost.forEach(function(itemPost){ %>
-					<div class="col-md-3" style="border-style: solid; text-align: center; box-sizing: border-box;">	
-						<div class="classWithPad">
-							<label style="float: left;"> By: <%= itemPost.ownerName %></label> <br>
-							<img src="images/<%= itemPost.itemPic %>" class="figure-img img-fluid img-rounded" style="height:200px; width: 200px;"> <br>
-							<h2> <%= itemPost.title %> </h2> <br>
-							<label id="productFont"> S$<%= itemPost.price %> </label><br>
-							<label id="productFont"> Brand: <%= itemPost.brand %> </label> <br>
-							<label id="productFont"> Details: <%= itemPost.prodDesc %> </label> <br>
-							<button class="productBtn" data-id="<%= itemPost.id%>">View Product</button>
-						</div>
-					</div>
-				<% }) %>					
+			<div class="row"> 
+					<% 
+					if(itemSearch != undefined) {
+						%> 
+
+						<h1> Item Query:<%= itemSearch%></h1>
+						<%
+						 itemPost.forEach(function(itemPost){ 
+							var items = (itemPost.title).split(" ");
+							// Can find itemSearch and itemPost Value. Cannot Compare. (TBC)
+							for(var i = 0; i < items.length; i++) {
+								if (itemSearch == items[i]) { %>
+
+									<div class="col-md-3" style="border-style: solid; text-align: center; box-sizing: border-box;">	
+										<div class="classWithPad">
+											<label style="float: left;"> By: <%= itemPost.ownerName %></label> <br>
+											<img src="images/<%= itemPost.itemPic %>" class="figure-img img-fluid img-rounded" style="height:200px; width: 200px;"> <br>
+											<h2> <%= itemPost.title %> </h2> <br>
+											<label id="productFont"> S$<%= itemPost.price %> </label><br>
+											<label id="productFont"> Brand: <%= itemPost.brand %> </label> <br>
+											<label id="productFont"> Details: <%= itemPost.prodDesc %> </label> <br>
+											<button class="productBtn" data-id="<%= itemPost.id%>">View Product</button>
+										</div>
+									</div>
+							<% }} %>
+					<% }) } %>			
 			</div>
 			<!-- /row -->
 		</div>
@@ -73,7 +86,7 @@
 				}
 			})
 		})
-
+		
 	</script>
 </body>
 

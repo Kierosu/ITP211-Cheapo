@@ -43,6 +43,7 @@ exports.list = function(req, res) {
                     total: totalPrice,
                     subtotal: subtotal,
                     shippingFee: shippingFee,
+                    itemSearch: req.body.searchWord
                 });
 
                 }).catch ((err) => {
