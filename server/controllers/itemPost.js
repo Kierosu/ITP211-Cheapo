@@ -11,15 +11,50 @@ var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
 var UserModel = require('../models/user');
 
-exports.list = function(req, res) {
-    
-    sequelize.query('select id, itemPic, title, price, brand, prodDesc, ownerName, sellerID from itemPosts', {model: itemPostModel}).then((itemPost) => {
+var { raysonCart } = require('./otherFunc')
+exports.list = function (req, res) {
+    if (req.user) {
+        sequelize.query('select id, itemPic, title, price, brand, prodDesc, ownerName, sellerID from itemPosts', { model: itemPostModel }).then((itemPost) => {
+            raysonCart(req.user).then((obj) => {
+                res.render('itemPosted', {
+                    title: 'Images Gallery',
+                    itemPost: itemPost,
+                    urlPath: req.protocol + "://" + req.get("host") + req.url,
+                    realQuantity: obj.realQuantity,
+                    products: obj.products,
+                    total: obj.totalPrice,
+                    subtotal: obj.subtotal,
+                    shippingFee: obj.shippingFee,
+                    itemSearch: req.body.searchWord
+                });
+            })
+        })
+    }
+    else {
+        sequelize.query('select id, itemPic, title, price, brand, prodDesc, ownerName, sellerID from itemPosts', { model: itemPostModel }).then((itemPost) => {
+            res.render('itemPosted', {
+                title: 'Images Gallery',
+                itemPost: itemPost,
+                urlPath: req.protocol + "://" + req.get("host") + req.url,
+                itemSearch: req.body.searchWord
+            });
+
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
+        });
+    };
+};
+exports.show = function (req, res) {
+
+    sequelize.query('select id, itemPic, title, price, brand, prodDesc, ownerName, sellerID from itemPosts', { model: itemPostModel }).then((itemPost) => {
         sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
             var totalPrice = 0;
             var shippingFee = 0;
             var stripeTotal = 0;
             var realQuantity = 0;
-    
+
             products.forEach(function (rayson) {
                 totalPrice += rayson.ProductPrice;
                 realQuantity += 1;
@@ -33,69 +68,26 @@ exports.list = function(req, res) {
                 shippingFee = 5.00;
                 stripeTotal = totalPrice;
             }
-            res.render('itemPosted', {
-                    title: 'Images Gallery',
-                    itemPost: itemPost,
-                    req: req,
-                    urlPath: req.protocol + "://" + req.get("host") + req.url,
-                    realQuantity: realQuantity,
-                    products: products,
-                    total: totalPrice,
-                    subtotal: subtotal,
-                    shippingFee: shippingFee,
-                    itemSearch: req.body.searchWord
-                });
-
-                }).catch ((err) => {
-            return res.status(400).send({
-                message: err
-            });        
-        }); 
-    });
-};
-
-exports.show = function(req, res) {
-    
-    sequelize.query('select id, itemPic, title, price, brand, prodDesc, ownerName, sellerID from itemPosts', {model: itemPostModel}).then((itemPost) => {
-        sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
-            var totalPrice = 0;
-            var shippingFee = 0;
-            var stripeTotal = 0;
-            var realQuantity = 0;
-    
-            products.forEach(function (rayson) {
-                totalPrice += rayson.ProductPrice;
-                realQuantity += 1;
-            });
-            if (totalPrice > 50) {
-                subtotal = totalPrice;
-                stripeTotal = totalPrice;
-            } else {
-                subtotal = totalPrice;
-                totalPrice += 5.00;
-                shippingFee = 5.00;
-                stripeTotal = totalPrice;
-            }    
             res.render('userItems', {
-                    title: 'Images Gallery',
-                    itemPost: itemPost,
-                    urlPath: req.protocol + "://" + req.get("host") + req.url,
-                    realQuantity: realQuantity,
-                    products: products,
-                    total: totalPrice,
-                    subtotal: subtotal,
-                    shippingFee: shippingFee,
-                });
+                title: 'Images Gallery',
+                itemPost: itemPost,
+                urlPath: req.protocol + "://" + req.get("host") + req.url,
+                realQuantity: realQuantity,
+                products: products,
+                total: totalPrice,
+                subtotal: subtotal,
+                shippingFee: shippingFee,
+            });
 
-                }).catch ((err) => {
+        }).catch((err) => {
             return res.status(400).send({
                 message: err
-            });        
-        }); 
+            });
+        });
     });
 };
 
-exports.postItem = function(req, res) {
+exports.postItem = function (req, res) {
     sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
         var totalPrice = 0;
         var shippingFee = 0;
@@ -114,7 +106,7 @@ exports.postItem = function(req, res) {
             totalPrice += 5.00;
             shippingFee = 5.00;
             stripeTotal = totalPrice;
-        }    
+        }
         res.render('sellDetails', {
             title: "Product Details",
             req: req,
@@ -134,7 +126,6 @@ exports.create = function (req, res) {
     var src;
     var dest;
     var targetPath;
-    var targetName;
     var tempPath = req.file.path;
     console.log(req.file);
     // get the mime type of the file
@@ -153,27 +144,27 @@ exports.create = function (req, res) {
     dest = fs.createWriteStream(targetPath);
     src.pipe(dest);
 
-// Save file process
-src.on('end', function () {
-    // create a new instance of the Images model with request body
-    var itemPostData = {
-        itemPic: req.file.originalname,
-        title: req.body.title,
-        price: req.body.price,
-        brand: req.body.brand,
-        prodDesc: req.body.prodDesc,
-        ownerName: req.body.ownerName,
-        sellerID: req.user.userID
-    }
-
-    // Save to database
-    itemPostModel.create(itemPostData).then((newItem, created) => {
-        if (!newItem) {
-            return res.send(400, {
-                message: "error"
-            });
+    // Save file process
+    src.on('end', function () {
+        // create a new instance of the Images model with request body
+        var itemPostData = {
+            itemPic: req.file.originalname,
+            title: req.body.title,
+            price: req.body.price,
+            brand: req.body.brand,
+            prodDesc: req.body.prodDesc,
+            ownerName: req.body.ownerName,
+            sellerID: req.user.userID
         }
-        res.redirect('userItems');
+
+        // Save to database
+        itemPostModel.create(itemPostData).then((newItem, created) => {
+            if (!newItem) {
+                return res.send(400, {
+                    message: "error"
+                });
+            }
+            res.redirect('userItems');
         })
     });
 };
@@ -182,71 +173,72 @@ src.on('end', function () {
 exports.delete = function (req, res) {
     var item_num = req.params.item_id;
     console.log("deleting items" + item_num);
-    itemPostModel.destroy ({ where: {id: item_num}}).then((deletedItem) => {
+    itemPostModel.destroy({ where: { id: item_num } }).then((deletedItem) => {
         if (!deletedItem) {
             return res.send(400, {
                 message: "error"
             });
         }
-        res.status(200).send({message: "Deleted Items: " + item_num});
+        res.status(200).send({ message: "Deleted Items: " + item_num });
     })
 }
 
-exports.showitem = function(req, res) {
-    var idCheck = req.params.imageId   
+exports.showitem = function (req, res) {
+    var idCheck = req.params.imageId
     console.log("Viewing " + idCheck);
     sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
-    itemPostModel.findOne({ where: {id: idCheck}}).then(productDetails => {
-        var id = req.params.userID;
-        //Calculating product total value
-        var totalPrice = 0;
-        var shippingFee = 0;
-        var stripeTotal = 0;
-        var realQuantity = 0;
+        itemPostModel.findOne({ where: { id: idCheck } }).then(productDetails => {
+            var id = req.params.userID;
+            //Calculating product total value
+            var totalPrice = 0;
+            var shippingFee = 0;
+            var stripeTotal = 0;
+            var realQuantity = 0;
 
-        products.forEach(function (rayson) {
-            totalPrice += rayson.ProductPrice;
-            realQuantity += 1;
-        });
-        if (totalPrice > 50) {
-            subtotal = totalPrice;
-            stripeTotal = totalPrice;
-        } else {
-            subtotal = totalPrice;
-            totalPrice += 5.00;
-            shippingFee = 5.00;
-            stripeTotal = totalPrice;
-        }
-        UserModel.findById(id).then(function() {
-            res.render("itemProduct", {
-                productImage: productDetails.itemPic,
-                productTitle: productDetails.title,
-                productPrice: productDetails.price,
-                productBrand: productDetails.brand,
-                productDesc: productDetails.prodDesc,
-                avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
-                username : req.user.username,
-                email: req.user.email,
-                userID: req.user.userID,
-                sellerID: productDetails.sellerID,
-                dateJoined: req.user.joinDate,
-                type: req.user.userType,
-                membership: req.user.membership,
-                req: req,
-                hostPath: req.protocol + "://" + req.get("host"),
-                ownerName: productDetails.ownerName,
-                realQuantity: realQuantity,
-                products: products,
-                total: totalPrice,
-                subtotal: subtotal,
-                shippingFee: shippingFee,
+            products.forEach(function (rayson) {
+                totalPrice += rayson.ProductPrice;
+                realQuantity += 1;
             });
-        }).catch((err) => {
-            return res.status(400).send({
-                message: err
+            if (totalPrice > 50) {
+                subtotal = totalPrice;
+                stripeTotal = totalPrice;
+            } else {
+                subtotal = totalPrice;
+                totalPrice += 5.00;
+                shippingFee = 5.00;
+                stripeTotal = totalPrice;
+            }
+            UserModel.findById(id).then(function () {
+                res.render("itemProduct", {
+                    productImage: productDetails.itemPic,
+                    productTitle: productDetails.title,
+                    productPrice: productDetails.price,
+                    productBrand: productDetails.brand,
+                    productDesc: productDetails.prodDesc,
+                    avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
+                    username: req.user.username,
+                    email: req.user.email,
+                    userID: req.user.userID,
+                    sellerID: productDetails.sellerID,
+                    dateJoined: req.user.joinDate,
+                    type: req.user.userType,
+                    membership: req.user.membership,
+                    req: req,
+                    hostPath: req.protocol + "://" + req.get("host"),
+                    ownerName: productDetails.ownerName,
+                    realQuantity: realQuantity,
+                    products: products,
+                    total: totalPrice,
+                    subtotal: subtotal,
+                    shippingFee: shippingFee,
+                    urlPath: req.protocol + "://" + req.get('host') + req.url
+                });
+            }).catch((err) => {
+                return res.status(400).send({
+                    message: err
+                });
             });
         });
-    });
     });
 };
 
@@ -257,20 +249,21 @@ exports.editProduct = function (req, res) {
         res.render('editProduct', {
             title: "Practical 5 Database Node JS - Edit Student Record",
             item: itemRecord,
-            hostPath: req.protocol + "://" + req.get("host")
+            hostPath: req.protocol + "://" + req.get("host"),
+            urlPath: req.protocol + "://" + req.get('host') + req.url
         });
-    }).catch ((err) => {
+    }).catch((err) => {
         return res.status(400).send({
             message: err
         });
-});
+    });
 };
 
 // Update student record in database
 exports.update = function (req, res) {
     var record_num = req.params.id;
     var updateData = {
-        title : req.body.title,
+        title: req.body.title,
         price: req.body.price,
         brand: req.body.brand,
         prodDesc: req.body.prodDesc

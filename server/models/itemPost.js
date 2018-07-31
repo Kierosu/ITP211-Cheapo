@@ -37,6 +37,14 @@ const itemPost = sequelize.define('itemPost', {
     },
     sellerID: {
         type: Sequelize.INTEGER,
+    },
+    status: {
+        type: Sequelize.STRING,
+        defaultValue: 'Active'
+    },
+    warnings: {
+        type: Sequelize.STRING,
+        defaultValue: ''
     }
 });
 

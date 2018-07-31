@@ -235,19 +235,12 @@ app.get('/userItems', auth.isLoggedIn, itemPost.show);
 app.delete('/itemPosted/:item_id', itemPost.delete);
 
 // Search
-app.get('/search', auth.isLoggedIn, itemPost.list);
-app.post('/search', auth.isLoggedIn, itemPost.list);
+app.get('/search', itemPost.list);
+app.post('/search', itemPost.list);
 
 app.use((req, res, next) => {
-    if (req.user) {
-        req.flash('message', 'Page does not exist');
-        res.status(404).redirect('/');
-        next();
-    } else {
-        req.flash('message', 'Page does not exist');
-        res.status(404).redirect('/');
-        next();
-    }
+    res.status(404).redirect('/');
+    next();
 })
 
 server.listen(3000);
