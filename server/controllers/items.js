@@ -142,14 +142,29 @@ router.post('/add', auth.isLoggedIn, (req, res) => {
 router.get('/edit/:id', auth.isLoggedIn, (req, res) => {
     Item.findOne({ where: { itemID: req.params.id } }).then((item => {
         raysonCart(req.user).then((obj) => {
-            res.render('itemEdit', {
-                item: item,
-                products: obj.products,
-                total: obj.total,
-                shippingFee: obj.shippingFee,
-                subtotal: obj.subtotal,
-                realQuantity: obj.realQuantity
-            })
+            if (req.user.userType === 'Admin') {
+                res.render('itemEdit', {
+                    item: item,
+                    products: obj.products,
+                    total: obj.total,
+                    shippingFee: obj.shippingFee,
+                    subtotal: obj.subtotal,
+                    realQuantity: obj.realQuantity
+                })
+            } else {
+                if (item.userID == req.user.userID) {
+                    res.render('itemEdit', {
+                        item: item,
+                        products: obj.products,
+                        total: obj.total,
+                        shippingFee: obj.shippingFee,
+                        subtotal: obj.subtotal,
+                        realQuantity: obj.realQuantity
+                    })
+                } else {
+                    res.redirect('/items');
+                }
+            }
         })
     }))
 })
@@ -157,29 +172,58 @@ router.get('/edit/:id', auth.isLoggedIn, (req, res) => {
 // Item edited
 router.post('/edit/:id', auth.isLoggedIn, (req, res) => {
     Item.findOne({ where: { itemID: req.params.id } }).then((item => {
-        item.name = req.body.name,
-            item.detail = req.body.detail,
-            item.price = req.body.price;
-
-        item.save().then(() => {
-            req.flash('message', 'Item edited successfully'),
-                res.redirect('/items')
-        })
+        if (req.user.userType === 'Admin') {
+            item.name = req.body.name,
+                item.detail = req.body.detail,
+                item.price = req.body.price;
+            item.save().then(() => {
+                req.flash('message', 'Item edited successfully'),
+                    res.redirect('/items')
+            })
+        } else {
+            if (item.userID == req.user.userID) {
+                item.name = req.body.name,
+                    item.detail = req.body.detail,
+                    item.price = req.body.price;
+                item.save().then(() => {
+                    req.flash('message', 'Item edited successfully'),
+                        res.redirect('/items')
+                })
+            } else {
+                res.redirect('/items');
+            }
+        }
     }))
 })
 
 // Item deleted
 router.get('/delete/:id', auth.isLoggedIn, (req, res) => {
     Item.findOne({ where: { itemID: req.params.id } }).then((item) => {
-        fs.unlinkSync('C:\\Users\\Matthew\\Desktop\\Merge\\public\\itemImg\\' + item.itemPic);
-        sequelize.query('DELETE from Reports WHERE itemID = ' + req.params.id + 'DELETE from Reviews WHERE itemID = ' + req.params.id + 'DELETE from Items WHERE itemID = ' + req.params.id, { model: Item }).then((deleteItem) => {
-            req.flash('message', 'Item deleted successfully'),
-                res.redirect('/items')
-        }).catch((err) => {
-            return res.status(400).send({
-                message: err
-            });
-        })
+        if (req.user.userType === 'Admin') {
+            fs.unlinkSync('C:\\Users\\Matthew\\Desktop\\Merge\\public\\itemImg\\' + item.itemPic);
+            sequelize.query('DELETE from Reports WHERE itemID = ' + req.params.id + 'DELETE from Reviews WHERE itemID = ' + req.params.id + 'DELETE from Items WHERE itemID = ' + req.params.id, { model: Item }).then((deleteItem) => {
+                req.flash('message', 'Item deleted successfully'),
+                    res.redirect('/items')
+            }).catch((err) => {
+                return res.status(400).send({
+                    message: err
+                });
+            })
+        } else {
+            if (item.userID == req.user.userID) {
+                fs.unlinkSync('C:\\Users\\Matthew\\Desktop\\Merge\\public\\itemImg\\' + item.itemPic);
+                sequelize.query('DELETE from Reports WHERE itemID = ' + req.params.id + 'DELETE from Reviews WHERE itemID = ' + req.params.id + 'DELETE from Items WHERE itemID = ' + req.params.id, { model: Item }).then((deleteItem) => {
+                    req.flash('message', 'Item deleted successfully'),
+                        res.redirect('/items')
+                }).catch((err) => {
+                    return res.status(400).send({
+                        message: err
+                    });
+                })
+            } else {
+                res.redirect('/items');
+            }
+        }
     })
 })
 
@@ -249,9 +293,9 @@ router.get('/list/:id', (req, res) => {
 
 // Auction item page
 router.get('/auction/:id', auth.isLoggedIn, (req, res) => {
-    if (req.user) {
-        Item.findOne({ where: { itemID: req.params.id } }).then((item => {
-            raysonCart(req.user).then((obj) => {
+    Item.findOne({ where: { itemID: req.params.id } }).then((item => {
+        raysonCart(req.user).then((obj) => {
+            if (req.user.userType === 'Admin') {
                 res.render('setAuction', {
                     item: item,
                     products: obj.products,
@@ -261,16 +305,23 @@ router.get('/auction/:id', auth.isLoggedIn, (req, res) => {
                     realQuantity: obj.realQuantity,
                     msg: req.flash('message')
                 })
-            })
-        }))
-    } else {
-        Item.findOne({ where: { itemID: req.params.id } }).then((item => {
-            res.render('setAuction', {
-                item: item,
-                msg: req.flash('message')
-            })
-        }))
-    }
+            } else {
+                if (item.userID == req.user.userID) {
+                    res.render('setAuction', {
+                        item: item,
+                        products: obj.products,
+                        total: obj.total,
+                        shippingFee: obj.shippingFee,
+                        subtotal: obj.subtotal,
+                        realQuantity: obj.realQuantity,
+                        msg: req.flash('message')
+                    })
+                } else {
+                    res.redirect('/items')
+                }
+            }
+        })
+    }))
 })
 
 // Check if auction is past present date
@@ -353,16 +404,30 @@ router.get('/canAuction/:id', auth.isLoggedIn, (req, res) => {
     })
 })
 
+// if (req.user.userType === 'Admin') {
+
+// } else {
+//     if (item.userID == req.user.userID) {
+
+//     } else {
+
+//     }
+// }
+
 router.get('/userAdd', auth.isLoggedIn, (req, res) => {
     raysonCart(req.user).then((obj) => {
-        res.render('addUser', {
-            products: obj.products,
-            total: obj.total,
-            shippingFee: obj.shippingFee,
-            subtotal: obj.subtotal,
-            realQuantity: obj.realQuantity,
-            msg: req.flash('message')
-        })
+        if (req.user.userType === 'Admin') {
+            res.render('addUser', {
+                products: obj.products,
+                total: obj.total,
+                shippingFee: obj.shippingFee,
+                subtotal: obj.subtotal,
+                realQuantity: obj.realQuantity,
+                msg: req.flash('message')
+            })
+        } else {
+            res.redirect('/items')
+        }
     })
 })
 
@@ -372,32 +437,35 @@ router.post('/addUser', (req, res) => {
         email: req.body.email,
         password: req.body.password
     }
-
-    if (userInfo.password == req.body.cfmPassword) {
-        User.findOne({ where: { email: userInfo.email } }).then((user) => {
-            if (user) {
-                req.flash('message', 'Email is already registered')
-                res.redirect('/items/userAdd');
-            } else {
-                bcrypt.genSalt(10, (err, salt) => {
-                    bcrypt.hash(userInfo.password, salt, (err, hash) => {
-                        if (err) throw err;
-                        userInfo.password = hash;
-                        User.create(userInfo)
-                            .then(() => {
-                                req.flash('message', 'Account registered successfully');
-                                res.redirect('/items');
-                            }).catch((err) => {
-                                console.log(err);
-                                return;
-                            });
+    if (req.user.userType === 'Admin') {
+        if (userInfo.password == req.body.cfmPassword) {
+            User.findOne({ where: { email: userInfo.email } }).then((user) => {
+                if (user) {
+                    req.flash('message', 'Email is already registered')
+                    res.redirect('/items/userAdd');
+                } else {
+                    bcrypt.genSalt(10, (err, salt) => {
+                        bcrypt.hash(userInfo.password, salt, (err, hash) => {
+                            if (err) throw err;
+                            userInfo.password = hash;
+                            User.create(userInfo)
+                                .then(() => {
+                                    req.flash('message', 'Account registered successfully');
+                                    res.redirect('/items');
+                                }).catch((err) => {
+                                    console.log(err);
+                                    return;
+                                });
+                        })
                     })
-                })
-            }
-        })
+                }
+            })
+        } else {
+            req.flash('message', 'Password does not match')
+            res.redirect('/items/userAdd');
+        }
     } else {
-        req.flash('message', 'Password does not match')
-        res.redirect('/items/userAdd');
+        res.redirect('/items')
     }
 })
 
