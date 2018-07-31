@@ -238,4 +238,9 @@ app.delete('/itemPosted/:item_id', itemPost.delete);
 app.get('/search', auth.isLoggedIn, itemPost.list);
 app.post('/search', auth.isLoggedIn, itemPost.list);
 
+app.use((req, res, next) => {
+    res.status(404).redirect('/');
+    next();
+})
+
 server.listen(3000);
