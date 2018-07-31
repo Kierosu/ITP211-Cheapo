@@ -46,26 +46,26 @@
 											<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
 												<div style="height: 55%;width: 100%;font-size: 32px;">
 													<div style="height: 33%;width: 100%;display: flex;">
-														<p style="margin: auto 0;">Name: <%= item.name %></p>
+														<p style="margin: auto 0;">Name: <b><%= item.name %></b></p>
 													</div>						
 													<div style="height: 33%;width: 100%;display: flex;">
 														<p style="width: 50%;float: left;display: flex;">Starting Bid: $
 															<% auction.forEach(function(auction){%>
 																<% if(auction.itemAuctionID == item.itemID){ %>
-																	<%= auction.basePrice %>
+																	<b><%= auction.basePrice %></b>
 																<% } %>														
 															<%})%>
 														</p>
 														<p style="width: 50%;float: left;display: flex;">Current Bid: $
 															<% auction.forEach(function(auction){%>
 																<% if(auction.itemAuctionID == item.itemID){ %>
-																	<%= auction.highestPrice %>
+																	<b><%= auction.highestPrice %></b>
 																<% } %>														
 															<%})%>	
 														</p>
 													</div>													
 													<div style="height: 33%;width: 100%;display: flex;">
-														<p style="margin: auto 0;">Status: <%= item.status %></p>
+														<p style="margin: auto 0;">Status: <b><%= item.status %></b></p>
 													</div>
 												</div>
 												<div style="height: 45%;width: 100%;font-size: 23px;display: flex;">
@@ -75,7 +75,7 @@
 											<div style="height: 100%;width: 15%;float: right;">
 												<div style="height: 100%; width: 100%;">
 													<div style="height: 50%;width: 100%;display: flex">
-														<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%=item.itemID%>" style="margin: auto;" class="btn btn-primary btn-sm">Cancel Auction</a>
+														<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Cancel Auction</a>
 													</div>
 													<div style="height: 50%;width: 100%;display: flex;">
 														<a href="/auctions/
@@ -88,7 +88,7 @@
 															<% if(auction.itemAuctionID == item.itemID){ %>
 																<%= auction.itemAuctionID %>
 															<% } %>														
-														<%})%>" style="margin: auto;" class="btn btn-primary btn-sm">View Auction</a>
+														<%})%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Auction</a>
 													</div>		
 												</div>												
 											</div>
@@ -105,13 +105,13 @@
 											<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
 												<div style="height: 55%;width: 100%;font-size: 32px;">
 													<div style="height: 33%;width: 100%;display: flex;">
-														<p style="margin: auto 0;">Name: <%= item.name %></p>
+														<p style="margin: auto 0;">Name: <b><%= item.name %></b></p>
 													</div>
 													<div style="height: 34%;width: 100%;display: flex;">
-														<p style="margin: auto 0;">Price: $<%= item.price %></p>
+														<p style="margin: auto 0;">Price: <b>$<%= item.price %></b></p>
 													</div>
 													<div style="height: 33%;width: 100%;display: flex;">
-														<p style="margin: auto 0;<%if(item.status == 'Deactivated'){%>color:red;<%}%>">Status:<%= item.status %></p>
+														<p style="margin: auto 0;<%if(item.status == 'Deactivated'){%>color:red;<%}%>">Status:<b><%= item.status %></b></p>
 													</div>
 												</div>
 												<div style="height: 45%;width: 100%;font-size: 23px;display: flex;">
@@ -179,10 +179,10 @@
 									<div style="height: 100%;width: 15%;float: right;">
 										<div style="height: 100%; width: 100%;">
 											<div style="height: 50%;width: 100%;display: flex">
-												<a href="#" style="margin: auto;" class="btn btn-primary btn-sm">Edit User</a>
+												<a href="#" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Edit User</a>
 											</div>
 											<div style="height: 50%;width: 100%;display: flex;">
-												<a href="#" onclick="javascript:location.href='daw'" style="margin: auto;" class="btn btn-primary btn-sm">Delete User</a>
+												<a href="#" onclick="javascript:location.href='daw'" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Delete User</a>
 											</div>		
 										</div>												
 									</div>
@@ -250,17 +250,17 @@
 									<div style="height: 100%;width: 15%;float: right;">
 										<div style="height: 100%; width: 100%;">
 											<div style="height: 33%;width: 100%;display: flex">
-												<a onclick="return confirm('Warn User?')" href="reports/warn/<%= report.itemID %>/<%= report.reportID %>" style="margin: auto;" class="btn btn-primary btn-sm">Warn User</a>
+												<a onclick="return confirm('Warn User?')" href="reports/warn/<%= report.itemID %>/<%= report.reportID %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Warn User</a>
 											</div>
 											<div style="height: 34%;width: 100%;display: flex;">
-												<a onclick="return confirm('Ignore Report?')" href="reports/delete/<%= report.reportID %>" style="margin: auto;" class="btn btn-primary btn-sm">Ignore Report</a>
+												<a onclick="return confirm('Ignore Report?')" href="reports/delete/<%= report.reportID %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Ignore Report</a>
 											</div>		
 											<div style="height: 33%;width: 100%;display: flex;">
 												<a href="items/list/<% item.forEach(function(item){ %>
 																		<% if(item.itemID == report.itemID){ %>																		
 																			<%= item.itemID %>
 																		<% } %>
-																	<% })%>" style="margin: auto;" class="btn btn-primary btn-sm">View Item</a>
+																	<% })%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Item</a>
 											</div>		
 										</div>												
 									</div>
@@ -285,26 +285,26 @@
 											<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
 												<div style="height: 55%;width: 100%;font-size: 32px;">
 													<div style="height: 33%;width: 100%;display: flex;">
-														<p style="margin: auto 0;">Name: <%= item.name %></p>
+														<p style="margin: auto 0;">Name: <b><%= item.name %></b></p>
 													</div>						
 													<div style="height: 33%;width: 100%;display: flex;">
 														<p style="width: 50%;float: left;display: flex;">Starting Bid: $
 															<% auction.forEach(function(auction){%>
 																<% if(auction.itemAuctionID == item.itemID){ %>
-																	<%= auction.basePrice %>
+																	<b><%= auction.basePrice %></b>
 																<% } %>														
 															<%})%>
 														</p>
 														<p style="width: 50%;float: left;display: flex;">Current Bid: $
 															<% auction.forEach(function(auction){%>
 																<% if(auction.itemAuctionID == item.itemID){ %>
-																	<%= auction.highestPrice %>
+																	<b><%= auction.highestPrice %></b>
 																<% } %>														
 															<%})%>	
 														</p>
 													</div>													
 													<div style="height: 33%;width: 100%;display: flex;">
-														<p style="margin: auto 0;">Status: <%= item.status %></p>
+														<p style="margin: auto 0;">Status: <b><%= item.status %></b></p>
 													</div>
 												</div>
 												<div style="height: 45%;width: 100%;font-size: 23px;display: flex;">
@@ -314,7 +314,7 @@
 											<div style="height: 100%;width: 15%;float: right;">
 												<div style="height: 100%; width: 100%;">
 													<div style="height: 50%;width: 100%;display: flex">
-														<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%=item.itemID%>" style="margin: auto;" class="btn btn-primary btn-sm">Cancel Auction</a>
+														<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Cancel Auction</a>
 													</div>
 													<div style="height: 50%;width: 100%;display: flex;">
 													<a href="/auctions/
@@ -327,7 +327,7 @@
 														<% if(auction.itemAuctionID == item.itemID){ %>
 															<%= auction.itemAuctionID %>
 														<% } %>														
-													<%})%>" style="margin: auto;" class="btn btn-primary btn-sm">View Auction</a>
+													<%})%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Auction</a>
 													</div>		
 												</div>												
 											</div>
@@ -344,13 +344,13 @@
 											<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
 												<div style="height: 55%;width: 100%;font-size: 32px;">
 													<div style="height: 33%;width: 100%;display: flex;">
-														<p style="margin: auto 0;">Name: <%= item.name %></p>
+														<p style="margin: auto 0;">Name: <b><%= item.name %></b></p>
 													</div>
 													<div style="height: 34%;width: 100%;display: flex;">
-														<p style="margin: auto 0;">Price: $<%= item.price %></p>
+														<p style="margin: auto 0;">Price: <b>$<%= item.price %></b></p>
 													</div>
 													<div style="height: 33%;width: 100%;display: flex;">
-														<p style="margin: auto 0;<%if(item.status == 'Deactivated'){%>color:red;<%}%>">Status:<%= item.status %></p>
+														<p style="margin: auto 0;<%if(item.status == 'Deactivated'){%>color:red;<%}%>">Status: <b><%= item.status %></b></p>
 													</div>
 												</div>
 												<div style="height: 45%;width: 100%;font-size: 23px;display: flex;">

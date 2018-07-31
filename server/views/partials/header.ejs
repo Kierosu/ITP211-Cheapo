@@ -1,6 +1,5 @@
 <!-- HEADER -->
 <header>
-
         <!-- header -->
         <div id="header">
             <div class="container">
@@ -40,8 +39,8 @@
                             </div>
                             <ul class="custom-menu">
                                 <li><a href="/profile/<%= loginuser.username %>"><i class="fa fa-user-o"></i> My Account</a></li>
-                                <li><a href="#"><i class="fa fa-heart-o"></i> My Wishlist</a></li>  
-                                <li><a href="#"><i class="fa fa-check"></i> Checkout</a></li>
+                                <li><a href="/wishlist"><i class="fa fa-heart-o"></i> My Wishlist</a></li>  
+                                <li><a href="/shopping-cart"><i class="fa fa-check"></i> Checkout</a></li>
                                 <li><a href="/logout"><i class="fa fa-unlock-alt"></i> Logout</a></li>
                             </ul>
                                 
@@ -494,26 +493,26 @@
             <!-- /container -->
         </div>
         <script>
-            // <% if (locals.raysonCart){ %>
-                $('.cancel-btn').click(function () {
-                var ProductID = $(this).data("id");
-                $.ajax({
-                    url: '<%-urlPath%>' + '/' + ProductID,
-                    type: 'DELETE',
-                    success: function (result) {
-                        console.log(result.price);
-                        var itemToRemove = '.product-widget[data-id=' + ProductID + ']';
-                        $(itemToRemove).remove();
-                        
-                        $('.totalMoney').text(result.price)
-                    },
-                    error: function (result) {
-                        alert("Unable to delete Product.");
-                        console.log(result);
-                    }
-                });
-                });
-            // <% } %>
+        $('.cancel-btn').click(function () {
+        var ProductID = $(this).data("id");
+        $.ajax({
+            url: 'http://localhost:3000' + '/shopping-cart/' + ProductID,
+            type: 'DELETE',
+            success: function (result) {
+                console.log(result.price);
+                var itemToRemove = '.product-widget[data-id=' + ProductID + ']';
+                console.log(itemToRemove)
+                $(itemToRemove).remove();
+                location.reload(true)
+                
+                $('.totalMoney').text(result.price)
+            },
+            error: function (result) {
+                alert("Unable to delete Product.");
+                console.log(result);
+            }
+        });
+        });
         </script>
         <br>
         <% include ../partials/msg %>

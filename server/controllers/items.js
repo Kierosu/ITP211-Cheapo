@@ -1,13 +1,13 @@
 var Review = require('../models/itemReview');
 var { auctionEXP } = require('./sendMails');
 var { raysonCart } = require('./otherFunc');
-var Product = require('../models/products');
 var Auction = require('../models/auction');
 var Report = require('../models/report');
 var Item = require('../models/item');
 var database = require('./database');
 var User = require('../models/user');
 var sequelize = database.sequelize;
+var bcrypt = require('bcryptjs');
 var express = require('express');
 var auth = require('./profile');
 var multer = require('multer');
@@ -248,7 +248,7 @@ router.get('/list/:id', (req, res) => {
 })
 
 // Auction item page
-router.get('/auction/:id', (req, res) => {
+router.get('/auction/:id', auth.isLoggedIn, (req, res) => {
     if (req.user) {
         Item.findOne({ where: { itemID: req.params.id } }).then((item => {
             raysonCart(req.user).then((obj) => {
@@ -288,7 +288,7 @@ function checkExp(dDate) {
 
 // Set auction
 var { newAuction } = require('./sendMails');
-router.post('/auction/:id', (req, res) => {
+router.post('/auction/:id', auth.isLoggedIn, (req, res) => {
     var auctionDetails = {
         itemAuctionID: req.params.id,
         basePrice: req.body.startPrice,
@@ -326,7 +326,7 @@ router.post('/auction/:id', (req, res) => {
 
 // Delete auction
 var { ifAucExp } = require('./sendMails');
-router.get('/canAuction/:id', (req, res) => {
+router.get('/canAuction/:id', auth.isLoggedIn, (req, res) => {
     Auction.findOne({ where: { itemAuctionID: req.params.id } }).then((selectedAuction) => {
         if (selectedAuction.buyerID != null) {
             selectedAuction.endDate = '2017-07-00T07:00:00';
@@ -351,6 +351,54 @@ router.get('/canAuction/:id', (req, res) => {
             })
         }
     })
+})
+
+router.get('/userAdd', auth.isLoggedIn, (req, res) => {
+    raysonCart(req.user).then((obj) => {
+        res.render('addUser', {
+            products: obj.products,
+            total: obj.total,
+            shippingFee: obj.shippingFee,
+            subtotal: obj.subtotal,
+            realQuantity: obj.realQuantity,
+            msg: req.flash('message')
+        })
+    })
+})
+
+router.post('/addUser', (req, res) => {
+    var userInfo = {
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password
+    }
+
+    if (userInfo.password == req.body.cfmPassword) {
+        User.findOne({ where: { email: userInfo.email } }).then((user) => {
+            if (user) {
+                req.flash('message', 'Email is already registered')
+                res.redirect('/items/userAdd');
+            } else {
+                bcrypt.genSalt(10, (err, salt) => {
+                    bcrypt.hash(userInfo.password, salt, (err, hash) => {
+                        if (err) throw err;
+                        userInfo.password = hash;
+                        User.create(userInfo)
+                            .then(() => {
+                                req.flash('message', 'Account registered successfully');
+                                res.redirect('/items');
+                            }).catch((err) => {
+                                console.log(err);
+                                return;
+                            });
+                    })
+                })
+            }
+        })
+    } else {
+        req.flash('message', 'Password does not match')
+        res.redirect('/items/userAdd');
+    }
 })
 
 module.exports = router;

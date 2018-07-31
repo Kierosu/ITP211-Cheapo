@@ -2018,7 +2018,7 @@ a.remove:hover {
 }
 .promoCode .btn {
   font-size: 0.85em;
-  paddding: 0.5em 2em;
+  padding: 0.5em 2em;
 }
 /* TOTAL AND CHECKOUT  */
 .subtotal {
@@ -2353,13 +2353,13 @@ input[type='password']:focus {
 /* Buttons */
 .btn {
   font-size: 16px;
-  width: 163px;
+  width: 200px;
   height: 48px;
   cursor: pointer;
   transition: all .2s ease-in-out;
   letter-spacing: 1px;
   border: none;
-  border-radius: 23px;
+  border-radius: 18px;
 }
 
 .back-btn {
