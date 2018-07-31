@@ -39,8 +39,8 @@
                             </div>
                             <ul class="custom-menu">
                                 <li><a href="/profile/<%= loginuser.username %>"><i class="fa fa-user-o"></i> My Account</a></li>
-                                <li><a href="#"><i class="fa fa-heart-o"></i> My Wishlist</a></li>  
-                                <li><a href="#"><i class="fa fa-check"></i> Checkout</a></li>
+                                <li><a href="/wishlist"><i class="fa fa-heart-o"></i> My Wishlist</a></li>  
+                                <li><a href="/shopping-cart"><i class="fa fa-check"></i> Checkout</a></li>
                                 <li><a href="/logout"><i class="fa fa-unlock-alt"></i> Logout</a></li>
                             </ul>
                                 
@@ -496,13 +496,14 @@
         $('.cancel-btn').click(function () {
         var ProductID = $(this).data("id");
         $.ajax({
-            url: '<%-urlPath%>' + '/' + ProductID,
+            url: 'http://localhost:3000' + '/shopping-cart/' + ProductID,
             type: 'DELETE',
             success: function (result) {
                 console.log(result.price);
                 var itemToRemove = '.product-widget[data-id=' + ProductID + ']';
                 console.log(itemToRemove)
                 $(itemToRemove).remove();
+                location.reload(true)
                 
                 $('.totalMoney').text(result.price)
             },
