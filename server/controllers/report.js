@@ -1,3 +1,4 @@
+var ItemPost = require('../models/itemPost');
 var reports = require('../models/report');
 var Items = require('../models/item');
 var database = require('./database');
@@ -42,32 +43,33 @@ function warnings(warns, itemId) {
 }
 
 function susp(id) {
-    Items.findOne({ where: { itemID: id } }).then((item => {
+    ItemPost.findOne({ where: { id: id } }).then((item => {
         item.status = 'Deactivated';
+        item.warnings = '';
         item.save();
     }))
 }
 
 function deleteInR(id) {
-    sequelize.query('DELETE from Reports WHERE itemID = ' + id + 'DELETE from Reviews WHERE itemID = ' + id + 'DELETE from Items WHERE itemID = ' + id, { model: Items })
+    sequelize.query('DELETE from Reports WHERE itemID = ' + id + 'DELETE from Reviews WHERE itemID = ' + id + 'DELETE from itemPosts WHERE id = ' + id, { model: ItemPost })
 }
 
 router.get('/warn/:iid/:rid', auth.isLoggedIn, (req, res) => {
-    Items.findOne({ where: { itemID: req.params.iid } }).then((item => {
+    ItemPost.findOne({ where: { id: req.params.iid } }).then((item => {
         if (item.warnings == 'Final') {
-            itemWarnings(item.itemID, 'deleteItem');
+            itemWarnings(item.id, 'deleteItem');
             deleteInR(req.params.iid);
             req.flash('message', 'Item removed successfully');
-            res.redirect('/items');
+            res.redirect('/userItems');
         } else {
-            item.warnings = warnings(item.warnings, item.itemID)
+            item.warnings = warnings(item.warnings, item.id)
             if (item.warnings == '3/3') {
-                itemWarnings(item.itemID, 'sus');
+                itemWarnings(item.id, 'sus');
                 susp(req.params.iid);
             }
             item.save().then(() => {
                 req.flash('message', 'Warn successfully'),
-                    res.redirect('/items')
+                    res.redirect('/userItems')
             }).catch((err) => {
                 return res.status(400).send({
                     message: err
@@ -88,7 +90,5 @@ router.get('/delete/:id', auth.isLoggedIn, (req, res) => {
         });
     })
 })
-
-
 
 module.exports = router;

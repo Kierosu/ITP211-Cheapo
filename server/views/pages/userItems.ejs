@@ -69,17 +69,27 @@
 									<div style="height: 45%;width: 100%;font-size: 23px;display: flex;">
 										<p style="height: 90%;width: 90%;margin: auto;text-align: justify;overflow-y: auto;border: 1px solid grey;border-radius: 7px;"><%= itemPost.prodDesc %></p>
 									</div>
-								</div>
+								</div>								
 								<div style="height: 100%;width: 15%;float: right;">
 									<div style="height: 100%; width: 100%;">
 										<div style="height: 50%;width: 100%;display: flex">
 											<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%= itemPost.id %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Cancel Auction</a>
 										</div>
 										<div style="height: 50%;width: 100%;display: flex;">
-										<a href="#" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Auction</a>
+										<a href="/auctions/
+										<% auction.forEach(function(auction){%>
+											<% if(auction.itemAuctionID == itemPost.id){ %>
+												<%= auction.auctionID %>
+											<% } %>														
+										<%})%>/
+										<% auction.forEach(function(auction){%>
+											<% if(auction.itemAuctionID == itemPost.id){ %>
+												<%= auction.itemAuctionID %>
+											<% } %>														
+										<%})%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Auction</a>
 										</div>		
 									</div>												
-								</div>
+								</div>						
 							</div>
 						</div>
 					<% } else { %>
@@ -101,7 +111,7 @@
 											</p>
 										</div>
 										<div style="height: 33%;width: 100%;display: flex;">
-											<p style="margin: auto 0;">Status:
+											<p style="margin: auto 0;<%if(itemPost.status == 'Deactivated'){%>color:orange;<%}%>">Status:
 												<b><%= itemPost.status %></b>
 											</p>
 										</div>
@@ -110,6 +120,21 @@
 										<p style="height: 90%;width: 90%;margin: auto;text-align: justify;overflow-y: auto;border: 1px solid grey;border-radius: 7px;"><%= itemPost.prodDesc %></p>
 									</div>
 								</div>
+								<%if(itemPost.status == 'Deactivated'){%>
+									<div style="height: 100%;width: 15%;float: right;">
+										<div style="height: 100%; width: 100%;">
+											<div style="height: 33%;width: 100%;display: flex">
+												<a href="/items/reactivate/<%= itemPost.id %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Reactivate</a>
+											</div>
+											<div style="height: 34%;width: 100%;display: flex;">
+												<a href="items/edit/<%= itemPost.id %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Edit</a>
+											</div>												
+											<div style="height: 33%;width: 100%;display: flex">
+												<a onclick="return confirm('Are you sure you want to delete?')" href="items/delete/<%= itemPost.id %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Delete</a>
+											</div>
+										</div>												
+									</div>	
+								<%}else{%>
 								<div style="height: 100%;width: 15%;float: right;">
 									<div style="height: 100%; width: 100%;">
 										<div style="height: 33%;width: 100%;display: flex">
@@ -123,6 +148,7 @@
 										</div>
 									</div>
 								</div>
+								<% } %>
 							</div>
 						</div>
 					<% } %>					
@@ -202,7 +228,7 @@
 										</p>
 										<p style="width: 50%;float: left;display: flex;">Warnings:&nbsp;
 												<% itemPost.forEach(function(item){ %>
-													<% if(item.itemID == report.itemID){ %>																		
+													<% if(item.id == report.itemID){ %>																		
 														<b><%= item.warnings %></b>
 													<% } %>
 												<% })%>
@@ -288,10 +314,20 @@
 								<div style="height: 100%;width: 15%;float: right;">
 									<div style="height: 100%; width: 100%;">
 										<div style="height: 50%;width: 100%;display: flex">
-											<a onclick="return confirm('Are you sure you want to delete auction?')" href="canAuction/<%= itemPost.id %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Cancel Auction</a>
+											<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%= itemPost.id %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Cancel Auction</a>
 										</div>
 										<div style="height: 50%;width: 100%;display: flex;">
-										<a href="#" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Auction</a>
+										<a href="/auctions/
+										<% auction.forEach(function(auction){%>
+											<% if(auction.itemAuctionID == itemPost.id){ %>
+												<%= auction.auctionID %>
+											<% } %>														
+										<%})%>/
+										<% auction.forEach(function(auction){%>
+											<% if(auction.itemAuctionID == itemPost.id){ %>
+												<%= auction.itemAuctionID %>
+											<% } %>														
+										<%})%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Auction</a>
 										</div>		
 									</div>												
 								</div>

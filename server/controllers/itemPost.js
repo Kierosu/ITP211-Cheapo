@@ -54,7 +54,7 @@ exports.show = function (req, res) {
     Auction.findAll({}).then((auction) => {
         if (req.user.userType === 'Admin') {
             Report.findAll({}).then((report) => {
-                User.findAll({ where: { userType: 'Member' } }).then((user) => {
+                User.findAll({ where: sequelize.or({ userType: 'Member' },{ userType: 'Driver' },{ userType: 'Support' }) }).then((user) => {
                     sequelize.query('select * from itemPosts', { model: itemPostModel }).then((itemPost) => {
                         raysonCart(req.user).then((obj) => {
                             res.render('userItems', {

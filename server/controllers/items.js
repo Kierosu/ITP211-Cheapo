@@ -230,11 +230,11 @@ router.get('/delete/:id', auth.isLoggedIn, (req, res) => {
 
 // Reactivate item
 router.get('/reactivate/:id', auth.isLoggedIn, (req, res) => {
-    Item.findOne({ where: { itemID: req.params.id } }).then((item => {
+    ItemPost.findOne({ where: { id: req.params.id } }).then((item => {
         item.warnings = 'Final';
         item.status = 'Active';
         item.save();
-        res.redirect('/items')
+        res.redirect('/userItems')
     }))
 })
 
@@ -318,7 +318,7 @@ router.get('/auction/:id', auth.isLoggedIn, (req, res) => {
                         msg: req.flash('message')
                     })
                 } else {
-                    res.redirect('/items')
+                    res.redirect('/userItems')
                 }
             }
         })
@@ -426,7 +426,8 @@ router.post('/addUser', auth.isLoggedIn, (req, res) => {
     var userInfo = {
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        userType: req.body.uType
     }
     if (req.user.userType === 'Admin') {
         if (userInfo.password == req.body.cfmPassword) {
