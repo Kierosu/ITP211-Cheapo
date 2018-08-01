@@ -51,7 +51,13 @@
 						<button type="submit" onclick=addToWish() class="btn" id="inputGone"> Save to Wishlist</button> 
 						<button type="submit" onclick=addToData() class="btn" data-toggle="modal" data-target="#addToCart"> Add To Cart </button> 
 					</div>
-					
+				</div>
+				<div class="row" style="margin:auto;">
+					<div class="col-lg-4"></div>
+					<div class="col-lg-8" style="margin-top: 1%;">
+						<button type="submit" class="btn">Leave a review</button> 
+						<button type="submit" class="btn">Report Item</button> 
+					</div>
 				</div>
 			</div>
 			<!-- /row -->
@@ -107,7 +113,7 @@
                 dataType: "json",
                 contentType: "application/json",
                 success: function(result){
-                    alert("Item Posted Successfully!");
+					console.log("Successfully Posted Item")
                 },
                 error: function(result){
                     alert("Error Posting Item");

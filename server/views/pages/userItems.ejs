@@ -42,21 +42,26 @@
 																	<div class="cartSection">
 																		<img src="images/<%= itemPost.itemPic %>" alt="" class="itemImg" />																		<h3>
 																		
-																		<h2> 
+																		<h3> 
 																			<%= itemPost.title %> 
-																		</h2>
-																		
+																		</h3>
+																		<h4>
+																			$<%= itemPost.price %>
+																		</h4>
 																		<p>
 																			<%= itemPost.prodDesc %>
 																		</p>
-																		
+																		<h4>
+																			Status: 
+																		</h4>
 																	</div>
-																	<div class="prodTotal cartSection">
-																		<p>$<%= itemPost.price %>
-																		</p>
-																	</div>
-																	<div class="cartSection">
-																			<a class="editBtn btn"  style="float:right;" data-id="<%= itemPost.id%>">Edit</a> <br>
+																	
+																	<div class="row">
+																		<div class="col-lg-4"></div>
+																		<div class="col-lg-8">
+																				<a class="editBtn btn" data-id="<%= itemPost.id%>">Edit Item</a>
+																				<a class="btn"> Auction</a>
+																		</div>
 																	</div>
 																	<div class="cartSection removeWrap">
 																		<a class="deleteBtn remove" style="float:right;" data-id="<%= itemPost.id %>">x</a>
