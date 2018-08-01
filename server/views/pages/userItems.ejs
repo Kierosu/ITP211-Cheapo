@@ -16,7 +16,6 @@
 <body>
 	<% include ../partials/header %>
 		<!-- container -->
-<<<<<<< HEAD
 		<div class="container">		
 			<% if(loginuser.userType == 'Admin'){ %> 	
 				<div style="height: 80px;width: 100%;">
@@ -75,56 +74,6 @@
 									<div style="height: 100%; width: 100%;">
 										<div style="height: 50%;width: 100%;display: flex">
 											<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%= itemPost.id %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Cancel Auction</a>
-=======
-		<div class="container">
-			<!-- row -->
-			<h1> My Products </h1>
-			<button onclick="location.href = 'http://localhost:3000/sellDetails';" class="btn" style="float:right;">Post an Item</button>
-			<div class="section">
-					<div class="container">
-						<br>
-						<br>
-						<div class="panel panel-default">
-							<div class="panel-body">
-									<div class="cart">
-											<% itemPost.forEach(function(itemPost){ %>
-												<% if(itemPost.ownerName == loginuser.username){ %>
-													<ul class="cartWrap">
-															<li class="items even" data-id="<%= itemPost.id %>">
-																<div class="infoWrap">
-																	<div class="cartSection">
-																		<img src="images/<%= itemPost.itemPic %>" alt="" class="itemImg" />																		<h3>
-																		
-																		<h3> 
-																			<%= itemPost.title %> 
-																		</h3>
-																		<h4>
-																			$<%= itemPost.price %>
-																		</h4>
-																		<p>
-																			<%= itemPost.prodDesc %>
-																		</p>
-																		<h4>
-																			Status: 
-																		</h4>
-																	</div>
-																	
-																	<div class="row">
-																		<div class="col-lg-4"></div>
-																		<div class="col-lg-8">
-																				<a class="editBtn btn"data-id="<%= itemPost.id%>">Edit Item</a>
-																				<a class="btn"> Auction</a>
-																		</div>
-																	</div>
-																	<div class="cartSection removeWrap">
-																		<a class="deleteBtn remove" style="float:right;" data-id="<%= itemPost.id %>">x</a>
-																	</div>
-																</div>
-															</li>
-														</ul>
-												<% }; %>
-												<% }); %>
->>>>>>> 30c9ae02b78a4c7ba6e65a193fe78b3e1db55947
 										</div>
 										<div style="height: 50%;width: 100%;display: flex;">
 										<a href="#" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Auction</a>
@@ -208,7 +157,7 @@
 										<a href="items/editUser/<%= users.userID %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Edit User</a>
 									</div>
 									<div style="height: 50%;width: 100%;display: flex;">
-										<a href="items/deleteUser/<%= users.userID %>" onclick="javascript:location.href='daw'" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Delete User</a>
+										<a href="items/deleteUser/<%= users.userID %>" onclick="return confirm('Are you sure you want to delete user?')" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Delete User</a>
 									</div>		
 								</div>												
 							</div>

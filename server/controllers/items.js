@@ -442,7 +442,7 @@ router.post('/addUser', auth.isLoggedIn, (req, res) => {
                             User.create(userInfo)
                                 .then(() => {
                                     req.flash('message', 'Account registered successfully');
-                                    res.redirect('/items');
+                                    res.redirect('/userItems');
                                 }).catch((err) => {
                                     console.log(err);
                                     return;
