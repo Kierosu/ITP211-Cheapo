@@ -26,10 +26,10 @@
                 <div style="height: 280px;width: 25%;float: left;display: flex">
                     <div style="border: 1px solid rgb(197, 187, 187);width: 95%;height: 95%;margin: auto;border-radius: 5px;">
                         <div style="height: 73%;width: 100%;display: flex;">
-                            <% item.forEach(function(item){ %>
-                            <% if(item.itemID == auction.itemAuctionID){ %>
+                            <% itemPost.forEach(function(itemPost){ %>
+                            <% if(itemPost.id == auction.itemAuctionID){ %>
                             <div style="height: 95%;width: 95%;border: 1px solid pink;margin: auto;position: relative;">
-                                <img onload="dTimer(this)" data-timer="<%= auction.endDate %>" data-countD="<%= auction.auctionID %>" alt="Img" style="height: 100%;width: 100%;" src="/itemImg/<%= item.itemPic %>">
+                                <img onload="dTimer(this)" data-timer="<%= auction.endDate %>" data-countD="<%= auction.auctionID %>" alt="Img" style="height: 100%;width: 100%;" src="/images/<%= itemPost.itemPic %>">
                                 <div id="<%= auction.auctionID %>" style="position: absolute;padding: 5px;width: 100%;bottom: 0;text-align: center;font-size: 13px;background: rgba(0, 0, 0, 0.5);color: aliceblue">
                                     0 days 0 hours 0 mins 0 secs
                                 </div>
@@ -38,7 +38,7 @@
                         <div style="height: 27%;width: 100%;">
                             <div style="height: 95%;width: 95%;margin: auto;position: relative;">
                                 <div style="height: 50%;width: 100%;font-size: 18px;">                                    
-                                            <%= item.name %>
+                                            <%= itemPost.title %>
                                         <% } %>
                                     <% }) %>
                                 </div>

@@ -7,109 +7,404 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-	<title>E-SHOP HTML Template</title>
+	<title>Cheapo</title>
 
-	<!-- Google font -->
 	<!-- Bootstrap -->
-	<link type="text/css" rel="stylesheet" href="/css/raysonStyle.css" />
 	<% include ../partials/stylesheet %>
-
 </head>
 
 <body>
-
 	<% include ../partials/header %>
-
-	<!-- section -->
-	<div class="section">
 		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<h1> My Products </h1>
-			<button onclick="location.href = 'http://localhost:3000/sellDetails';" class="btn" style="float:right;">Post an Item</button>
-			<div class="section">
-					<div class="container">
-						<br>
-						<br>
-						<div class="panel panel-default">
-							<div class="panel-body">
-									<div class="cart">
-											<% itemPost.forEach(function(itemPost){ %>
-												<% if(itemPost.ownerName == loginuser.username){ %>
-													<ul class="cartWrap">
-															<li class="items even" data-id="<%= itemPost.id %>">
-																<div class="infoWrap">
-																	<div class="cartSection">
-																		<img src="images/<%= itemPost.itemPic %>" alt="" class="itemImg" />																		<h3>
-																		
-																		<h3> 
-																			<%= itemPost.title %> 
-																		</h3>
-																		<h4>
-																			$<%= itemPost.price %>
-																		</h4>
-																		<p>
-																			<%= itemPost.prodDesc %>
-																		</p>
-																		<h4>
-																			Status: 
-																		</h4>
-																	</div>
-																	
-																	<div class="row">
-																		<div class="col-lg-4"></div>
-																		<div class="col-lg-8">
-																				<a class="editBtn btn" data-id="<%= itemPost.id%>">Edit Item</a>
-																				<a class="btn"> Auction</a>
-																		</div>
-																	</div>
-																	<div class="cartSection removeWrap">
-																		<a class="deleteBtn remove" style="float:right;" data-id="<%= itemPost.id %>">x</a>
-																	</div>
-																</div>
-															</li>
-														</ul>
-												<% }; %>
-												<% }); %>
+		<div class="container">		
+			<% if(loginuser.userType == 'Admin'){ %> 	
+				<div style="height: 80px;width: 100%;">
+					<div style="height: 100%;width: 20%;float: left;"></div>
+					<div style="height: 100%;width: 20%;float: right;display: flex;">
+						<a href="register" id="redBtn" class="btn btn-danger btn-lg" style="margin: auto">Add an user</a>
+					</div>
+					<div style="height: 100%;width: 20%;float: right;display: flex;">
+						<button onclick="reportsF()" style="margin: auto" class="btn btn-lg btn-info">Reports</button>
+					</div>
+					<div style="height: 100%;width: 20%;float: right;display: flex;">
+						<button onclick="itemsF()" style="margin: auto" class="btn btn-lg btn-info">Items</button>
+					</div>
+					<div style="height: 100%;width: 20%;float: right;display: flex;">
+						<button onclick="usersF()" style="margin: auto" class="btn btn-lg btn-info">Users</button>
+					</div>						
+				</div>
+			<div id="adminItems" style="display: block;">
+				<% itemPost.forEach(function(itemPost){ %>
+					<% if(itemPost.status == 'Auction'){ %>
+						<div style="height: 245px;width: 100%;overflow: hidden;display: flex;">										
+							<div class="container" style="height: 95%;width: 100%;margin: auto;border: 1px solid rgb(176, 179, 172);border-radius: 7px;">
+								<div style="height: 100%;width: 30%;float: left;display: flex;">												
+									<img src="/images/<%= itemPost.itemPic %>" style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="img">												
+								</div>
+								<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
+									<div style="height: 55%;width: 100%;font-size: 32px;">
+										<div style="height: 33%;width: 100%;display: flex;">
+											<p style="margin: auto 0;">Name: <b><%= itemPost.title %></b></p>
+										</div>						
+										<div style="height: 33%;width: 100%;display: flex;">
+											<p style="width: 50%;float: left;display: flex;">Starting Bid: $
+												<% auction.forEach(function(auction){%>
+													<% if(auction.itemAuctionID == itemPost.id){ %>
+														<b><%= auction.basePrice %></b>
+													<% } %>														
+												<%})%>
+											</p>
+											<p style="width: 50%;float: left;display: flex;">Current Bid: $
+												<% auction.forEach(function(auction){%>
+													<% if(auction.itemAuctionID == itemPost.id){ %>
+														<b><%= auction.highestPrice %></b>
+													<% } %>														
+												<%})%>
+											</p>
+										</div>													
+										<div style="height: 33%;width: 100%;display: flex;">
+											<p style="margin: auto 0;">Status: <b><%= itemPost.status %></b></p>
 										</div>
+									</div>
+									<div style="height: 45%;width: 100%;font-size: 23px;display: flex;">
+										<p style="height: 90%;width: 90%;margin: auto;text-align: justify;overflow-y: auto;border: 1px solid grey;border-radius: 7px;"><%= itemPost.prodDesc %></p>
+									</div>
+								</div>
+								<div style="height: 100%;width: 15%;float: right;">
+									<div style="height: 100%; width: 100%;">
+										<div style="height: 50%;width: 100%;display: flex">
+											<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%= itemPost.id %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Cancel Auction</a>
+										</div>
+										<div style="height: 50%;width: 100%;display: flex;">
+										<a href="#" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Auction</a>
+										</div>		
+									</div>												
+								</div>
 							</div>
 						</div>
-					</div>
+					<% } else { %>
+						<div style="height: 245px;width: 100%;overflow: hidden;display: flex;">
+							<div class="container" style="height: 95%;width: 100%;margin: auto;border: 1px solid rgb(176, 179, 172);border-radius: 7px;">
+								<div style="height: 100%;width: 30%;float: left;display: flex;">
+									<img src="/images/<%= itemPost.itemPic %>" style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="TET">
+								</div>
+								<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
+									<div style="height: 55%;width: 100%;font-size: 32px;">
+										<div style="height: 33%;width: 100%;display: flex;">
+											<p style="margin: auto 0;">Name:
+												<b><%= itemPost.title %></b>
+											</p>
+										</div>
+										<div style="height: 34%;width: 100%;display: flex;">
+											<p style="margin: auto 0;">Price:
+												<b>$<%= itemPost.price %></b>
+											</p>
+										</div>
+										<div style="height: 33%;width: 100%;display: flex;">
+											<p style="margin: auto 0;">Status:
+												<b><%= itemPost.status %></b>
+											</p>
+										</div>
+									</div>
+									<div style="height: 45%;width: 100%;font-size: 23px;display: flex;">
+										<p style="height: 90%;width: 90%;margin: auto;text-align: justify;overflow-y: auto;border: 1px solid grey;border-radius: 7px;"><%= itemPost.prodDesc %></p>
+									</div>
+								</div>
+								<div style="height: 100%;width: 15%;float: right;">
+									<div style="height: 100%; width: 100%;">
+										<div style="height: 33%;width: 100%;display: flex">
+											<a href="items/auction/<%=itemPost.id%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Auction</a>
+										</div>
+										<div style="height: 34%;width: 100%;display: flex;">
+											<a href="#" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm editBtn" data-id="<%= itemPost.id%>">Edit</a>
+										</div>
+										<div style="height: 33%;width: 100%;display: flex">
+											<a href="#" data-id="<%= itemPost.id %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm deleteBtn">Delete</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					<% } %>					
+				<% }); %>
 			</div>
-			<!-- /row -->
+			<div id="adminUsers" style="display: none;">
+				<% users.forEach(function(users){ %>		
+					<div style="height: 245px;width: 100%;overflow: hidden;display: flex;">										
+						<div class="container" style="height: 95%;width: 100%;margin: auto;border: 1px solid rgb(176, 179, 172);border-radius: 7px;">
+							<div style="height: 100%;width: 30%;float: left;display: flex;">												
+								<img src="/img/<%= users.profilePic %>" style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="img">												
+							</div>
+							<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
+								<div style="height: 100%;width: 100%;font-size: 32px;">
+									<div style="height: 25%;width: 100%;display: flex;">
+										<p style="margin: auto 0;">Username: <b><%= users.username %></b></p>
+									</div>						
+									<div style="height: 25%;width: 100%;display: flex;">
+										<p style="width: 50%;float: left;display: flex;">Email: <b><%= users.email %></b></p>
+									</div>													
+									<div style="height: 25%;width: 100%;display: flex;">
+										<p style="margin: auto 0;">Type: <b><%= users.userType %></b></p>
+									</div>
+									<div style="height: 25%;width: 100%;display: flex;">
+										<p style="margin: auto 0;">2FA: <b><%= users.TwoFA %></b></p>
+									</div>
+								</div>
+							</div>
+							<div style="height: 100%;width: 15%;float: right;">
+								<div style="height: 100%; width: 100%;">
+									<div style="height: 50%;width: 100%;display: flex">
+										<a href="items/editUser/<%= users.userID %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Edit User</a>
+									</div>
+									<div style="height: 50%;width: 100%;display: flex;">
+										<a href="items/deleteUser/<%= users.userID %>" onclick="javascript:location.href='daw'" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Delete User</a>
+									</div>		
+								</div>												
+							</div>
+						</div>
+					</div>					
+				<% })%>
+			</div>
+			<div id="adminReports" style="display: none">
+				<% report.forEach(function(report){ %>	
+					<div style="height: 245px;width: 100%;overflow: hidden;display: flex;">										
+						<div class="container" style="height: 95%;width: 100%;margin: auto;border: 1px solid rgb(176, 179, 172);border-radius: 7px;">
+							<div style="height: 100%;width: 30%;float: left;display: flex;">												
+								<img src="/images/<% itemPost.forEach(function(itemPost){ %>
+														<% if(itemPost.id == report.itemID){ %>
+															<%= itemPost.itemPic %>	
+														<% } %>
+													<% })%>" 
+								style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="img">												
+							</div>
+							<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
+								<div style="height: 55%;width: 100%;font-size: 32px;">
+									<div style="height: 33%;width: 100%;display: flex;">
+										<p style="margin: auto 0;">Item Name: 
+											<% itemPost.forEach(function(itemPost){ %>
+												<% if(itemPost.id == report.itemID){ %>
+													<%= itemPost.title %>	
+												<% } %>
+											<% })%>	
+										</p>
+									</div>						
+									<div style="height: 33%;width: 100%;display: flex;">
+										<p style="width: 50%;float: left;display: flex;">Owner:&nbsp;
+												<% itemPost.forEach(function(item){ %>
+													<% if(item.id == report.itemID){ %>																		
+														<% users.forEach(function(users){ %>
+															<% if(item.sellerID == users.userID){ %>
+															<b><%= users.username %></b>
+															<% } %>
+														<% })%>
+													<% } %>
+												<% })%>
+										</p>
+										<p style="width: 50%;float: left;display: flex;">Warnings:&nbsp;
+												<% itemPost.forEach(function(item){ %>
+													<% if(item.itemID == report.itemID){ %>																		
+														<b><%= item.warnings %></b>
+													<% } %>
+												<% })%>
+										</p>
+									</div>													
+									<div style="height: 33%;width: 100%;display: flex;">
+										<p style="margin: auto 0;">Reporter: 
+											<% users.forEach(function(users){ %>
+												<% if(users.userID == report.userID){ %>
+													<b><%= users.username %></b>
+												<% } %>
+											<% })%>
+										</p>
+									</div>
+								</div>
+								<div style="height: 45%;width: 100%;font-size: 23px;display: flex;">
+									<p style="height: 90%;width: 90%;margin: auto;text-align: justify;overflow-y: auto;border: 1px solid grey;border-radius: 7px;">Report: <b><%= report.reportDetails %></b></p>
+								</div>
+							</div>
+							<div style="height: 100%;width: 15%;float: right;">
+								<div style="height: 100%; width: 100%;">
+									<div style="height: 33%;width: 100%;display: flex">
+										<a onclick="return confirm('Warn User?')" href="reports/warn/<%= report.itemID %>/<%= report.reportID %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Warn User</a>
+									</div>
+									<div style="height: 34%;width: 100%;display: flex;">
+										<a onclick="return confirm('Ignore Report?')" href="reports/delete/<%= report.reportID %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Ignore Report</a>
+									</div>		
+									<div style="height: 33%;width: 100%;display: flex;">
+										<a href="items/list/<% itemPost.forEach(function(item){ %>
+																<% if(item.itemID == report.itemID){ %>																		
+																	<%= item.itemID %>
+																<% } %>
+															<% })%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Item</a>
+									</div>		
+								</div>												
+							</div>
+						</div>
+					</div>			
+				<% })%>
+			</div>
+			<% } else { %>
+				<div id="memberItems">
+				<div style="height: 80px;width: 100%;">
+					<h1 style="float: left;">My listed items</h1>
+					<button onclick="location.href = 'http://localhost:3000/sellDetails';" class="btn" style="float:right;">Post an Item</button>
+				</div>
+				<% itemPost.forEach(function(itemPost){ %>
+					<% if(itemPost.status == 'Auction'){ %>
+						<div style="height: 245px;width: 100%;overflow: hidden;display: flex;">										
+							<div class="container" style="height: 95%;width: 100%;margin: auto;border: 1px solid rgb(176, 179, 172);border-radius: 7px;">
+								<div style="height: 100%;width: 30%;float: left;display: flex;">												
+									<img src="/images/<%= itemPost.itemPic %>" style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="img">												
+								</div>
+								<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
+									<div style="height: 55%;width: 100%;font-size: 32px;">
+										<div style="height: 33%;width: 100%;display: flex;">
+											<p style="margin: auto 0;">Name: <b><%= itemPost.title %></b></p>
+										</div>						
+										<div style="height: 33%;width: 100%;display: flex;">
+											<p style="width: 50%;float: left;display: flex;">Starting Bid: $
+												<% auction.forEach(function(auction){%>
+													<% if(auction.itemAuctionID == itemPost.id){ %>
+														<b><%= auction.basePrice %></b>
+													<% } %>														
+												<%})%>
+											</p>
+											<p style="width: 50%;float: left;display: flex;">Current Bid: $
+												<% auction.forEach(function(auction){%>
+													<% if(auction.itemAuctionID == itemPost.id){ %>
+														<b><%= auction.highestPrice %></b>
+													<% } %>														
+												<%})%>
+											</p>
+										</div>													
+										<div style="height: 33%;width: 100%;display: flex;">
+											<p style="margin: auto 0;">Status: <b><%= itemPost.status %></b></p>
+										</div>
+									</div>
+									<div style="height: 45%;width: 100%;font-size: 23px;display: flex;">
+										<p style="height: 90%;width: 90%;margin: auto;text-align: justify;overflow-y: auto;border: 1px solid grey;border-radius: 7px;"><%= itemPost.prodDesc %></p>
+									</div>
+								</div>
+								<div style="height: 100%;width: 15%;float: right;">
+									<div style="height: 100%; width: 100%;">
+										<div style="height: 50%;width: 100%;display: flex">
+											<a onclick="return confirm('Are you sure you want to delete auction?')" href="canAuction/<%= itemPost.id %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Cancel Auction</a>
+										</div>
+										<div style="height: 50%;width: 100%;display: flex;">
+										<a href="#" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Auction</a>
+										</div>		
+									</div>												
+								</div>
+							</div>
+						</div>
+					<% } else { %>
+						<div style="height: 245px;width: 100%;overflow: hidden;display: flex;">
+							<div class="container" style="height: 95%;width: 100%;margin: auto;border: 1px solid rgb(176, 179, 172);border-radius: 7px;">
+								<div style="height: 100%;width: 30%;float: left;display: flex;">
+									<img src="/images/<%= itemPost.itemPic %>" style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="TET">
+								</div>
+								<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
+									<div style="height: 55%;width: 100%;font-size: 32px;">
+										<div style="height: 33%;width: 100%;display: flex;">
+											<p style="margin: auto 0;">Name:
+												<b><%= itemPost.title %></b>
+											</p>
+										</div>
+										<div style="height: 34%;width: 100%;display: flex;">
+											<p style="margin: auto 0;">Price:
+												<b>$<%= itemPost.price %></b>
+											</p>
+										</div>
+										<div style="height: 33%;width: 100%;display: flex;">
+											<p style="margin: auto 0;">Status:
+												<b><%= itemPost.status %></b>
+											</p>
+										</div>
+									</div>
+									<div style="height: 45%;width: 100%;font-size: 23px;display: flex;">
+										<p style="height: 90%;width: 90%;margin: auto;text-align: justify;overflow-y: auto;border: 1px solid grey;border-radius: 7px;"><%= itemPost.prodDesc %></p>
+									</div>
+								</div>
+								<div style="height: 100%;width: 15%;float: right;">
+									<div style="height: 100%; width: 100%;">
+										<div style="height: 33%;width: 100%;display: flex">
+											<a href="items/auction/<%=itemPost.id%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Auction</a>
+										</div>
+										<div style="height: 34%;width: 100%;display: flex;">
+											<a href="#" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm editBtn" data-id="<%= itemPost.id%>">Edit</a>
+										</div>
+										<div style="height: 33%;width: 100%;display: flex">
+											<a href="#" data-id="<%= itemPost.id %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm deleteBtn">Delete</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					<% } %>					
+				<% }); %>
+				</div>
+			<% } %>
 		</div>
 		<!-- /container -->
-	</div>
-	<!-- /section -->
 
-	<!-- jQuery Plugins -->
-    <% include ../partials/javascript %>
-    
-    <% include ../partials/footer %>
-    <script>
-        $('.deleteBtn').click(function() {
-			var item_id = $(this).data('id');
-			$.ajax({
-				url: 'http://localhost:3000/itemPosted/' + item_id,
-				type: 'DELETE',
-				success: function(result) {
-					console.log(result);
-					var itemToRemove = '.list-group-item[data-id=' + item_id + ']';
-					$(itemToRemove).remove();
-					location.reload();
-				},
-				error: function(result){
-					alert("Unable to delete item.");
-					console.log(result);
-				}
-			});
-		})
-		$('.editBtn').click(function () {
-			var record_num = $(this).data('id');
-			location.href = "http://localhost:3000/editProduct/" + record_num;
-		});
-
-    </script>
+		<!-- jQuery Plugins -->
+		<% include ../partials/javascript %>
+		<% include ../partials/footer %>
+			<script>
+				function reportsF() { 
+				var i = document.getElementById("adminItems");
+				var u = document.getElementById("adminUsers");
+				var r = document.getElementById("adminReports");
+				var redBtn = document.getElementById("redBtn");
+				i.style.display = "none";
+				u.style.display = "none";
+				r.style.display = "block";
+				redBtn.innerHTML = "";
+				redBtn.style.display = 'none';
+			}			
+			function itemsF() { 
+				var i = document.getElementById("adminItems");
+				var u = document.getElementById("adminUsers");
+				var r = document.getElementById("adminReports");
+				i.style.display = "block";
+				u.style.display = "none";
+				r.style.display = "none";
+				redBtn.innerHTML = "Add an item";
+				redBtn.href = "/sellDetails";
+				redBtn.style.display = 'block';
+			}			
+			function usersF() { 
+				var i = document.getElementById("adminItems");
+				var u = document.getElementById("adminUsers");
+				var r = document.getElementById("adminReports");
+				i.style.display = "none";
+				u.style.display = "block";
+				r.style.display = "none";
+				redBtn.innerHTML = "Add an user";
+				redBtn.href = "items/userAdd";
+				redBtn.style.display = 'block';
+			}
+				$('.deleteBtn').click(function () {
+					var item_id = $(this).data('id');
+					$.ajax({
+						url: 'http://localhost:3000/itemPosted/' + item_id,
+						type: 'DELETE',
+						success: function (result) {
+							console.log(result);
+							var itemToRemove = '.list-group-item[data-id=' + item_id + ']';
+							$(itemToRemove).remove();
+							location.reload();
+						},
+						error: function (result) {
+							alert("Unable to delete item.");
+							console.log(result);
+						}
+					});
+				})
+				$('.editBtn').click(function () {
+					var record_num = $(this).data('id');
+					location.href = "http://localhost:3000/editProduct/" + record_num;
+				});
+			</script>
 </body>
-
 </html>

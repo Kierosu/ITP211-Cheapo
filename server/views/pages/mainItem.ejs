@@ -13,13 +13,11 @@
 <body>
 	<!-- header -->
 	<% include ../partials/header %>
-
 		<div class="container">
 			<% if (item.length > 0) { %>
 				<% if(loginuser.userType == 'Admin'){ %> 
 					<div style="height: 80px;width: 100%;">
 						<div style="height: 100%;width: 20%;float: left;display: flex">
-							<h1 style="margin: auto;">Listed Items</h1>
 						</div>
 						<div style="height: 100%;width: 20%;float: right;display: flex;">
 								<a href="register" id="redBtn" class="btn btn-danger btn-lg" style="margin: auto">Add an user</a>
@@ -335,52 +333,50 @@
 									</div>									
 								</form>
 							<% } else { %>
-								<form action="/items/edit" method="post">
-									<div style="height: 245px;width: 100%;overflow: hidden;display: flex;">										
-										<div class="container" style="height: 95%;width: 100%;margin: auto;border: 1px solid rgb(176, 179, 172);border-radius: 7px;">
-											<div style="height: 100%;width: 30%;float: left;display: flex;">												
-												<img src="../itemImg/<%= item.itemPic %>" style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="TET">												
+								<div style="height: 245px;width: 100%;overflow: hidden;display: flex;">										
+									<div class="container" style="height: 95%;width: 100%;margin: auto;border: 1px solid rgb(176, 179, 172);border-radius: 7px;">
+										<div style="height: 100%;width: 30%;float: left;display: flex;">												
+											<img src="../itemImg/<%= item.itemPic %>" style="height: 95%;width: 95%;border-radius: 7px;margin: auto;" alt="TET">												
+										</div>
+										<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
+											<div style="height: 55%;width: 100%;font-size: 32px;">
+												<div style="height: 33%;width: 100%;display: flex;">
+													<p style="margin: auto 0;">Name: <b><%= item.name %></b></p>
+												</div>
+												<div style="height: 34%;width: 100%;display: flex;">
+													<p style="margin: auto 0;">Price: <b>$<%= item.price %></b></p>
+												</div>
+												<div style="height: 33%;width: 100%;display: flex;">
+													<p style="margin: auto 0;<%if(item.status == 'Deactivated'){%>color:red;<%}%>">Statuskkk: <b><%= item.status %></b></p>
+												</div>
 											</div>
-											<div style="height: 100%;width: 55%;float: left;font-family: calibri;">
-												<div style="height: 55%;width: 100%;font-size: 32px;">
-													<div style="height: 33%;width: 100%;display: flex;">
-														<p style="margin: auto 0;">Name: <b><%= item.name %></b></p>
+											<div style="height: 45%;width: 100%;font-size: 23px;display: flex;">
+												<p style="height: 90%;width: 90%;margin: auto;text-align: justify;overflow-y: auto;border: 1px solid grey;border-radius: 7px;"><%= item.detail %></p>
+											</div>
+										</div>
+										<%if(item.status == 'Deactivated'){%>
+											<div style="height: 100%;width: 15%;float: right;display: flex;">
+												<div style="height: 80%; width: 80%;margin: auto;font-size: 32px;display: flex;">
+													<p style="margin: auto;">Please seek help</p> 
+												</div>												
+											</div>
+										<%}else{%>
+											<div style="height: 100%;width: 15%;float: right;">
+												<div style="height: 100%; width: 100%;">
+													<div style="height: 33%;width: 100%;display: flex">
+														<a href="items/auction/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Auction</a>
 													</div>
 													<div style="height: 34%;width: 100%;display: flex;">
-														<p style="margin: auto 0;">Price: <b>$<%= item.price %></b></p>
-													</div>
-													<div style="height: 33%;width: 100%;display: flex;">
-														<p style="margin: auto 0;<%if(item.status == 'Deactivated'){%>color:red;<%}%>">Status: <b><%= item.status %></b></p>
-													</div>
-												</div>
-												<div style="height: 45%;width: 100%;font-size: 23px;display: flex;">
-													<p style="height: 90%;width: 90%;margin: auto;text-align: justify;overflow-y: auto;border: 1px solid grey;border-radius: 7px;"><%= item.detail %></p>
-												</div>
-											</div>
-											<%if(item.status == 'Deactivated'){%>
-												<div style="height: 100%;width: 15%;float: right;display: flex;">
-													<div style="height: 80%; width: 80%;margin: auto;font-size: 32px;display: flex;">
-														<p style="margin: auto;">Please seek help</p> 
+														<a href="items/edit/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Edit</a>
 													</div>												
-												</div>
-											<%}else{%>
-												<div style="height: 100%;width: 15%;float: right;">
-													<div style="height: 100%; width: 100%;">
-														<div style="height: 33%;width: 100%;display: flex">
-															<a href="items/auction/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Auction</a>
-														</div>
-														<div style="height: 34%;width: 100%;display: flex;">
-															<a href="items/edit/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Edit</a>
-														</div>												
-														<div style="height: 33%;width: 100%;display: flex">
-															<a onclick="return confirm('Are you sure you want to delete?')" href="items/delete/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Delete</a>
-														</div>
-													</div>												
-												</div>	
-											<%}%>
-										</div>
-									</div>									
-								</form>
+													<div style="height: 33%;width: 100%;display: flex">
+														<a onclick="return confirm('Are you sure you want to delete?')" href="items/delete/<%=item.itemID%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Delete</a>
+													</div>
+												</div>												
+											</div>	
+										<%}%>
+									</div>
+								</div>
 							<% } %>					
 						<% })%>
 					</div>

@@ -19,17 +19,17 @@
             <% if(item){ %>            
             <div style="width: 60%;height: 400px;display: flex;float: left;">
                 <div style="width: 95%;height: 95%;margin: auto;border: 1px solid rgb(197, 187, 187)">
-                    <img src="/itemImg/<%= item.itemPic %>" style="height: 100%;width: 100%;" alt="item IMG">                    
+                    <img src="/images/<%= item.itemPic %>" style="height: 100%;width: 100%;" alt="item IMG">                    
                 </div>
             </div>
             <div style="width: 40%;height: 400px;float: right;display: flex;">
-                <form action="/items/auction/<%= item.itemID %>" method="POST" style="height: 95%;width: 95%;border: 1px solid rgb(197, 187, 187);margin: auto;border-radius: 8px;overflow: hidden;">
+                <form action="/items/auction/<%= item.id %>" method="POST" style="height: 95%;width: 95%;border: 1px solid rgb(197, 187, 187);margin: auto;border-radius: 8px;overflow: hidden;">
                     <div style="height: 28%;width: 90%;margin: auto;">
                         <div style="height: 50%;width: 100%;display: flex;">
                             <p style="margin: auto 0;font-family: calibri;font-size: 35px;text-decoration: bold;">Name:</p>
                         </div>
                         <div style="height: 50%;width: 100%;display: flex;">
-                            <p style="margin: auto 0;font-family: calibri;font-size: 32px;font-weight: bold;"><%= item.name %></p>
+                            <p style="margin: auto 0;font-family: calibri;font-size: 32px;font-weight: bold;"><%= item.title %></p>
                         </div>
                     </div>
                     <div style="height: 28%;width: 90%;margin: auto;">
