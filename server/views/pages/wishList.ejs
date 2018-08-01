@@ -135,23 +135,11 @@
 	$('.add').click(function () {
         var s = $('.price').text();
         var sliced = s.slice(1)
-        console.log(sliced)
         var ProductID = $(this).data("id");
-		var url = "<%=hostPath%>/wishlist-Add/" + ProductID;
-		var addToCart = {
-            UserId: "<%= userID %>",
-            ProductName: $('.name').val(),
-            ProductDescription: $('.desc').val(),
-            ProductPrice:  sliced,
-            sellerId: parseInt($('.sellerId').val()),
-            ProductImage: $('.img').val()
-		}
+        var url = "<%=hostPath%>/wishlist-Add/" + ProductID;
 		$.ajax({
 			url: url,
 			type: "POST",
-			data: JSON.stringify(addToCart),
-			dataType: "json",
-			contentType: "application/json",
 			success: function(result){
                 $.ajax({
                  url: '<%-urlPath%>' + '/' + ProductID,
