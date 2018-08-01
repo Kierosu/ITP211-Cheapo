@@ -32,7 +32,7 @@ module.exports = {
                 subtotal: subtotal,
                 realQuantity: realQuantity,
             }
-            return(obj)
+            return (obj)
         });
     }
 }

@@ -129,7 +129,7 @@ module.exports = {
                     sender: 1,
                     receiver: item.userID,
                     title: 'First item warning',
-                    message: 'Your item,  has been flagged. Please change it. You have 2 more chances',
+                    message: 'Your item, ' + item.name + ' has been flagged. Please change it. You have 2 more chances',
                     status: 'notSeen'
                 }
                 try {
@@ -143,8 +143,8 @@ module.exports = {
                 var warnUser = {
                     sender: 1,
                     receiver: item.userID,
-                    title: 'First item warning',
-                    message: 'Your item,  has been flagged. Please change it. You have 1 more chances',
+                    title: 'Second item warning',
+                    message: 'Your item, ' + item.name + ' has been flagged. Please change it. You have 1 more chances',
                     status: 'notSeen'
                 }
                 try {
@@ -158,8 +158,8 @@ module.exports = {
                 var warnUser = {
                     sender: 1,
                     receiver: item.userID,
-                    title: 'First item warning',
-                    message: 'Your item,  has been suspended',
+                    title: 'Third item warning',
+                    message: 'Your item, ' + item.name + ' has been suspended',
                     status: 'notSeen'
                 }
                 try {
@@ -174,7 +174,7 @@ module.exports = {
                     sender: 1,
                     receiver: item.userID,
                     title: 'First item warning',
-                    message: 'Your item,  has been deleted from being flagged to many times',
+                    message: 'Your item, ' + item.name + ' has been deleted from being flagged to many times',
                     status: 'notSeen'
                 }
                 try {
