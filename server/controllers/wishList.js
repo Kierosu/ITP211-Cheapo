@@ -6,9 +6,7 @@ var Product = require('../models/products');
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
 var passport = require('passport');
-var fs = require('fs');
 var UserModel = require('../models/user');
-var parseDecimalNumber = require('parse-decimal-number');
 
 //Destroy wish list items
 // Destroy product
@@ -28,22 +26,34 @@ exports.delete = function (req, res) {
 // Insert data into wish List
 exports.addItems = function (req, res) {
     console.log("wishlist add working! with values")
-    var addShop = {
-        UserId: req.body.UserId,
-        ProductName: req.body.ProductName,
-        ProductDescription: req.body.ProductDescription,
-        ProductPrice: parseFloat(req.body.ProductPrice),
-        sellerId: req.body.sellerId,
-        ProductImage: req.body.ProductImage
-    }
-    console.log(addShop);
-    Product.create(addShop).then((newRecord, created) => {
-        if (!newRecord) {
-            return res.send(400, {
-                message: "error"
-            });
-        }
-        res.status(200).send({ message: "Uploaded To Shopping Cart" + newRecord });
+    sequelize.query("select ProductID, sellerId, w.UserId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from wishList w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: wishList }).then((wishList) => {
+        var record_num = req.params.ProductID;
+        wishList.forEach(function(wishlist){
+            if (wishlist.ProductID == record_num)
+            {
+                var addShop = {
+                    UserId: wishlist.UserId,
+                    ProductName: wishlist.ProductName,
+                    ProductDescription: wishlist.ProductDescription,
+                    ProductPrice: parseFloat(wishlist.ProductPrice),
+                    sellerId: wishlist.sellerId,
+                    ProductImage: wishlist.ProductImage
+                }
+                console.log(addShop);
+                Product.create(addShop).then((newRecord, created) => {
+                    if (!newRecord) {
+                        return res.send(400, {
+                            message: "error"
+                        });
+                    }
+                    res.status(200).send({ message: "Uploaded To Shopping Cart" + newRecord });
+                });
+            }
+            else
+            {
+                console.log("upload error!")
+            }
+        })
     });
 };
 
@@ -55,6 +65,11 @@ exports.show = function (req, res) {
             wishList.forEach(function (wishlist) {
                 console.log(wishlist.dataValues.sellerName)
             });
+            console.log("testt" + wishList);
+            for (var i = 0; i < wishList.length; i++)
+            {
+                console.log("wishwish" + wishList[i].ProductID) 
+            }
             //Calculating product total value
             var totalPrice = 0;
             var shippingFee = 0;
