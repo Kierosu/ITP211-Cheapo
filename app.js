@@ -229,7 +229,7 @@ app.get('/itemProduct/:imageId', auth.isLoggedIn, itemPost.showitem);
 
 // Item Edit and Delete
 app.get('/editProduct/:id', auth.isLoggedIn, itemPost.editProduct);
-app.post('/edit/:id', auth.isLoggedIn, itemPost.update);
+app.post('/edit/:id', auth.isLoggedIn, upload.single('image'), itemPost.update);
 
 // Test Specified User Items
 app.get('/userItems', auth.isLoggedIn, auctionEXP, itemPost.show);

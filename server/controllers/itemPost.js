@@ -282,8 +282,33 @@ exports.editProduct = function (req, res) {
 
 // Update student record in database
 exports.update = function (req, res) {
+    var src;
+    var dest;
+    var targetPath;
+    var tempPath = req.file.path;
+    console.log(req.file);
+    // get the mime type of the file
+    var type = (req.file.mimetype);
+    // get file extension
+    var extension = req.file.path.split(/[. ]+/).pop();
+    // check support file types
+    if (IMAGE_TYPES.indexOf(type) == -1) {
+        return res.status(415).send('Supported image formats: jpeg, jpg, jpe, png.');
+    }
+    // Set new path to images
+    targetPath = './public/images/' + req.file.originalname;
+    // using read stream API to read file
+    src = fs.createReadStream(tempPath);
+    // using a write stream API to write file
+    dest = fs.createWriteStream(targetPath);
+    src.pipe(dest);
+
+    // Save file process
+    src.on('end', function () {
+        // create a new instance of the Images model with request body
         var record_num = req.params.id;
         var updateData = {
+            itemPic: req.file.originalname,
             title: req.body.title,
             price: req.body.price,
             brand: req.body.brand,
@@ -297,12 +322,5 @@ exports.update = function (req, res) {
             }
             res.status(200).send({ message: "Updated student record: " + record_num });
         })
-    };
-    // // remove from temp folder
-    // fs.unlink(tempPath, function (err) {
-    //     if (err) {
-    //         return res.status(500).send('Something bad happened here');
-    //     }
-    //     // Redirect to gallery's page
-    //     res.redirect('itemPosted');
-    // });
+    });
+};

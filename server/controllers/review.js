@@ -21,7 +21,7 @@ router.post('/add/:id', auth.isLoggedIn, (req, res) => {
             }
         } else {
             Review.create(reviewData).then(() => {
-                req.flash('message', 'Review add successfully');
+                req.flash('message', 'Review added successfully');
                 res.redirect('/itemProduct/' + reviewData.itemID);
             }).catch((err) => {
                 console.log(err);

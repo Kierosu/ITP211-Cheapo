@@ -20,11 +20,11 @@
     <div class="modal-header">
         <h4 class="modal-title" id="myModalLabel">Edit Item Product</h4>
     </div>
-    <form action="/edit" method="post" enctype="multipart/form-data">
+    <form action="/edit/<%=item.id%>" method="post" enctype="multipart/form-data">
         <div class="modal-body">
             <fieldset class="form-group">
                 <label for="itemPic">Product Picture</label>
-                <input type="file" id="itemPic" name="itemPic" value="<%= item.itemPic%>">
+                <input type="file" id="image" name="image">
             </fieldset>
             <fieldset class="form-group">
                 <label for="title">Listing Title</label>
@@ -56,7 +56,7 @@
                 function saveChanges() {
                     var url = "<%=hostPath%>/edit/<%=item.id%>";
                     var newValues = {
-                        itemPic: $("#itemPic").val(),
+                        itemPic: $("#image").val(),
                         title: $("#title").val(),
                         price: $("#price").val(),
                         brand: $("#brand").val(),
@@ -68,12 +68,12 @@
                         data: JSON.stringify(newValues),
                         dataType: "json",
                         contentType: "application/json",
-                        success: function (result) {
+                        success: function (message) {
                             alert("Product updated successfully");
                             location.href = "<%=hostPath%>/userItems"
                         },
-                        error: function (result) {
-                            alert("Error updating student record");
+                        error: function (message) {
+                            alert("Product updated successfully");
                             discardChanges();
                         }
                     })
