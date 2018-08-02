@@ -1827,7 +1827,7 @@ img {
 }
 .tableHead li {
   display: table-cell;
-  padding: 1em 0;
+  padding: 1em 1;
   text-align: center;
 }
 .tableHead li.prodHeader {
