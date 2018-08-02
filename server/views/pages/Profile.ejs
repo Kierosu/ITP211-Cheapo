@@ -11,7 +11,9 @@
     <% include ../partials/header %>
 
     <% if(locals.loginuser.username == user.username) { %>
+    <span class="openSideNav" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
     <div class="sidenav" id="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="/profile/<%= locals.loginuser.username %>">Profile</a>
         <a href="/edit/profile">Edit Profile</a>
         <a href="/changePassword">Change Password</a>
@@ -20,8 +22,7 @@
     <% } else { %>
     <% } %>
 
-    <div style="margin-top: 80px;">
-    <div style="margin-bottom: 100px;">    
+    <div class="body">   
         <div class="media" style="position: relative;left:390px;">      
             <div class="media-left">
                 <img src="http://localhost:3000/img/<%= user.profilePic %>" alt="Profile Picture" width="160px" height="160px" style="border: 3px solid black; border-radius: 2px;">
@@ -32,10 +33,55 @@
                 <p><strong>Date Joined</strong>: <%= user.joinDate %></p>
                 <p><strong>Type (Member/Admin)</strong>: <%= user.userType %></p>
             </div>
-        </div>     
+        </div>
+        <p style="text-align: center; position: relative; font-weight: bold; font-size: 20px;color: black; margin: 50px 0 20px 0;">Items Posted</p>
+        <%if(itemPost == undefined || itemPost == null || itemPost == 0){ %>
+            <p style="text-align: center; position: relative; font-size: 20px;color: black; margin-bottom:  100px;">This user currently has no items posted</p>
+        <% } else {
+        itemPost.forEach(function(itemPost){ 
+            var items = (itemPost.title).split(" ");
+            for(var i = 1; i < items.length; i++) {%>
+                <div style="height:400px; width:25%; display:flex; font-family: Calibri; float: left; text-align:center; margin-bottom: 25px;">
+                    <div style="width:85%; height:95%; margin:auto;">	
+                        <div style="height:100%; width:100%;">
+                            <label style="float: left; width:100%; height:5%;"> By: <%= itemPost.ownerName %></label>
+                            <div style="height:55%; width:100%; display:flex;">
+                                <img style="margin:auto; width:85%; height:95%;" src="http://localhost:3000/images/<%= itemPost.itemPic %>" class="figure-img img-fluid img-rounded" style="height:200px; width: 200px;">
+                            </div>
+                            <div style="width:100%; height:10%; overflow:hidden;">
+                                <h2> <%= itemPost.title %> </h2> 
+                            </div>
+                            <label id="productFont" style=" width:100%; height:5%; overflow:hidden;"> S$<%= itemPost.price %> </label>
+                            <label id="productFont" style="width:100%; height:5%; overflow:hidden;"> Brand: <%= itemPost.brand %> </label> 
+                            <label id="productFont" style="width:100%; height:5%; overflow:hidden;"> Details: <%= itemPost.prodDesc %> </label> 
+                            <div style="width:100%; height:15%;">
+                                <button class="productBtn btn" data-id="<%= itemPost.id%>" >View Product</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        <% } }) } %>
     </div>
-</div>
-    
     <% include ../partials/footer %>
+    <script>
+		$('.productBtn').click(function() {
+			var imageId = $(this).data('id');
+			window.location.replace("/itemProduct/" + imageId)
+			console.log("Check show")
+			$.ajax({
+				url: '<%=urlPath%>' + '/' + imageId,
+				type: 'GET',
+				success: function(result){
+					console.log('View Image')
+				}
+			})
+        })
+        function openNav() {
+            $("#sidenav").css("width", "242px")
+        }
+        function closeNav() {
+            $("#sidenav").css("width", "0")
+        }    
+	</script>
 </body>  
 </html>
