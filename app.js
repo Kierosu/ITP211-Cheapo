@@ -211,7 +211,47 @@ app.post('/wishlist-Add/:ProductID', auth.isLoggedIn, wishList.addItems);
 app.get('/order-tracking', auth.isLoggedIn, orderTracking.show)
 app.post('/feedback', auth.isLoggedIn, orderTracking.feedback)
 
-app.get('/', auth.index);
+app.get('/', auth.index);  
+// shafie's code, will change later, so i comment for now.
+//var user = require("./server/controllers/usercontroller") 
+
+// app.get('/', user.list); 
+  
+// io.on('connection', function(socket)  { 
+//     chatConnections++;   
+//      //auto get username when button clicked
+//     socket.on('chat', (data) => {
+//         socket.username = data.username
+//     })
+//     console.log('New user connected. Username: ' + socket.username + 'SocketID: ' + socket.id);  
+//     // store user info to be used when private messaging
+//     dict.push({
+//         key:   socket.id,
+//         value: socket.username
+//     });  
+//      // remove user info when disconnect to prevent duplicates
+//     socket.on('disconnect', function()  { 
+//         chatConnections--; 
+//         delete dict[socket.id];
+//      });
+// });
+ 
+// app.post('/', function (req, res)  { 
+//     var chatData  = { 
+//         username : req.body.username, 
+//         message : req.body.message, 
+//         sentby : req.body.username, 
+//         sentto : req.body.sentto, 
+//     }   
+//     Msg.create(chatData).then((newMessage) =>{ 
+//         if (!newMessage){ 
+//             sendStatus(500);
+//         } 
+//         io.to(dict[username]).emit('message', req.body) 
+//         io.to(dict[sentto]).emit('message', req.body) 
+//         res.sendStatus(200)
+//     })
+// });
 
 // Teh Yang's code
 

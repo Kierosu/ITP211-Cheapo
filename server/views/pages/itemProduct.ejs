@@ -72,7 +72,7 @@
 					<center><p class="success">Item added Successfully!</p></center>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn" data-dismiss="modal">Continue Shopping</button>
+					<button type="button" class="btn" data-dismiss="modal" onclick="location.reload(true)">Continue Shopping</button>
 					<button type="button" id="check" class="btn">Checkout</button>
 				</div>
 			</div>
@@ -168,7 +168,7 @@
                 dataType: "json",
                 contentType: "application/json",
                 success: function(result){
-                    alert("Item Posted Successfully!");
+					alert("Item Posted Successfully!");
                 },
                 error: function(result){
                     alert("Error Posting Item");

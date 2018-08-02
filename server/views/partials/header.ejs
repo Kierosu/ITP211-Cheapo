@@ -492,6 +492,7 @@
         <script>
         $('.cancel-btn').click(function () {
         var ProductID = $(this).data("id");
+        console.log("productid" + ProductID)
         $.ajax({
             url: 'http://localhost:3000' + '/shopping-cart/' + ProductID,
             type: 'DELETE',
