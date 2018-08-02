@@ -247,7 +247,7 @@ exports.editProduct = function (req, res) {
     var record_num = req.params.id;
     itemPostModel.findById(record_num).then(function (itemRecord) {
         res.render('editProduct', {
-            title: "Practical 5 Database Node JS - Edit Student Record",
+            title: "Edit Item Product",
             item: itemRecord,
             hostPath: req.protocol + "://" + req.get("host"),
             urlPath: req.protocol + "://" + req.get('host') + req.url
@@ -261,23 +261,22 @@ exports.editProduct = function (req, res) {
 
 // Update student record in database
 exports.update = function (req, res) {
-    var record_num = req.params.id;
-    var updateData = {
-        title: req.body.title,
-        price: req.body.price,
-        brand: req.body.brand,
-        prodDesc: req.body.prodDesc
-    }
-    itemPostModel.update(updateData, { where: { id: record_num } }).then((updatedProducts) => {
-        if (!updatedProducts || updatedProducts == 0) {
-            return res.send(400, {
-                message: "error"
-            });
+        var record_num = req.params.id;
+        var updateData = {
+            title: req.body.title,
+            price: req.body.price,
+            brand: req.body.brand,
+            prodDesc: req.body.prodDesc
         }
-        res.status(200).send({ message: "Updated student record: " + record_num });
-    })
-}
-
+        itemPostModel.update(updateData, { where: { id: record_num } }).then((updatedProducts) => {
+            if (!updatedProducts || updatedProducts == 0) {
+                return res.send(400, {
+                    message: "error"
+                });
+            }
+            res.status(200).send({ message: "Updated student record: " + record_num });
+        })
+    };
     // // remove from temp folder
     // fs.unlink(tempPath, function (err) {
     //     if (err) {

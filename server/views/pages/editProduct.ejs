@@ -2,25 +2,30 @@
 <html lang="en">
 
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-	<title>E-SHOP HTML Template</title>
+    <title>E-SHOP HTML Template</title>
 
-	<!-- Google font -->
+    <!-- Google font -->
     <!-- Bootstrap -->
-	<link type="text/css" rel="stylesheet" href="/css/raysonStyle.css" />
-	<% include ../partials/stylesheet %>
+    <link type="text/css" rel="stylesheet" href="/css/raysonStyle.css" />
+    <% include ../partials/stylesheet %>
 
 </head>
 
 <body>
-        <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">Edit Item Product</h4>
-        </div>
+    <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Edit Item Product</h4>
+    </div>
+    <form action="/edit" method="post" enctype="multipart/form-data">
         <div class="modal-body">
+            <fieldset class="form-group">
+                <label for="itemPic">Product Picture</label>
+                <input type="file" id="itemPic" name="itemPic" value="<%= item.itemPic%>">
+            </fieldset>
             <fieldset class="form-group">
                 <label for="title">Listing Title</label>
                 <input type="text" id="title" name="title" class="form-control" placeholder="Listing Title" required="true" value="<%=item.title%>">
@@ -31,7 +36,7 @@
             </fieldset>
             <fieldset class="form-group">
                 <label for="brand">Brand</label>
-                <input type="text" id="brand" name="brand" class="form-control" placeholder="Brand"  value="<%=item.brand%>">
+                <input type="text" id="brand" name="brand" class="form-control" placeholder="Brand" value="<%=item.brand%>">
             </fieldset>
             <fieldset class="form-group">
                 <label for="prodDesc">Product Description</label>
@@ -39,44 +44,46 @@
             </fieldset>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" onclick=saveChanges()>Save Changes</button>
+            <button type="submit" id="send" class="btn btn-primary" onclick=saveChanges()>Save Changes</button>
             <button type="button" class="btn btn-secondary" onclick=discardChanges()>Cancel</button>
         </div>
+    </form>
 
         <!-- jQuery Plugins -->
-	<% include ../partials/javascript %>
-    
-        <script>
-            function saveChanges() {
-                var url = "<%=hostPath%>/edit/<%=item.id%>";
-                var newValues = {
-                    title: $("#title").val(),
-                    price: $("#price").val(),
-                    brand: $("#brand").val(),
-                    prodDesc: $("#prodDesc").val()
-                }
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: JSON.stringify(newValues),
-                    dataType: "json",
-                    contentType: "application/json",
-                    success: function(result){
-                        alert("Product updated successfully");
-                        location.href = "<%=hostPath%>/userItems"
-                    },
-                    error: function(result){
-                        alert("Error updating student record");
-                        discardChanges();
+        <% include ../partials/javascript %>
+
+            <script>
+                function saveChanges() {
+                    var url = "<%=hostPath%>/edit/<%=item.id%>";
+                    var newValues = {
+                        itemPic: $("#itemPic").val(),
+                        title: $("#title").val(),
+                        price: $("#price").val(),
+                        brand: $("#brand").val(),
+                        prodDesc: $("#prodDesc").val()
                     }
-                })
-            }
-    
-            function discardChanges() {
-                location.href = "<%=hostPath%>/userItems"
-            }
-        </script>
-    </body>
-    
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: JSON.stringify(newValues),
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (result) {
+                            alert("Product updated successfully");
+                            location.href = "<%=hostPath%>/userItems"
+                        },
+                        error: function (result) {
+                            alert("Error updating student record");
+                            discardChanges();
+                        }
+                    })
+                }
+
+                function discardChanges() {
+                    location.href = "<%=hostPath%>/userItems"
+                }
+            </script>
+</body>
+
 
 </html>
