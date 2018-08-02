@@ -18,7 +18,7 @@ function dTimer(aucD) {
 }
 
 function goBackToItems(){
-    window.location.assign("/items");
+    window.location.assign("/userItems");
 }
 
 function showMail(from,message,mID){

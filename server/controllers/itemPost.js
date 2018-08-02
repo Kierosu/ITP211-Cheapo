@@ -1,6 +1,10 @@
 // Import modules
 var fs = require('fs');
 var mime = require('mime');
+var { raysonCart } = require('./otherFunc');
+var Auction = require('../models/auction');
+var Report = require('../models/report');
+var User = require('../models/user');
 // set image file types
 var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 
@@ -14,7 +18,7 @@ var UserModel = require('../models/user');
 var { raysonCart } = require('./otherFunc')
 exports.list = function (req, res) {
     if (req.user) {
-        sequelize.query('select id, itemPic, title, price, brand, prodDesc, ownerName, sellerID from itemPosts', { model: itemPostModel }).then((itemPost) => {
+        sequelize.query('select * from itemPosts', { model: itemPostModel }).then((itemPost) => {
             raysonCart(req.user).then((obj) => {
                 res.render('itemPosted', {
                     title: 'Images Gallery',
@@ -25,20 +29,20 @@ exports.list = function (req, res) {
                     total: obj.totalPrice,
                     subtotal: obj.subtotal,
                     shippingFee: obj.shippingFee,
-                    itemSearch: req.body.searchWord
+                    itemSearch: req.body.searchWord,
+                    msg: req.flash('message')
                 });
             })
         })
     }
     else {
-        sequelize.query('select id, itemPic, title, price, brand, prodDesc, ownerName, sellerID from itemPosts', { model: itemPostModel }).then((itemPost) => {
+        sequelize.query('select * from itemPosts', { model: itemPostModel }).then((itemPost) => {
             res.render('itemPosted', {
-                title: 'Images Gallery',
                 itemPost: itemPost,
                 urlPath: req.protocol + "://" + req.get("host") + req.url,
                 itemSearch: req.body.searchWord
             });
-
+            console.log('YKKKK')
         }).catch((err) => {
             return res.status(400).send({
                 message: err
@@ -47,43 +51,56 @@ exports.list = function (req, res) {
     };
 };
 exports.show = function (req, res) {
-
-    sequelize.query('select id, itemPic, title, price, brand, prodDesc, ownerName, sellerID from itemPosts', { model: itemPostModel }).then((itemPost) => {
-        sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
-            var totalPrice = 0;
-            var shippingFee = 0;
-            var stripeTotal = 0;
-            var realQuantity = 0;
-
-            products.forEach(function (rayson) {
-                totalPrice += rayson.ProductPrice;
-                realQuantity += 1;
-            });
-            if (totalPrice > 50) {
-                subtotal = totalPrice;
-                stripeTotal = totalPrice;
-            } else {
-                subtotal = totalPrice;
-                totalPrice += 5.00;
-                shippingFee = 5.00;
-                stripeTotal = totalPrice;
+    Auction.findAll({}).then((auction) => {
+        if (req.user.userType === 'Admin') {
+            Report.findAll({}).then((report) => {
+                User.findAll({ where: sequelize.or({ userType: 'Member' },{ userType: 'Driver' },{ userType: 'Support' }) }).then((user) => {
+                    sequelize.query('select * from itemPosts', { model: itemPostModel }).then((itemPost) => {
+                        raysonCart(req.user).then((obj) => {
+                            res.render('userItems', {
+                                report: report,
+                                users: user,
+                                itemPost: itemPost,
+                                auction: auction,
+                                urlPath: req.protocol + "://" + req.get("host") + req.url,
+                                products: obj.products,
+                                total: obj.totalPrice,
+                                shippingFee: obj.shippingFee,
+                                subtotal: obj.subtotal,
+                                realQuantity: obj.realQuantity,
+                                msg: req.flash('message')
+                            });
+                        }).catch((err) => {
+                            return res.status(400).send({
+                                message: err
+                            });
+                        });
+                    });
+                })
+            })
+        } else {
+            if (req.user.userType === 'Member') {
+                sequelize.query('select * from itemPosts where sellerID = ' + req.user.userID, { model: itemPostModel }).then((itemPost) => {
+                    raysonCart(req.user).then((obj) => {
+                        res.render('userItems', {
+                            itemPost: itemPost,
+                            auction: auction,
+                            urlPath: req.protocol + "://" + req.get("host") + req.url,
+                            products: obj.products,
+                            total: obj.totalPrice,
+                            shippingFee: obj.shippingFee,
+                            subtotal: obj.subtotal,
+                            realQuantity: obj.realQuantity,
+                            msg: req.flash('message')
+                        });
+                    })
+                }).catch((err) => {
+                    return res.status(400).send({
+                        message: err
+                    });
+                });
             }
-            res.render('userItems', {
-                title: 'Images Gallery',
-                itemPost: itemPost,
-                urlPath: req.protocol + "://" + req.get("host") + req.url,
-                realQuantity: realQuantity,
-                products: products,
-                total: totalPrice,
-                subtotal: subtotal,
-                shippingFee: shippingFee,
-            });
-
-        }).catch((err) => {
-            return res.status(400).send({
-                message: err
-            });
-        });
+        }
     });
 };
 
@@ -120,6 +137,7 @@ exports.postItem = function (req, res) {
     });
 }
 
+var { mailNewItem } = require('./sendMails');
 // Add new item record to database
 exports.create = function (req, res) {
     console.log("creating items")
@@ -164,6 +182,7 @@ exports.create = function (req, res) {
                     message: "error"
                 });
             }
+            mailNewItem(req.user.userID, itemPostData.title);
             res.redirect('userItems');
         })
     });
@@ -215,6 +234,7 @@ exports.showitem = function (req, res) {
                     productPrice: productDetails.price,
                     productBrand: productDetails.brand,
                     productDesc: productDetails.prodDesc,
+                    productID: productDetails.id,
                     avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
                     username: req.user.username,
                     email: req.user.email,
@@ -231,7 +251,8 @@ exports.showitem = function (req, res) {
                     total: totalPrice,
                     subtotal: subtotal,
                     shippingFee: shippingFee,
-                    urlPath: req.protocol + "://" + req.get('host') + req.url
+                    urlPath: req.protocol + "://" + req.get('host') + req.url,
+                    msg: req.flash('message')
                 });
             }).catch((err) => {
                 return res.status(400).send({

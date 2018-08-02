@@ -6,23 +6,23 @@ var router = express.Router();
 router.post('/add/:id', auth.isLoggedIn, (req, res) => {
     var reviewData = {
         itemID: req.params.id,
-        itemReview: req.body.details,
+        itemReview: req.body.theItemReview,
         userID: req.user.userID
     }
 
     Review.findOne({ where: { itemID: reviewData.itemID, userID: reviewData.userID } }).then((dReview) => {
         if (dReview) {
-            Review.findOne({ where: { itemID: reviewData.itemID, userID: req.user.userID } }).then((eReview => {
-                eReview.itemReview = req.body.details;
-                eReview.save().then(() => {
-                    req.flash('msg', 'Review changed successfully');
-                    res.redirect('/items/list/' + reviewData.itemID);
+            if (req.user.userID == dReview.userID) {
+                dReview.itemReview = req.body.theItemReview;
+                dReview.save().then(() => {
+                    req.flash('message', 'Review changed successfully');
+                    res.redirect('/itemProduct/' + reviewData.itemID);
                 })
-            }))
+            }
         } else {
             Review.create(reviewData).then(() => {
-                req.flash('msg', 'Review add successfully');
-                res.redirect('/items/list/' + reviewData.itemID);
+                req.flash('message', 'Review add successfully');
+                res.redirect('/itemProduct/' + reviewData.itemID);
             }).catch((err) => {
                 console.log(err);
                 return;

@@ -1,7 +1,5 @@
-var Product = require('../models/products');
+var ItemPost = require('../models/itemPost');
 var Auction = require('../models/auction');
-var myDatabase = require('./database');
-var sequelize = myDatabase.sequelize;
 var Item = require('../models/item');
 var Mail = require('../models/mail');
 var User = require('../models/user');
@@ -16,10 +14,10 @@ function timeNow() {
 
 function mailExpAuc(auctionID, itemID) {
     Auction.destroy({ where: { auctionID: auctionID } }).then(() => {
-        Item.findOne({ where: { itemID: itemID } }).then((item) => {
+        ItemPost.findOne({ where: { id: itemID } }).then((item) => {
             var alertExpAuction = {
                 sender: 1,
-                receiver: item.userID,
+                receiver: item.sellID,
                 title: 'Auction expired',
                 message: 'Auction ' + item.name + ' has expired',
                 status: 'notSeen'
@@ -38,11 +36,11 @@ function mailExpAuc(auctionID, itemID) {
 
 function mailSoldAuc(aucID, buyerID, price) {
     Auction.findOne({ where: { auctionID: aucID } }).then((auction) => {
-        Item.findOne({ where: { itemID: auction.itemAuctionID } }).then((item) => {
+        ItemPost.findOne({ where: { id: auction.itemAuctionID } }).then((item) => {
             User.findOne({ where: { userID: buyerID } }).then((user) => {
                 var soldAucSeller = {
                     sender: 1,
-                    receiver: item.userID,
+                    receiver: item.sellerID,
                     title: 'Auction expired',
                     message: 'Auction, ' + item.name + ' has ended being bought from buyer, ' + user.username + ' at $' + price,
                     status: 'notSeen'
@@ -82,7 +80,7 @@ module.exports = {
             console.log(err);
         }
     },
-    newItem: (user, item) => {
+    mailNewItem: (user, item) => {
         var newItemMail = {
             sender: 1,
             receiver: user,
@@ -123,13 +121,13 @@ module.exports = {
         return next();
     },
     itemWarnings: (itemId, action) => {
-        Item.findOne({ where: { itemID: itemId } }).then((item) => {
+        ItemPost.findOne({ where: { id: itemId } }).then((item) => {
             if (action == '1/3') {
                 var warnUser = {
                     sender: 1,
-                    receiver: item.userID,
+                    receiver: item.sellerID,
                     title: 'First item warning',
-                    message: 'Your item, ' + item.name + ' has been flagged. Please change it. You have 2 more chances',
+                    message: 'Your item, ' + item.title + ' has been flagged. Please change it. You have 2 more chances',
                     status: 'notSeen'
                 }
                 try {
@@ -142,9 +140,9 @@ module.exports = {
             if (action == '2/3') {
                 var warnUser = {
                     sender: 1,
-                    receiver: item.userID,
+                    receiver: item.sellerID,
                     title: 'Second item warning',
-                    message: 'Your item, ' + item.name + ' has been flagged. Please change it. You have 1 more chances',
+                    message: 'Your item, ' + item.title + ' has been flagged. Please change it. You have 1 more chances',
                     status: 'notSeen'
                 }
                 try {
@@ -157,9 +155,9 @@ module.exports = {
             if (action == 'sus') {
                 var warnUser = {
                     sender: 1,
-                    receiver: item.userID,
+                    receiver: item.sellerID,
                     title: 'Third item warning',
-                    message: 'Your item, ' + item.name + ' has been suspended',
+                    message: 'Your item, ' + item.title + ' has been suspended',
                     status: 'notSeen'
                 }
                 try {
@@ -172,9 +170,9 @@ module.exports = {
             if (action == 'deleteItem') {
                 var warnUser = {
                     sender: 1,
-                    receiver: item.userID,
+                    receiver: item.sellerID,
                     title: 'First item warning',
-                    message: 'Your item, ' + item.name + ' has been deleted from being flagged to many times',
+                    message: 'Your item, ' + item.title + ' has been deleted from being flagged to many times',
                     status: 'notSeen'
                 }
                 try {

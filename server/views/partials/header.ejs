@@ -475,15 +475,12 @@
                                     <a href="/mail">Mail</a>
                             </li>
                             <li>
-                                    <% if(locals.loginuser.userType === 'Admin') { %>
-                                        <a href="/items">Managements</a>
-                                    <% } else { %>
-                                        <a href="/items">Items</a>
-                                    <% } %>
+                            <% if(locals.loginuser.userType === 'Admin') { %>
+                                    <a href="/userItems">Managements</a>
+                                <% } else { %>
+                                    <a href="/userItems">My Products</a>
                                 <% } %>
-                            </li>
-                            <li>
-                                <a href="/userItems"> My Products </a>
+                            <% } %>
                             </li>
                         </ul>
                     </div>

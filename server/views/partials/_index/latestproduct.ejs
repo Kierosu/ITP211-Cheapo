@@ -31,10 +31,10 @@
             <div class="col-md-3 col-sm-6 col-xs-6">
                 <div class="product product-single">
                     <div class="product-thumb">
-                        <img style="height: 280px;width: 100%;" src="./itemImg/<%= selectedItems.itemPic %>" alt="">
+                        <img style="height: 280px;width: 100%;" src="./images/<%= selectedItems.itemPic %>" alt="">
                     </div>
                     <div class="product-body">
-                        <h3 class="product-price"><%= selectedItems.price %></h3>
+                        <h3 class="product-price">$<%= selectedItems.price %></h3>
                         <div class="product-rating">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
@@ -43,10 +43,10 @@
                             <i class="fa fa-star-o empty"></i>
                         </div>
                         <h2 class="product-name">
-                            <a href="#"><%= selectedItems.name %></a>
+                            <a href="#"><%= selectedItems.title %></a>
                         </h2>
                         <div class="product-btns">
-                            <a href="items/list/<%=selectedItems.itemID%>" class="primary-btn add-to-cart">View</a>
+                            <a href="itemProduct/<%=selectedItems.id%>" class="primary-btn add-to-cart">View</a>
                         </div>
                     </div>
                 </div>

@@ -33,7 +33,7 @@ Reports.sync({force: false, logging: console.log}).then(()=>{
     Reports.upsert({
         reportID:1,
         reportDetails:'I dont like the picture',
-        itemID: 4,
+        itemID: 5,
         userID:8
     });
 });

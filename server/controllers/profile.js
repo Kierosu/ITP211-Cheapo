@@ -1,4 +1,5 @@
 const passport = require('passport');
+var ItemPost = require('../models/itemPost');
 const fs = require('fs');
 const UserModel = require('../models/user');
 const Product = require('../models/products');
@@ -423,8 +424,8 @@ exports.checkTFA = (req, res) => {
 //Index page
 exports.index = (req, res) => {
     if (req.user) {
-        Item.findAll({}).then((item) => {
-            sequelize.query("select * from(select top 7 * from Items where status = 'Active' order by itemID desc) s order by itemID asc", { model: Item }).then((selectedItems) => {
+        ItemPost.findAll({}).then((item) => {
+            sequelize.query("select * from(select top 7 * from itemPosts where status = 'Active' order by id desc) s order by id asc", { model: ItemPost }).then((selectedItems) => {
                 raysonCart(req.user).then((obj) => {
                     Auction.findAll({}).then((auction) => {
                         res.render('index', {
@@ -445,8 +446,8 @@ exports.index = (req, res) => {
             })
         })
     } else {
-        Item.findAll({}).then((item) => {
-            sequelize.query("select * from(select top 7 * from Items where status = 'Active' order by itemID desc) s order by itemID asc", { model: Item }).then((selectedItems) => {
+        ItemPost.findAll({}).then((item) => {
+            sequelize.query("select * from(select top 7 * from itemPosts where status = 'Active' order by id desc) s order by id asc", { model: ItemPost }).then((selectedItems) => {
                 Auction.findAll({}).then((auction) => {
                     res.render('index', {
                         item: item,

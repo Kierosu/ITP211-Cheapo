@@ -1,4 +1,5 @@
 var Product = require('../models/products');
+var ItemPost = require('../models/itemPost');
 var { auctionEXP } = require('./sendMails');
 var { raysonCart } = require('./otherFunc');
 var Auction = require('../models/auction');
@@ -12,11 +13,11 @@ var router = express.Router();
 // Show auction page
 router.get('/', auctionEXP, (req, res) => {
     if (req.user) {
-        Item.findAll({}).then((item) => {
+        ItemPost.findAll({}).then((itemPost) => {
             Auction.findAll({}).then((auction) => {
                 raysonCart(req.user).then((obj) => {
                     res.render('auctions', {
-                        item: item,
+                        itemPost: itemPost,
                         auction: auction,
                         products: obj.products,
                         total: obj.totalPrice,
@@ -29,10 +30,10 @@ router.get('/', auctionEXP, (req, res) => {
             })
         })
     } else {
-        Item.findAll({}).then((item) => {
+        ItemPost.findAll({}).then((itemPost) => {
             Auction.findAll({}).then((auction) => {
                 res.render('auctions', {
-                    item: item,
+                    itemPost: itemPost,
                     auction: auction,
                     msg: req.flash('message')
                 });
@@ -52,9 +53,9 @@ router.get('/:aucId/:itemId', (req, res) => {
                 raysonCart(req.user).then((obj) => {
                     if (auctionExist) {
                         Auction.findOne({ where: { auctionID: req.params.aucId } }).then((auction) => {
-                            Item.findOne({ where: { itemID: req.params.itemId } }).then((item) => {
+                            ItemPost.findOne({ where: { id: req.params.itemId } }).then((itemPost) => {
                                 res.render('auctionItem', {
-                                    item: item,
+                                    item: itemPost,
                                     auction: auction,
                                     products: obj.products,
                                     total: obj.totalPrice,
@@ -76,9 +77,9 @@ router.get('/:aucId/:itemId', (req, res) => {
             Auction.findOne({ where: { auctionID: req.params.aucId, itemAuctionID: req.params.itemId } }).then((auctionExist) => {
                 if (auctionExist) {
                     Auction.findOne({ where: { auctionID: req.params.aucId } }).then((auction) => {
-                        Item.findOne({ where: { itemID: req.params.itemId } }).then((item) => {
+                        ItemPost.findOne({ where: { itemID: req.params.itemId } }).then((itemPost) => {
                             res.render('auctionItem', {
-                                item: item,
+                                item: itemPost,
                                 auction: auction,
                                 msg: req.flash('message')
                             });
@@ -97,10 +98,10 @@ router.get('/:aucId/:itemId', (req, res) => {
 // Bid auction
 router.post('/:aucId/:itemId', auth.isLoggedIn, (req, res) => {
     Auction.findOne({ where: { auctionID: req.params.aucId } }).then((auction) => {
-        Item.findOne({ where: { itemID: req.params.itemId } }).then((item) => {
-            if (item.userID == req.user.userID) {
+        ItemPost.findOne({ where: { id: req.params.itemId } }).then((itemPost) => {
+            if (itemPost.sellerID == req.user.userID) {
                 req.flash('message', 'Unable to bid your own items');
-                res.redirect('/auctions/' + req.params.aucId + '/' + req.params.itemId);
+                res.redirect('/auctions/' + req.params.aucId + '/' + req.params.id);
             } else {
                 if (req.body.aucInput < auction.highestPrice) {
                     req.flash('message', 'Please bid higher than the current bid: $' + auction.highestPrice);
