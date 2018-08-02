@@ -95,7 +95,7 @@ app.post('/verifyOTP', auth.verifyOTP)
 
 app.get('/signup', auth.isLoggedInV2, auth.signup);
 app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/logout',
+    successRedirect: '/',
     failureRedirect: '/signup',
     failureFlash: true
 }));
