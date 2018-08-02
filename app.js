@@ -1,4 +1,5 @@
 const express = require("express");
+var { auctionEXP } = require('./server/controllers/sendMails');
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -231,7 +232,7 @@ app.get('/editProduct/:id', auth.isLoggedIn, itemPost.editProduct);
 app.post('/edit/:id', auth.isLoggedIn, itemPost.update);
 
 // Test Specified User Items
-app.get('/userItems', auth.isLoggedIn, itemPost.show);
+app.get('/userItems', auth.isLoggedIn, auctionEXP, itemPost.show);
 app.delete('/itemPosted/:item_id', itemPost.delete);
 
 // Search
