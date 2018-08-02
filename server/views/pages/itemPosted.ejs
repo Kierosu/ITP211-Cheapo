@@ -19,38 +19,35 @@
 <body>
 
 	<% include ../partials/header %>
-
-	<!-- BREADCRUMB -->
-	<div id="breadcrumb">
-		<div class="container">
-			<ul class="breadcrumb">
-				<li><a href='#'>Home</a></li>
-				<li class="active">Blank</li>
-			</ul>
-		</div>
-	</div>
-	<!-- /BREADCRUMB -->
-
+	
 	<!-- section -->
 	<div class="section">
 		<!-- container -->
 		<div class="container">
 			<!-- row -->
-			<div class="row"> 
 					<% 
 					if(itemSearch == undefined || itemSearch == "") {
 						itemPost.forEach(function(itemPost){ %>
-							<div class="col-md-3" style="border-style: solid; text-align: center; box-sizing: border-box;">	
-									<div class="classWithPad">
-										<label style="float: left;"> By: <%= itemPost.ownerName %></label> <br>
-										<img src="images/<%= itemPost.itemPic %>" class="figure-img img-fluid img-rounded" style="height:200px; width: 200px;"> <br>
-										<h2> <%= itemPost.title %> </h2> <br>
-										<label id="productFont"> S$<%= itemPost.price %> </label><br>
-										<label id="productFont"> Brand: <%= itemPost.brand %> </label> <br>
-										<label id="productFont"> Details: <%= itemPost.prodDesc %> </label> <br>
-										<button class="productBtn btn" data-id="<%= itemPost.id%>">View Product</button>
+							<div style="height:400px; width:25%; display:flex; font-family: Calibri; float: left; text-align:center; margin-bottom: 25px;">
+								<div style="width:85%; height:95%; margin:auto;">	
+									<div style="height:100%; width:100%;">
+										<label style="float: left; width:100%; height:5%;"> By: <%= itemPost.ownerName %></label>
+										<div style="height:55%; width:100%; display:flex;">
+											<img style="margin:auto; width:85%; height:95%;" src="images/<%= itemPost.itemPic %>" class="figure-img img-fluid img-rounded" style="height:200px; width: 200px;">
+										</div>
+										<div style="width:100%; height:10%; overflow:hidden;">
+											<h2> <%= itemPost.title %> </h2> 
+										</div>
+										<label id="productFont" style=" width:100%; height:5%; overflow:hidden;"> S$<%= itemPost.price %> </label>
+										<label id="productFont" style="width:100%; height:5%; overflow:hidden;"> Brand: <%= itemPost.brand %> </label> 
+										<label id="productFont" style="width:100%; height:5%; overflow:hidden;"> Details: <%= itemPost.prodDesc %> </label> 
+										<div style="width:100%; height:15%;">
+											<button class="productBtn btn" data-id="<%= itemPost.id%>" >View Product</button>
+										</div>
 									</div>
 								</div>
+							</div>
+							
 						 <% })
 
 						} else { 
@@ -59,20 +56,26 @@
 							for(var i = 0; i < items.length; i++) {
 								if (itemSearch.toLowerCase() == items[i].toLowerCase()) { %>
 
-									<div class="col-md-3" style="border-style: solid; text-align: center; box-sizing: border-box;">	
-										<div class="classWithPad">
-											<label style="float: left;"> By: <%= itemPost.ownerName %></label> <br>
-											<img src="images/<%= itemPost.itemPic %>" class="figure-img img-fluid img-rounded" style="height:200px; width: 200px;"> <br>
-											<h2> <%= itemPost.title %> </h2> <br>
-											<label id="productFont"> S$<%= itemPost.price %> </label><br>
-											<label id="productFont"> Brand: <%= itemPost.brand %> </label> <br>
-											<label id="productFont"> Details: <%= itemPost.prodDesc %> </label> <br>
-											<button class="productBtn btn" data-id="<%= itemPost.id%>">View Product</button>
+									<div style="height:400px; width:25%; display:flex; font-family: Calibri; float: left; text-align:center; margin-bottom: 25px;">
+											<div style="width:85%; height:95%; margin:auto;">	
+												<div style="height:100%; width:100%;">
+													<label style="float: left; width:100%; height:5%;"> By: <%= itemPost.ownerName %></label>
+													<div style="height:55%; width:100%; display:flex;">
+														<img style="margin:auto; width:85%; height:95%;" src="images/<%= itemPost.itemPic %>" class="figure-img img-fluid img-rounded" style="height:200px; width: 200px;">
+													</div>
+													<div style="width:100%; height:10%; overflow:hidden;">
+														<h2> <%= itemPost.title %> </h2> 
+													</div>
+													<label id="productFont" style=" width:100%; height:5%; overflow:hidden;"> S$<%= itemPost.price %> </label>
+													<label id="productFont" style="width:100%; height:5%; overflow:hidden;"> Brand: <%= itemPost.brand %> </label> 
+													<label id="productFont" style="width:100%; height:5%; overflow:hidden;"> Details: <%= itemPost.prodDesc %> </label> 
+													<div style="width:100%; height:15%;">
+														<button class="productBtn btn" data-id="<%= itemPost.id%>" >View Product</button>
+													</div>
+												</div>
+											</div>
 										</div>
-									</div>
-							<% }} }) }%>
-								
-			</div>
+							<% }} }) }%>								
 			<!-- /row -->
 		</div>
 		<!-- /container -->

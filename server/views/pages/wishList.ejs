@@ -24,18 +24,7 @@
    </head>
    <body>
         <% include ../partials/header %>
-      <!-- BREADCRUMB -->
-      <div id="breadcrumb">
-         <div class="container">
-            <ul class="breadcrumb">
-               <li>
-                  <a href="#">Home</a>
-               </li>
-               <li class="active">Wish List</li>
-            </ul>
-         </div>
-      </div>
-      <!-- /BREADCRUMB -->
+
       <!-- section -->
       <center>
          <div class="section">
@@ -58,9 +47,9 @@
                      <div class="cart">
                         <ul class="tableHead">
                            <li class="prodHeader">Product</li>
-                           <li>Quantity</li>
-                           <li>Total</li>
-                           <li>Remove</li>
+                           <li style="padding-left: 325px">Quantity</li>
+                           <li style="padding-left: 250px">Total</li>
+                           <li>Add to Cart/Remove from Wishlist</li>
                         </ul>
                         <% wishlist.forEach(function(wishlist){ %>
                         <ul class="cartWrap">
@@ -83,7 +72,7 @@
                                     <p class="stockStatus"> In Stock</p>
                                  </div>
                                  <div class="prodTotal cartSection">
-                                    <p class="price">$<%= wishlist.ProductPrice %>
+                                    <p class="price" style="padding-right: 70px">$<%= wishlist.ProductPrice %>
                                     </p>
                                  </div>
                                  <div class="cartSection removeWrap">
@@ -135,25 +124,12 @@
 	$('.add').click(function () {
         var s = $('.price').text();
         var sliced = s.slice(1)
-        console.log(sliced)
         var ProductID = $(this).data("id");
-		var url = "<%=hostPath%>/wishlist-Add/" + ProductID;
-		var addToCart = {
-            UserId: "<%= userID %>",
-            ProductName: $('.name').val(),
-            ProductDescription: $('.desc').val(),
-            ProductPrice:  sliced,
-            sellerId: parseInt($('.sellerId').val()),
-            ProductImage: $('.img').val()
-		}
+        var url = "<%=hostPath%>/wishlist-Add/" + ProductID;
 		$.ajax({
 			url: url,
 			type: "POST",
-			data: JSON.stringify(addToCart),
-			dataType: "json",
-			contentType: "application/json",
 			success: function(result){
-                alert('Success')
                 $.ajax({
                  url: '<%-urlPath%>' + '/' + ProductID,
                  type: 'DELETE',

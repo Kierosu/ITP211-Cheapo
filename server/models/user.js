@@ -135,6 +135,13 @@ User.sync({force: false, logging: console.log}).then(()=>{
         password: "test",
         userType: "Admin"
     });
+    User.upsert({
+        userID: 12,
+        username: "Toh",
+        email: "Toh@Toh.com",
+        password: "Toh",
+        userType: "Driver"
+    });
 });
 
 User.beforeUpsert(function(user, options) {

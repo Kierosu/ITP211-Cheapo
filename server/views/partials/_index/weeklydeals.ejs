@@ -36,7 +36,7 @@
                                     <div class="product product-single">
                                         <div class="product-thumb">
                                             <img style="height: 280px;width: 100%;" 
-                                            src="./itemImg/<%item.forEach(function(item){%><% if (item.itemID == auction.itemAuctionID){ %><%= item.itemPic %><% } %><% }) %>" alt="img">
+                                            src="./images/<%item.forEach(function(item){%><% if (item.id == auction.itemAuctionID){ %><%= item.itemPic %><% } %><% }) %>" alt="img">
                                         </div>
                                         <div class="product-body">
                                             <h3 class="product-price">
@@ -51,7 +51,7 @@
                                             </div>
                                             <h2 class="product-name">
                                                 <a href="#">
-                                                    <%item.forEach(function(item){%><% if (item.itemID == auction.itemAuctionID){ %><%= item.name %><% } %><% }) %>
+                                                    <%item.forEach(function(item){%><% if (item.id == auction.itemAuctionID){ %><%= item.title %><% } %><% }) %>
                                                 </a>
                                             </h2>
                                             <div class="product-btns" style="display: flex">

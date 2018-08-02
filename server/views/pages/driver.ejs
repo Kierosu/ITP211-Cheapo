@@ -181,11 +181,11 @@ window.onclick = function(event) {
             <% differentAcc.forEach(function(test){ %>
                 <div class="select" id="test" data-id="<%= test.UserId %>">
                 <% var count = 1 %>
-                <p class="dropbtn">User ID: <span class="line"><%= test.UserId %></span></p>
+                <p class="dropbtn">User ID: <%= test.UserId %></p>
                 <hr>
                 <% for(var namesPrint = 0; namesPrint < (test.Name).length; namesPrint ++) { %>
                     <p style="color: orange">Item Id: <%= count %></p>
-                    <p><bold>Username: </bold><%= test.Name[namesPrint]%></p>
+                    <p><bold>Username: </bold><span class="line"><%= test.Name[namesPrint]%></span></p>
                     <hr>
                     <p><bold>Items Bought:</bold></p>
                     <div class="container" style="display: inline-block">

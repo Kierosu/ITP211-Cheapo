@@ -1,3 +1,4 @@
+var ItemPost = require('../models/itemPost');
 var reports = require('../models/report');
 var Items = require('../models/item');
 var database = require('./database');
@@ -7,15 +8,14 @@ var auth = require('./profile');
 var router = express.Router();
 
 router.post('/add/:id', auth.isLoggedIn, (req, res) => {
-    var reportD = req.body.reasons + ':' + req.body.details
     var reportData = {
         itemID: req.params.id,
-        reportDetails: reportD,
+        reportDetails: req.body.itemReport,
         userID: req.user.userID
     }
     reports.create(reportData).then(() => {
-        req.flash('msg', 'Report is successful');
-        res.redirect('/items/list/' + reportData.itemID);
+        req.flash('message', 'Report is made');
+        res.redirect('/itemProduct/' + reportData.itemID);
     }).catch((err) => {
         console.log(err);
         return;
@@ -42,32 +42,33 @@ function warnings(warns, itemId) {
 }
 
 function susp(id) {
-    Items.findOne({ where: { itemID: id } }).then((item => {
+    ItemPost.findOne({ where: { id: id } }).then((item => {
         item.status = 'Deactivated';
+        item.warnings = '';
         item.save();
     }))
 }
 
 function deleteInR(id) {
-    sequelize.query('DELETE from Reports WHERE itemID = ' + id + 'DELETE from Reviews WHERE itemID = ' + id + 'DELETE from Items WHERE itemID = ' + id, { model: Items })
+    sequelize.query('DELETE from Reports WHERE itemID = ' + id + 'DELETE from Reviews WHERE itemID = ' + id + 'DELETE from itemPosts WHERE id = ' + id, { model: ItemPost })
 }
 
 router.get('/warn/:iid/:rid', auth.isLoggedIn, (req, res) => {
-    Items.findOne({ where: { itemID: req.params.iid } }).then((item => {
+    ItemPost.findOne({ where: { id: req.params.iid } }).then((item => {
         if (item.warnings == 'Final') {
-            itemWarnings(item.itemID, 'deleteItem');
+            itemWarnings(item.id, 'deleteItem');
             deleteInR(req.params.iid);
             req.flash('message', 'Item removed successfully');
-            res.redirect('/items');
+            res.redirect('/userItems');
         } else {
-            item.warnings = warnings(item.warnings, item.itemID)
+            item.warnings = warnings(item.warnings, item.id)
             if (item.warnings == '3/3') {
-                itemWarnings(item.itemID, 'sus');
+                itemWarnings(item.id, 'sus');
                 susp(req.params.iid);
             }
             item.save().then(() => {
                 req.flash('message', 'Warn successfully'),
-                    res.redirect('/items')
+                    res.redirect('/userItems')
             }).catch((err) => {
                 return res.status(400).send({
                     message: err
@@ -80,15 +81,13 @@ router.get('/warn/:iid/:rid', auth.isLoggedIn, (req, res) => {
 
 router.get('/delete/:id', auth.isLoggedIn, (req, res) => {
     sequelize.query('DELETE from Reports WHERE reportID = ' + req.params.id, { model: reports }).then(() => {
-        req.flash('msg', 'Report deleted successfully'),
-            res.redirect('/items')
+        req.flash('message', 'Report ignored'),
+            res.redirect('/userItems')
     }).catch((err) => {
         return res.status(400).send({
             message: err
         });
     })
 })
-
-
 
 module.exports = router;

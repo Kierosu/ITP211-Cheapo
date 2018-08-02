@@ -1,6 +1,5 @@
 <!-- HEADER -->
 <header>
-
         <!-- header -->
         <div id="header">
             <div class="container">
@@ -40,8 +39,8 @@
                             </div>
                             <ul class="custom-menu">
                                 <li><a href="/profile/<%= loginuser.username %>"><i class="fa fa-user-o"></i> My Account</a></li>
-                                <li><a href="#"><i class="fa fa-heart-o"></i> My Wishlist</a></li>  
-                                <li><a href="#"><i class="fa fa-check"></i> Checkout</a></li>
+                                <li><a href="/wishlist"><i class="fa fa-heart-o"></i> My Wishlist</a></li>  
+                                <li><a href="/shopping-cart"><i class="fa fa-check"></i> Checkout</a></li>
                                 <li><a href="/logout"><i class="fa fa-unlock-alt"></i> Logout</a></li>
                             </ul>
                                 
@@ -99,8 +98,8 @@
                                                 <% }); %>
                                             </div>
                                     <div class="shopping-cart-btns">
-                                        <button class="main-btn">View Cart</button>
-                                        <button class="primary-btn">Checkout <i class="fa fa-arrow-circle-right"></i></button>
+                                        <button class="main-btn">Cancel</button>
+                                        <button onclick="location.href = 'http://localhost:3000/shopping-cart';" class="primary-btn">Cart <i class="fa fa-arrow-circle-right"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -476,15 +475,12 @@
                                     <a href="/mail">Mail</a>
                             </li>
                             <li>
-                                    <% if(locals.loginuser.userType === 'Admin') { %>
-                                        <a href="/items">Managements</a>
-                                    <% } else { %>
-                                        <a href="/items">Items</a>
-                                    <% } %>
+                            <% if(locals.loginuser.userType === 'Admin') { %>
+                                    <a href="/userItems">Managements</a>
+                                <% } else { %>
+                                    <a href="/userItems">My Products</a>
                                 <% } %>
-                            </li>
-                            <li>
-                                <a href="/userItems"> My Products </a>
+                            <% } %>
                             </li>
                         </ul>
                     </div>
@@ -494,26 +490,27 @@
             <!-- /container -->
         </div>
         <script>
-            // <% if (locals.raysonCart){ %>
-                $('.cancel-btn').click(function () {
-                var ProductID = $(this).data("id");
-                $.ajax({
-                    url: '<%-urlPath%>' + '/' + ProductID,
-                    type: 'DELETE',
-                    success: function (result) {
-                        console.log(result.price);
-                        var itemToRemove = '.product-widget[data-id=' + ProductID + ']';
-                        $(itemToRemove).remove();
-                        
-                        $('.totalMoney').text(result.price)
-                    },
-                    error: function (result) {
-                        alert("Unable to delete Product.");
-                        console.log(result);
-                    }
-                });
-                });
-            // <% } %>
+        $('.cancel-btn').click(function () {
+        var ProductID = $(this).data("id");
+        console.log("productid" + ProductID)
+        $.ajax({
+            url: 'http://localhost:3000' + '/shopping-cart/' + ProductID,
+            type: 'DELETE',
+            success: function (result) {
+                console.log(result.price);
+                var itemToRemove = '.product-widget[data-id=' + ProductID + ']';
+                console.log(itemToRemove)
+                $(itemToRemove).remove();
+                location.reload(true)
+                
+                $('.totalMoney').text(result.price)
+            },
+            error: function (result) {
+                alert("Unable to delete Product.");
+                console.log(result);
+            }
+        });
+        });
         </script>
         <br>
         <% include ../partials/msg %>

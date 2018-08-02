@@ -1,4 +1,5 @@
 const express = require("express");
+var { auctionEXP } = require('./server/controllers/sendMails');
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -210,7 +211,47 @@ app.post('/wishlist-Add/:ProductID', auth.isLoggedIn, wishList.addItems);
 app.get('/order-tracking', auth.isLoggedIn, orderTracking.show)
 app.post('/feedback', auth.isLoggedIn, orderTracking.feedback)
 
-app.get('/', auth.index);
+app.get('/', auth.index);  
+// shafie's code, will change later, so i comment for now.
+//var user = require("./server/controllers/usercontroller") 
+
+// app.get('/', user.list); 
+  
+// io.on('connection', function(socket)  { 
+//     chatConnections++;   
+//      //auto get username when button clicked
+//     socket.on('chat', (data) => {
+//         socket.username = data.username
+//     })
+//     console.log('New user connected. Username: ' + socket.username + 'SocketID: ' + socket.id);  
+//     // store user info to be used when private messaging
+//     dict.push({
+//         key:   socket.id,
+//         value: socket.username
+//     });  
+//      // remove user info when disconnect to prevent duplicates
+//     socket.on('disconnect', function()  { 
+//         chatConnections--; 
+//         delete dict[socket.id];
+//      });
+// });
+ 
+// app.post('/', function (req, res)  { 
+//     var chatData  = { 
+//         username : req.body.username, 
+//         message : req.body.message, 
+//         sentby : req.body.username, 
+//         sentto : req.body.sentto, 
+//     }   
+//     Msg.create(chatData).then((newMessage) =>{ 
+//         if (!newMessage){ 
+//             sendStatus(500);
+//         } 
+//         io.to(dict[username]).emit('message', req.body) 
+//         io.to(dict[sentto]).emit('message', req.body) 
+//         res.sendStatus(200)
+//     })
+// });
 
 // Teh Yang's code
 
@@ -228,15 +269,15 @@ app.get('/itemProduct/:imageId', auth.isLoggedIn, itemPost.showitem);
 
 // Item Edit and Delete
 app.get('/editProduct/:id', auth.isLoggedIn, itemPost.editProduct);
-app.post('/edit/:id', auth.isLoggedIn, itemPost.update);
+app.post('/edit/:id', auth.isLoggedIn, upload.single('image'), itemPost.update);
 
 // Test Specified User Items
-app.get('/userItems', auth.isLoggedIn, itemPost.show);
+app.get('/userItems', auth.isLoggedIn, auctionEXP, itemPost.show);
 app.delete('/itemPosted/:item_id', itemPost.delete);
 
 // Search
-app.get('/search', auth.isLoggedIn, itemPost.list);
-app.post('/search', auth.isLoggedIn, itemPost.list);
+app.get('/search', itemPost.list);
+app.post('/search', itemPost.list);
 
 app.use((req, res, next) => {
     res.status(404).redirect('/');

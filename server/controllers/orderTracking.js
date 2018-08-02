@@ -159,13 +159,13 @@ exports.show = function (req, res){
         });
     });
 
-        var ip = "183.90.37.120";
+        var ip = "202.12.95.239";
         var geo = geoip.lookup(ip);
         geoip.startWatchingDataUpdate();
 
         console.log(geo);
-        var myLatitude = parseFloat(geo.ll[0]);
-        var myLongitude = parseFloat(geo.ll[1]);
+        var myLatitude = parseFloat(1.2867);
+        var myLongitude = parseFloat(103.8535);
         var myCity = geo.city;
 
         //Calculating product total value
