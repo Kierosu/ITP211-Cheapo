@@ -137,6 +137,7 @@ exports.postItem = function (req, res) {
     });
 }
 
+var { mailNewItem } = require('./sendMails');
 // Add new item record to database
 exports.create = function (req, res) {
     console.log("creating items")
@@ -181,6 +182,7 @@ exports.create = function (req, res) {
                     message: "error"
                 });
             }
+            mailNewItem(req.user.userID, itemPostData.title);
             res.redirect('userItems');
         })
     });
@@ -232,6 +234,7 @@ exports.showitem = function (req, res) {
                     productPrice: productDetails.price,
                     productBrand: productDetails.brand,
                     productDesc: productDetails.prodDesc,
+                    productID: productDetails.id,
                     avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
                     username: req.user.username,
                     email: req.user.email,
@@ -248,7 +251,8 @@ exports.showitem = function (req, res) {
                     total: totalPrice,
                     subtotal: subtotal,
                     shippingFee: shippingFee,
-                    urlPath: req.protocol + "://" + req.get('host') + req.url
+                    urlPath: req.protocol + "://" + req.get('host') + req.url,
+                    msg: req.flash('message')
                 });
             }).catch((err) => {
                 return res.status(400).send({

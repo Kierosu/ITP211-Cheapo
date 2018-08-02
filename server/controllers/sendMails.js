@@ -80,7 +80,7 @@ module.exports = {
             console.log(err);
         }
     },
-    newItem: (user, item) => {
+    mailNewItem: (user, item) => {
         var newItemMail = {
             sender: 1,
             receiver: user,

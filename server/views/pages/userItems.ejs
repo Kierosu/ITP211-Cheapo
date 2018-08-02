@@ -257,9 +257,9 @@
 										<a onclick="return confirm('Ignore Report?')" href="reports/delete/<%= report.reportID %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Ignore Report</a>
 									</div>		
 									<div style="height: 33%;width: 100%;display: flex;">
-										<a href="items/list/<% itemPost.forEach(function(item){ %>
-																<% if(item.itemID == report.itemID){ %>																		
-																	<%= item.itemID %>
+										<a href="/itemProduct/<% itemPost.forEach(function(item){ %>
+																<% if(item.id == report.itemID){ %>																		
+																	<%= item.id %>
 																<% } %>
 															<% })%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Item</a>
 									</div>		

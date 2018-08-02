@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-	<title>E-SHOP HTML Template</title>
+	<title>Cheapo</title>
 
 	<!-- Google font -->
 	<!-- Bootstrap -->
@@ -20,31 +20,22 @@
 
 	<% include ../partials/header %>
 
-	<!-- BREADCRUMB -->
-	<div id="breadcrumb">
-		<div class="container">
-			<ul class="breadcrumb">
-				<li><a href='#'>Home</a></li>
-				<li class="active">Blank</li>
-			</ul>
-		</div>
-	</div>
-	<!-- /BREADCRUMB -->
-
 	<!-- section -->
 	<div class="section">
 		<!-- container -->
 		<div class="container">
 			<!-- row -->
 			<div class="row" style="margin:auto;">
-				<div class="col-lg-4"> <img src = "../images/<%= productImage %>" style="height:300px; width: 300px;"></img> </div>
-				<input type="hidden" class="productIMG" value="../images/<%= productImage %>">
-				<div class="col-lg-8"> <h2 class="title"> <%= productTitle %> </h2> </div>
-				<div class="col-lg-8"> <h3 class="price"> S$<%= productPrice %> </h3> </div>
-				<div class="col-lg-8"> <h3 class="brand"> Brand: <%= productBrand %> </h3> </div>
-				<div class="col-lg-8"> <h4 class="prodDesc"> Description: <%= productDesc %> </h4> </div>
-				<div class="col-lg-8"> <h3 style="float: left;"> By: <%= ownerName %> </div>
+				<div class="col-lg-4"> 
+					<img src = "../images/<%= productImage %>" style="height:300px; width: 300px;"></img> 
 				</div>
+					<input type="hidden" class="productIMG" value="../images/<%= productImage %>">
+					<div class="col-lg-8"> <h2 class="title"> <%= productTitle %> </h2> </div>
+					<div class="col-lg-8"> <h3 class="price"> S$<%= productPrice %> </h3> </div>
+					<div class="col-lg-8"> <h3 class="brand"> Brand: <%= productBrand %> </h3> </div>
+					<div class="col-lg-8"> <h4 class="prodDesc"> Description: <%= productDesc %> </h4> </div>
+					<div class="col-lg-6"> <h3 style="float: left;"> By: <%= ownerName %> </div>
+				</div>				
 				<div class="row" style="margin:auto;">
 					<div class="col-lg-4"></div>
 					<div class="col-lg-8">
@@ -55,8 +46,8 @@
 				<div class="row" style="margin:auto;">
 					<div class="col-lg-4"></div>
 					<div class="col-lg-8" style="margin-top: 1%;">
-						<button type="submit" class="btn">Leave a review</button> 
-						<button type="submit" class="btn">Report Item</button> 
+						<button type="submit" class="btn" data-toggle="modal" data-target="#itemReview">Leave a review</button> 
+						<button type="submit" class="btn" data-toggle="modal" data-target="#itemReport">Report Item</button> 
 					</div>
 				</div>
 			</div>
@@ -66,8 +57,8 @@
 	</div>
 	<!-- /section -->
 	<div class="modal fade" id="addToCart" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="myModalLabel">Successfully added to cart!</h4>
@@ -76,18 +67,55 @@
 					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
 						<circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
 						<polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
-					  </svg>
-					  <br>
-					  <center><p class="success">Item added Successfully!</p></center>
+					</svg>
+					<br>
+					<center><p class="success">Item added Successfully!</p></center>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn" data-dismiss="modal">Continue Shopping</button>
 					<button type="button" id="check" class="btn">Checkout</button>
 				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="itemReport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<form action="/reports/add/<%= productID %>" method="POST">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myModalLabel">Item Report</h4>
+					</div>
+					<div class="modal-body">
+						<input type="text" name="itemReport" id="itemReport" required>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn" data-dismiss="modal">Close</button>
+						<button type="submit" id="check" class="btn">Submit</button>
+					</div>
 				</div>
-			</div>
-			</div>
-
+			</form>
+		</div>
+	</div>
+	<div class="modal fade" id="itemReview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<form action="/reviews/add/<%= productID %>" method="POST">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myModalLabel">Item Review</h4>
+					</div>
+					<div class="modal-body">
+						<input type="text" name="theItemReview" id="theItemReview" required>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn" data-dismiss="modal">Close</button>
+						<button type="submit" id="check" class="btn">Submit</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 	<!-- jQuery Plugins -->
 	<% include ../partials/javascript %>
 	

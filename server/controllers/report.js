@@ -8,15 +8,14 @@ var auth = require('./profile');
 var router = express.Router();
 
 router.post('/add/:id', auth.isLoggedIn, (req, res) => {
-    var reportD = req.body.reasons + ':' + req.body.details
     var reportData = {
         itemID: req.params.id,
-        reportDetails: reportD,
+        reportDetails: req.body.itemReport,
         userID: req.user.userID
     }
     reports.create(reportData).then(() => {
-        req.flash('msg', 'Report is successful');
-        res.redirect('/items/list/' + reportData.itemID);
+        req.flash('message', 'Report is made');
+        res.redirect('/itemProduct/' + reportData.itemID);
     }).catch((err) => {
         console.log(err);
         return;
@@ -82,8 +81,8 @@ router.get('/warn/:iid/:rid', auth.isLoggedIn, (req, res) => {
 
 router.get('/delete/:id', auth.isLoggedIn, (req, res) => {
     sequelize.query('DELETE from Reports WHERE reportID = ' + req.params.id, { model: reports }).then(() => {
-        req.flash('msg', 'Report deleted successfully'),
-            res.redirect('/items')
+        req.flash('message', 'Report ignored'),
+            res.redirect('/userItems')
     }).catch((err) => {
         return res.status(400).send({
             message: err
