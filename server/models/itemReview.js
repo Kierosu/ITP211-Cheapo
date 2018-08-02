@@ -28,31 +28,25 @@ Reviews.sync({force: false, logging: console.log}).then(()=>{
     Reviews.upsert({
         itemReviewID: 1,
         itemReview: "Looks nice",
-        itemID: 1,
-        userID: 6
+        itemID: 5,
+        userID: 7
     });
     Reviews.upsert({
         itemReviewID: 2,
         itemReview: "Smells nice",
-        itemID: 2,
-        userID: 7
+        itemID: 6,
+        userID: 8
     });
     Reviews.upsert({
         itemReviewID: 3,
         itemReview: "Taste nice",
-        itemID: 3,
-        userID: 8
+        itemID: 7,
+        userID: 9
     });
     Reviews.upsert({
         itemReviewID: 4,
         itemReview: "Feels nice",
-        itemID: 4,
-        userID: 9
-    });
-    Reviews.upsert({
-        itemReviewID: 5,
-        itemReview: "Nice",
-        itemID: 5,
+        itemID: 8,
         userID: 10
     });
 });

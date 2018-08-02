@@ -8,39 +8,40 @@
     <title>Cheapo</title>
     <!-- css -->
     <% include ../partials/stylesheet %>
+    <% include ../partials/javascript %>
     <link type="text/css" rel="stylesheet" href="/css/raysonStyle.css" />
 </head>
 
 <body>
     <% include ../partials/header %>
         <div class="container">
-            <div style="height: 400px;width: 75%;margin: auto;font-family: calibri;">
+            <div style="height: 400px;width: 100%;margin: auto;font-family: calibri;">
                 <div style="height: 100%;width: 25%;float: left;">
-                    <div style="height: 15%;width: 100%;background-color: rgb(209, 241, 159);display: flex;font-size: 35px;">
+                    <div style="height: 15%;width: 100%;background-color: rgb(219, 233, 198);display: flex;font-size: 35px;">
                         <p style="margin: auto;">Cheap mail</p>
                     </div>
                     <div style="height: 85%;width: 100%;background-color: rgb(238, 235, 235);overflow-y: auto;font-size: 23px;">
                         <% mail.forEach(function(mail){ %>
                         <div style="height: 13%;width: 100%;display: flex;">
-                            <div id="mailSelection" onclick="showMailT(
+                            <div class="btn" id="mailSelection" onclick="showMailT(
                             <% user.forEach(function(user){
                                 if(user.userID == mail.sender){ %>
                                    '<%= user.email %>'
                             <% }}) %>
-                            ,'<%= mail.message %>','<%= mail.mailID %>');" style="height: 90%;width: 95%;margin: auto;background-color: #F8694A;border-radius: 7px;display: flex;cursor: pointer;overflow: hidden;">
+                            ,'<%= mail.message %>','<%= mail.mailID %>');" style="height: 90%;width: 80%;margin: auto;background-color: rgb(228, 196, 189);border-radius: 7px;display: flex;cursor: pointer;overflow: hidden;">
                                 <p style="margin: auto 0;padding-left: 5px;"><%= mail.title %></p>
                             </div>
                         </div>
                         <% }) %>
                     </div>
-                </div>
-                <div style="height: 100%;width: 75%;float: right;">
+                </div>                
+                <div style="height: 100%;width: 50%;float: left;">
                     <div style="height: 15%;width: 95%;background-color:#F8694A;margin: 0 auto;display: flex;">
                         <div style="height: 100%;width: 30%;display: flex;margin: auto;">
                             <button data-aID="" id="deleteMail" name="deleteMail" type="button" class="btn btn-lg btn-primary" style="height: 95;width: 95%;margin: auto;">Delete Mail</button>
                         </div>
                     </div>
-                    <div style="height: 80%;width: 95%;background-color: moccasin;margin: 0 auto;">
+                    <div style="height: 80%;width: 95%;margin: 0 auto;">
                         <div style="height: 15%;width: 100%;background-color: rgb(238, 235, 235);display: flex;border-top-left-radius: 5px;border-top-right-radius: 5px;">
                             <p id="fromText" style="margin: auto 0;padding-left: 5px;font-size: 32px;"></p>
                         </div>
@@ -49,11 +50,87 @@
                         </div>
                     </div>
                 </div>
+                <div style="height: 100%;width: 25%;float: right;">
+                    <div style="height: 15%;width: 100%;background-color: rgb(219, 233, 198);font-size: 35px;">
+                        <div style="height: 100%;width: 100%;float: left;display: flex;">
+                            <p style="margin: auto; ">Social</p>
+                        </div>                          
+                    </div>
+                    <div style="height: 85%;width: 100%;">
+                        <div style="height: 100%;width: 100%;background-color: pink;">
+                            <div style="height: 15%;background-color: rgb(167, 161, 166);font-size: 20px;">
+                                <div style="height: 100%;width: 50%;float: left;display: flex;">
+                                    <button onclick="followingU()" style="height: 30px;width: 130px;float: left;margin: auto;" class="btn btn-sm btn-info">Following</button>
+                                </div>
+                                <div style="height: 100%;width: 50%;float: left;display: flex;">
+                                    <button onclick="followerU()" style="height: 30px;width: 130px;float: left;margin: auto;" class="btn btn-sm btn-info">Followers</button>
+                                </div>
+                            </div>
+                            <div id="followingUsers" style="height: 85%;width: 100%;overflow-y: auto;">
+                                <% following.forEach(function(following){ %>
+                                    <div onclick="fName(<% user.forEach(function(user){ %><% if(user.userID == following.following){ %>'<%= user.username %>','<%= user.userID %>'<% } %><%}) %>)" data-followingU="<% user.forEach(function(user){ %><% if(user.userID == following.following){ %><%= user.username %><% } %><%}) %>" data-toggle="modal" data-target="#sendMail" class="sList" style="height: 18%;width: 100%;">
+                                        <div style="height: 100%;width: 18%;display: flex;float: left;">
+                                            <img src="/img/<% user.forEach(function(user){ %><% if(user.userID == following.following){ %><%= user.profilePic %><% } %><%}) %>" alt="Profile Picture" style="height: 95%;width: 95%;margin: auto;border-radius: 50%;">
+                                        </div>
+                                        <div style="height: 100%;width: 5%;float: left;"></div>
+                                        <div style="height: 100%;width: 77%;display: flex;float: left;">
+                                            <h3 style="margin: auto 0;">
+                                                <% user.forEach(function(user){ %>
+                                                    <% if(user.userID == following.following){ %>
+                                                        <%= user.username %>
+                                                    <% } %>
+                                                <%}) %>
+                                            </h3>  
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            </div>
+                            <div id="followerUsers" style="height: 85%;width: 100%;overflow-y: auto;display: none;">
+                                <% follower.forEach(function(follower){ %>
+                                    <div onclick="sesdatMail('abc','efg')" data-toggle="modal" data-target="#sendMail" class="sList" style="height: 18%;width: 100%;">
+                                        <div style="height: 100%;width: 18%;display: flex;float: left;">
+                                            <img src="/img/<% user.forEach(function(user){ %><% if(user.userID == follower.follower){ %><%= user.profilePic %><% } %><%}) %>" alt="Profile Picture" style="height: 95%;width: 95%;margin: auto;border-radius: 50%;">
+                                        </div>
+                                        <div style="height: 100%;width: 5%;float: left;"></div>
+                                        <div style="height: 100%;width: 77%;display: flex;float: left;">
+                                            <h3 style="margin: auto 0;">
+                                                <% user.forEach(function(user){ %>
+                                                    <% if(user.userID == follower.follower){ %>
+                                                        <%= user.username %>
+                                                    <% } %>
+                                                <%}) %>
+                                            </h3>  
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            </div>
+                        </div>  
+                    </div>                        
+                </div>  
             </div>
+            <div class="modal fade" id="sendMail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <form id="socailMailForm" action="/mail/social/" method="POST">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 id="mailTarget" class="modal-title" id="myModalLabel"></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="text" name="mailInfo" id="mailInfo" required>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                                    <button type="submit" id="check" class="btn">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
         </div>
         <% include ../partials/footer %>
         <!-- jQuery Plugins -->
-        <% include ../partials/javascript %>
+        
         <script>
             function showMailT(from,message,mID){
                 $('#deleteMail').attr("data-aID",mID);
@@ -75,7 +152,12 @@
                         location.reload();
                         alert("Mail has been deleted")
                 }       
-            });
+            });       
+            
+            function fName(sName, sID){
+                document.getElementById("mailTarget").innerHTML = "Mailing to " + sName;
+                document.getElementById("socailMailForm").action = "/mail/social/" + sID;
+            }
         </script>
 </body>
 

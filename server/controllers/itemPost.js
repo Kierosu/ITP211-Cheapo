@@ -1,6 +1,7 @@
 // Import modules
 var fs = require('fs');
 var mime = require('mime');
+var Review = require('../models/itemReview');
 var { raysonCart } = require('./otherFunc');
 var Auction = require('../models/auction');
 var Report = require('../models/report');
@@ -54,7 +55,7 @@ exports.show = function (req, res) {
     Auction.findAll({}).then((auction) => {
         if (req.user.userType === 'Admin') {
             Report.findAll({}).then((report) => {
-                User.findAll({ where: sequelize.or({ userType: 'Member' },{ userType: 'Driver' },{ userType: 'Support' }) }).then((user) => {
+                User.findAll({ where: sequelize.or({ userType: 'Member' }, { userType: 'Driver' }, { userType: 'Support' }) }).then((user) => {
                     sequelize.query('select * from itemPosts', { model: itemPostModel }).then((itemPost) => {
                         raysonCart(req.user).then((obj) => {
                             res.render('userItems', {
@@ -205,61 +206,48 @@ exports.delete = function (req, res) {
 exports.showitem = function (req, res) {
     var idCheck = req.params.imageId
     console.log("Viewing " + idCheck);
-    sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
-        itemPostModel.findOne({ where: { id: idCheck } }).then(productDetails => {
-            var id = req.params.userID;
-            //Calculating product total value
-            var totalPrice = 0;
-            var shippingFee = 0;
-            var stripeTotal = 0;
-            var realQuantity = 0;
-
-            products.forEach(function (rayson) {
-                totalPrice += rayson.ProductPrice;
-                realQuantity += 1;
-            });
-            if (totalPrice > 50) {
-                subtotal = totalPrice;
-                stripeTotal = totalPrice;
-            } else {
-                subtotal = totalPrice;
-                totalPrice += 5.00;
-                shippingFee = 5.00;
-                stripeTotal = totalPrice;
-            }
-            UserModel.findById(id).then(function () {
-                res.render("itemProduct", {
-                    productImage: productDetails.itemPic,
-                    productTitle: productDetails.title,
-                    productPrice: productDetails.price,
-                    productBrand: productDetails.brand,
-                    productDesc: productDetails.prodDesc,
-                    productID: productDetails.id,
-                    avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
-                    username: req.user.username,
-                    email: req.user.email,
-                    userID: req.user.userID,
-                    sellerID: productDetails.sellerID,
-                    dateJoined: req.user.joinDate,
-                    type: req.user.userType,
-                    membership: req.user.membership,
-                    req: req,
-                    hostPath: req.protocol + "://" + req.get("host"),
-                    ownerName: productDetails.ownerName,
-                    realQuantity: realQuantity,
-                    products: products,
-                    total: totalPrice,
-                    subtotal: subtotal,
-                    shippingFee: shippingFee,
-                    urlPath: req.protocol + "://" + req.get('host') + req.url,
-                    msg: req.flash('message')
-                });
-            }).catch((err) => {
-                return res.status(400).send({
-                    message: err
+    raysonCart(req.user).then((obj) => {
+        Review.findAll({ where: { itemID: idCheck } }).then((review => {
+            itemPostModel.findOne({ where: { id: idCheck } }).then(productDetails => {
+                User.findAll({}).then((reviewUser) => {
+                    var id = req.params.userID;
+                    UserModel.findById(id).then(function () {
+                        res.render("itemProduct", {
+                            reviewUser: reviewUser,
+                            review: review,
+                            productImage: productDetails.itemPic,
+                            productTitle: productDetails.title,
+                            productPrice: productDetails.price,
+                            productBrand: productDetails.brand,
+                            productDesc: productDetails.prodDesc,
+                            productID: productDetails.id,
+                            avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
+                            username: req.user.username,
+                            email: req.user.email,
+                            userID: req.user.userID,
+                            sellerID: productDetails.sellerID,
+                            dateJoined: req.user.joinDate,
+                            type: req.user.userType,
+                            membership: req.user.membership,
+                            req: req,
+                            hostPath: req.protocol + "://" + req.get("host"),
+                            ownerName: productDetails.ownerName,
+                            products: obj.products,
+                            total: obj.total,
+                            shippingFee: obj.shippingFee,
+                            subtotal: obj.subtotal,
+                            realQuantity: obj.realQuantity,
+                            urlPath: req.protocol + "://" + req.get('host') + req.url,
+                            msg: req.flash('message')
+                        });
+                    }).catch((err) => {
+                        return res.status(400).send({
+                            message: err
+                        });
+                    });
                 });
             });
-        });
+        }));
     });
 };
 

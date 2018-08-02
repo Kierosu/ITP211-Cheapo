@@ -23,3 +23,7 @@
 .well{
     margin-bottom: 7px;
 }
+
+.sList :hover{
+    cursor: pointer;
+}
