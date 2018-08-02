@@ -10,6 +10,7 @@
 	<title>Cheapo</title>
 
 	<!-- Bootstrap -->
+	
 	<% include ../partials/stylesheet %>
 </head>
 
@@ -73,7 +74,7 @@
 								<div style="height: 100%;width: 15%;float: right;">
 									<div style="height: 100%; width: 100%;">
 										<div style="height: 50%;width: 100%;display: flex">
-											<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%= itemPost.id %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Cancel Auction</a>
+											<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%= itemPost.id %>" style="margin: auto;width: 100%;" class="btn btn-primary btn-sm">Cancel Auction</a>
 										</div>
 										<div style="height: 50%;width: 100%;display: flex;">
 										<a href="/auctions/
@@ -86,7 +87,7 @@
 											<% if(auction.itemAuctionID == itemPost.id){ %>
 												<%= auction.itemAuctionID %>
 											<% } %>														
-										<%})%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Auction</a>
+										<%})%>" style="margin: auto;width: 100%;" class="btn btn-primary btn-sm">View Auction</a>
 										</div>		
 									</div>												
 								</div>						
@@ -138,13 +139,13 @@
 								<div style="height: 100%;width: 15%;float: right;">
 									<div style="height: 100%; width: 100%;">
 										<div style="height: 33%;width: 100%;display: flex">
-											<a href="items/auction/<%=itemPost.id%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Auction</a>
+											<a href="items/auction/<%=itemPost.id%>" style="margin: auto;width: 100%;" class="btn btn-primary btn-sm">Auction</a>
 										</div>
 										<div style="height: 34%;width: 100%;display: flex;">
-											<a href="#" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm editBtn" data-id="<%= itemPost.id%>">Edit</a>
+											<a href="#" style="margin: auto;width: 100%;text-align: center" class="btn btn-primary btn-sm editBtn" data-id="<%= itemPost.id%>">Edit</a>
 										</div>
 										<div style="height: 33%;width: 100%;display: flex">
-											<a href="#" data-id="<%= itemPost.id %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm deleteBtn">Delete</a>
+											<a href="#" data-id="<%= itemPost.id %>" style="margin: auto;width: 100%;" class="btn btn-primary btn-sm deleteBtn">Delete</a>
 										</div>
 									</div>
 								</div>
@@ -314,7 +315,7 @@
 								<div style="height: 100%;width: 15%;float: right;">
 									<div style="height: 100%; width: 100%;">
 										<div style="height: 50%;width: 100%;display: flex">
-											<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%= itemPost.id %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Cancel Auction</a>
+											<a onclick="return confirm('Are you sure you want to delete auction?')" href="items/canAuction/<%= itemPost.id %>" style="margin: auto;width: 100%;" class="btn btn-primary btn-sm">Cancel Auction</a>
 										</div>
 										<div style="height: 50%;width: 100%;display: flex;">
 										<a href="/auctions/
@@ -327,7 +328,7 @@
 											<% if(auction.itemAuctionID == itemPost.id){ %>
 												<%= auction.itemAuctionID %>
 											<% } %>														
-										<%})%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">View Auction</a>
+										<%})%>" style="margin: auto;width: 100%;" class="btn btn-primary btn-sm">View Auction</a>
 										</div>		
 									</div>												
 								</div>
@@ -364,13 +365,13 @@
 								<div style="height: 100%;width: 15%;float: right;">
 									<div style="height: 100%; width: 100%;">
 										<div style="height: 33%;width: 100%;display: flex">
-											<a href="items/auction/<%=itemPost.id%>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm">Auction</a>
+											<a href="items/auction/<%=itemPost.id%>" style="margin: auto;width: 100%;" class="btn btn-primary btn-sm">Auction</a>
 										</div>
 										<div style="height: 34%;width: 100%;display: flex;">
-											<a href="#" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm editBtn" data-id="<%= itemPost.id%>">Edit</a>
+											<a href="#" style="margin: auto;width: 100%;text-align: center;" class="btn btn-primary btn-sm editBtn" data-id="<%= itemPost.id%>">Edit</a>
 										</div>
 										<div style="height: 33%;width: 100%;display: flex">
-											<a href="#" data-id="<%= itemPost.id %>" style="margin: auto;width: 100%;font-size: 18px;" class="btn btn-primary btn-sm deleteBtn">Delete</a>
+											<a href="#" data-id="<%= itemPost.id %>" style="margin: auto;width: 100%;text-align: center;" class="btn btn-sm deleteBtn">Delete</a>
 										</div>
 									</div>
 								</div>
