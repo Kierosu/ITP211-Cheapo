@@ -94,7 +94,8 @@ app.post('/login', passport.authenticate('local-login', {
 }
 );
 
-app.post('/verifyOTP', auth.verifyOTP)
+app.post('/verifyOTP', auth.verifyOTP);
+app.post('/noLoginVerifyOTP', auth.noLoginVerifyOTP);
 
 app.get('/signup', auth.isLoggedInV2, auth.signup);
 app.post('/signup', passport.authenticate('local-signup', {
@@ -104,6 +105,7 @@ app.post('/signup', passport.authenticate('local-signup', {
 }));
 
 app.post('/checkTFA', auth.checkTFA);
+app.post('/noLogincheckTFA', auth.noLogincheckTFA);
 
 app.get('/profile/:username', auth.isLoggedIn, auth.profilepage);
 

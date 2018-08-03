@@ -6,6 +6,7 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var User = require('../models/user');
 const nodemailer = require('nodemailer');
 var bcrypt = require('bcrypt');
+const generatePassword = require('password-generator');
 const saltRounds = 10;
 
 module.exports = function (passport) {
@@ -128,10 +129,9 @@ module.exports = function (passport) {
                         return done(null, user);
                     }
                     else {
-                        var email = profile.emails[0].value;
-                        var name = email.substring(0, email.lastIndexOf("@"));
+                        var randompass = generatePassword(12, false);
                         bcrypt.genSalt(saltRounds, function (err, salt) {
-                            bcrypt.hash(name, salt, function (err, hash) {
+                            bcrypt.hash(randompass, salt, function (err, hash) {
                                 var userData = {
                                     username: profile.displayName,
                                     email: profile.emails[0].value,
@@ -163,10 +163,10 @@ module.exports = function (passport) {
                                                 to: newUser.email, // list of receivers
                                                 subject: 'New Account created using this email', // Subject line
                                                 text: 'Hi ' + newUser.username + ", Welcome to Cheapo Eshop! We hope you enjoy " +
-                                                    "your time shopping at our website! Here is your password: " + name + "Please change your password when you logged in as it is the same as your email name." +
+                                                    "your time shopping at our website! Here is your password: " + randompass + "Please change your password when you logged in to suit your preference." +
                                                     "Cheers! Cheapo Eshop",
                                                 html: '<p>Hi ' + newUser.username + ",</p><p>Welcome to Cheapo Eshop! We hope you enjoy " +
-                                                    "your time shopping at our website! Here is your password: " + name + "</p><p>Please change your password when you logged in as it is the same as your email name.</p>" +
+                                                    "your time shopping at our website! Here is your password: " + randompass + "</p><p>Please change your password when you logged in to suit your preference.</p>" +
                                                     "<p><span style = \"font-weight: bold;\">Cheers!</span><br>Cheapo Eshop</p>"
                                             };
 

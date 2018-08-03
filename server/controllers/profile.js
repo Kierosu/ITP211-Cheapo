@@ -41,7 +41,7 @@ exports.signin = function (req, res) {
 exports.profilepage = function (req, res) {
     var username = req.params.username;
     raysonCart(req.user).then((obj) => {
-        sequelize.query('select * from itemPosts where sellerID = ' + req.user.userID, { model: itemPostModel }).then((itemPost) => {
+        sequelize.query('select * from itemPosts where ownerName = \'' + username + '\' and status=\'Active\'', { model: itemPostModel }).then((itemPost) => {
             UserModel.findOne({ where: { username: username } }).then(function (userprofile) {
                 res.render('Profile', {
                     user: userprofile,
@@ -227,61 +227,56 @@ exports.forgetPass = (req, res) => {
 
 exports.setSendPass = (req, res) => {
     UserModel.findOne({ where: { username: req.body.username } }).then(function (user) {
-        if (user.email == req.body.email) {
-            var randompass = generatePassword(12, false);
-            bcrypt.hash(randompass, saltRounds).then(function (hash) {
-                var newpass = {
-                    password: hash
-                }
-                UserModel.update(newpass, { where: { userID: user.userID } }).then(() => {
-                    // Generate test SMTP service account from ethereal.email
-                    // Only needed if you don't have a real mail account for testing
-                    nodemailer.createTestAccount(() => {
-                        // create reusable transporter object using the default SMTP transport
-                        let transporter = nodemailer.createTransport({
-                            service: "gmail",
-                            port: 25,
-                            secure: false,
-                            auth: {
-                                user: "TheCheapoOnline@gmail.com",
-                                pass: "cheapo123"
-                            },
-                            tls: {
-                                rejectUnauthorized: false
-                            }
-                        });
-
-                        // setup email data with unicode symbols
-                        let mailOptions = {
-                            from: '"Cheapo Eshop" <TheCheapoOnline@gmail.com>', // sender address
-                            to: user.email, // list of receivers
-                            subject: 'Password Recovery', // Subject line
-                            text: 'Hi ' + user.username + ", your password have been reset. Here is your new " +
-                                "password: " + randompass + "Make sure to change your password when you logged in!" +
-                                "Cheers! Cheapo Eshop",
-                            html: '<p>Hi ' + user.username + ",</p><p>Your password have been reset. Here is your new " +
-                                "password: " + randompass + "</p><p>Make sure to change your password when you logged in!</p>" +
-                                "<p><span style = \"font-weight: bold;\">Cheers!</span><br>Cheapo Eshop</p>"
-                        };
-
-                        // send mail with defined transport object
-                        transporter.sendMail(mailOptions, (error, info) => {
-                            if (error) {
-                                return console.log(error);
-                            }
-                            console.log('Message sent: %s', info.messageId);
-                            // Preview only available when sending through an Ethereal account
-                            console.log((info));
-
-                        });
+        var randompass = generatePassword(12, false);
+        bcrypt.hash(randompass, saltRounds).then(function (hash) {
+            var newpass = {
+                password: hash
+            }
+            UserModel.update(newpass, { where: { userID: user.userID } }).then(() => {
+                // Generate test SMTP service account from ethereal.email
+                // Only needed if you don't have a real mail account for testing
+                nodemailer.createTestAccount(() => {
+                    // create reusable transporter object using the default SMTP transport
+                    let transporter = nodemailer.createTransport({
+                        service: "gmail",
+                        port: 25,
+                        secure: false,
+                        auth: {
+                            user: "TheCheapoOnline@gmail.com",
+                            pass: "cheapo123"
+                        },
+                        tls: {
+                            rejectUnauthorized: false
+                        }
                     });
-                })
+
+                    // setup email data with unicode symbols
+                    let mailOptions = {
+                        from: '"Cheapo Eshop" <TheCheapoOnline@gmail.com>', // sender address
+                        to: user.email, // list of receivers
+                        subject: 'Password Reset (New Password)', // Subject line
+                        text: 'Hi ' + user.username + ", your password have been reset. Here is your new " +
+                            "password: " + randompass + "Make sure to change your password when you logged in!" +
+                            "Cheers! Cheapo Eshop",
+                        html: '<p>Hi ' + user.username + ",</p><p>Your password have been reset. Here is your new " +
+                            "password: " + randompass + "</p><p>Make sure to change your password when you logged in!</p>" +
+                            "<p><span style = \"font-weight: bold;\">Cheers!</span><br>Cheapo Eshop</p>"
+                    };
+
+                    // send mail with defined transport object
+                    transporter.sendMail(mailOptions, (error, info) => {
+                        if (error) {
+                            return console.log(error);
+                        }
+                        console.log('Message sent: %s', info.messageId);
+                        // Preview only available when sending through an Ethereal account
+                        console.log((info));
+                    });
+                });
             })
-            res.status(200).send({ message: "New password sent! " + randompass });
-        }
-        else {
-            res.status(400).send("Username and Email does not match!");
-        }
+        })
+        res.status(200).send({ message: "New password sent! " + randompass });
+
     }).catch(() => {
         res.status(400).send("Username not found!");
     })
@@ -419,9 +414,38 @@ exports.verifyOTP = function (req, res) {
         res.status(400).send("Wrong verification code!")
     }
 }
+exports.noLoginVerifyOTP = function (req, res) {
+    UserModel.findOne({ where: { username: req.body.username } }).then(function (userprofile) {
+        var userToken = req.body.otp;
+        var userSecret = userprofile.SecretToken;
+        var verified = speakeasy.totp.verify({
+            secret: userSecret,
+            encoding: 'base32',
+            token: userToken
+        });
+        if (verified) {
+            res.status(200).send({ message: "AUTHORIZED" })
+        }
+        else {
+            res.status(400).send("Wrong verification code!")
+        }
+    }) 
+}
 
 exports.checkTFA = (req, res) => {
     res.status(200).send({ message: req.user.TwoFA });
+}
+exports.noLogincheckTFA = (req, res) => {
+    UserModel.findOne({ where: { username: req.body.username } }).then(function (userprofile) {
+        if (userprofile.email == req.body.email) {
+            res.status(200).send({ message: userprofile.TwoFA });
+        }
+        else {
+            res.status(400).send("Username and Email does not match!");
+        }
+    }).catch(() => {
+        res.status(400).send("Username not found!");
+    })
 }
 
 //Index page

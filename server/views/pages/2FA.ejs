@@ -54,7 +54,7 @@
                 <input type="text" name="token" id="token" placeholder="6-digit verification code">
             </div>
             <div class="modal-footer" id="modalfooterGoogleAuth">
-                <button type="button" class="btn btn-default" data-dismiss="modal" class="closeModal">Close</button>
+                <button type="button" class="btn btn-default closeModal" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal" id="enableGoogleAuth">Enable Two-Factor</button>    
             </div>
           </div>
@@ -80,7 +80,7 @@
                 <input type="text" name="disableToken" id="disableToken" placeholder="6-digit verification code" required>
             </div>
             <div class="modal-footer" id="modalfooterDisabled">
-                <button type="button" class="btn btn-default" data-dismiss="modal" class="closeModal">Close</button>
+                <button type="button" class="btn btn-default closeModal" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal" id="disableTFA">Disable Two-Factor</button>      
             </div>
           </div>
@@ -100,7 +100,7 @@
                     <p id="msg"></p>
                 </div>
                 <div class="modal-footer" id="modalfooterMessage">    
-                    <button type="button" class="btn btn-default" data-dismiss="modal" id="close" class="closeModal">Close</button>
+                    <button type="button" class="btn btn-default closeModal" data-dismiss="modal" id="close">Close</button>
                 </div>
               </div>
               
@@ -130,7 +130,7 @@
         $("#disabled").click(()=>{
             if("<%= Select2FA %>" == "disabled"){
                 $("#modalbodyDisabled").html("<p>Two-Factor Authentication is already disabled!</p>");
-                $("#modalfooterDisabled").html("<button type='button' class='btn btn-default' data-dismiss='modal' class='closeModal'>Close</button>")
+                $("#modalfooterDisabled").html("<button type='button' class='closeModal btn btn-default' data-dismiss='modal'>Close</button>")
             }
             else if("<%= Select2FA %>" != "disabled"){
                 $("#modalbodyDisabled").html("<label for=\"password\">Enter your password:</label><br>" +
@@ -138,14 +138,14 @@
                 "<br><br>" +
                 "<label for=\"disableToken\">Enter the verification code:</label> <br>"+
                 "<input type=\"text\" name=\"disableToken\" id=\"disableToken\" placeholder=\"6-digit verification code\">");
-                $("#modalfooterDisabled").html("<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" class=\"closeModal\">Close</button> <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" id=\"disableTFA\">Disable Two-Factor</button>")
+                $("#modalfooterDisabled").html("<button type=\"button\" class=\"btn btn-default closeModal\" data-dismiss=\"modal\">Close</button> <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" id=\"disableTFA\">Disable Two-Factor</button>")
             }
         });
         
         $("#GoogleAuth").click(()=>{
             if("<%= Select2FA %>" == "GoogleAuth"){
                 $("#modalbodyGoogleAuth").html("<p>You are already using Google Authenticator for your Two-Factor Authentication!</p>");
-                $("#modalfooterGoogleAuth").html("<button type='button' class='btn btn-default' data-dismiss='modal' class='closeModal'>Close</button>")
+                $("#modalfooterGoogleAuth").html("<button type='button' class='btn btn-default closeModal' data-dismiss='modal'>Close</button>")
             }
             else if("<%= Select2FA %>" != "GoogleAuth"){
                 $("#modalbodyGoogleAuth").html("<p>1. Download the Google Authenticator from the app store on your mobile device. Select an option to setup a new account and follow the instructions given to you in your app.</p>" +
@@ -154,7 +154,7 @@
                 "<p>3. Enter the verification code on the Google Authenticator app to complete setup</p>" +
                 "<label for=\"token\"></label>" +
                 "<input type=\"text\" name=\"token\" id=\"token\" placeholder=\"6-digit verification code\">")
-                $("#modalfooterGoogleAuth").html("<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" class=\"closeModal\">Close</button>" +
+                $("#modalfooterGoogleAuth").html("<button type=\"button\" class=\"btn btn-default closeModal\" data-dismiss=\"modal\">Close</button>" +
                 "<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\" id=\"enableGoogleAuth\">Enable Two-Factor</button>")
             }
         })

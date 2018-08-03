@@ -5,6 +5,11 @@ display: none;
   margin-top:55px; 
   overflow: hidden;
 }
+.bodyProfile{
+  margin-top:55px; 
+  overflow: hidden;
+  margin-bottom: 50px;
+}
 #head{
   text-align: center;
 }
