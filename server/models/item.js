@@ -39,7 +39,7 @@ const Item = sequelize.define('Item', {
     }
 });
 
-Item.sync({force: true, logging: console.log}).then(()=>{
+Item.sync({force: false, logging: console.log}).then(()=>{
     console.log("Item table synced");
     // Item.upsert({
     //     itemID: 1,

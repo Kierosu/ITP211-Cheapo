@@ -1,5 +1,7 @@
 var { auctionEXP } = require('./sendMails');
+var { raysonCart } = require('./otherFunc');
 var Product = require('../models/products');
+var Flist = require('../models/friendList');
 var Mail = require('../models/mail');
 var User = require('../models/user');
 var database = require('./database');
@@ -9,38 +11,25 @@ var auth = require('./profile');
 var router = express.Router();
 
 router.get('/', auth.isLoggedIn, auctionEXP, (req, res) => {
-    sequelize.query("select ProductID, sellerId, u.userId, (select username from Users where userId = w.sellerId) As sellerName,ProductName, ProductImage, ProductPrice, ProductDescription from products w join Users u on w.UserId = u.userID  where w.UserId = " + req.user.userID + " order by sellerId", { model: Product }).then((products) => {
-        //Calculating product total value
-        var totalPrice = 0;
-        var shippingFee = 0;
-        var stripeTotal = 0;
-        var realQuantity = 0;
-
-        products.forEach(function (rayson) {
-            totalPrice += rayson.ProductPrice;
-            realQuantity += 1;
-        });
-        if (totalPrice > 50) {
-            subtotal = totalPrice;
-            stripeTotal = totalPrice;
-        } else {
-            subtotal = totalPrice;
-            totalPrice += 5.00;
-            shippingFee = 5.00;
-            stripeTotal = totalPrice;
-        }
+    raysonCart(req.user).then((obj) => {
         Mail.findAll({ where: { receiver: req.user.userID } }).then((mail) => {
             User.findAll({}).then((user) => {
-                res.render("mail", {
-                    mail: mail,
-                    user: user,
-                    products: products,
-                    total: totalPrice,
-                    shippingFee: shippingFee,
-                    subtotal: subtotal,
-                    realQuantity: realQuantity,
-                    msg: req.flash('message')
-                });
+                Flist.findAll({ where: { follower: req.user.userID } }).then((following) => {
+                    Flist.findAll({ where: { following: req.user.userID } }).then((follower) => {
+                        res.render("mail", {
+                            following: following,
+                            follower: follower,
+                            mail: mail,
+                            user: user,
+                            products: obj.products,
+                            total: obj.total,
+                            shippingFee: obj.shippingFee,
+                            subtotal: obj.subtotal,
+                            realQuantity: obj.realQuantity,
+                            msg: req.flash('message')
+                        });
+                    })
+                })
             })
         })
     })
@@ -57,6 +46,24 @@ router.post('/deleteMail', auth.isLoggedIn, (req, res) => {
             })
         })
     })
+})
+
+router.post('/social/:id', (req, res) => {
+    var socialMailInfo = {
+        sender: req.user.userID,
+        receiver: req.params.id,
+        title: 'New mail!',
+        message: req.body.mailInfo,
+        status: 'notSeen'
+    }
+    try {
+        Mail.create(socialMailInfo).then(() => {
+            req.flash('message', 'Item successfully added');
+            res.redirect('/mail');
+        })
+    } catch (err) {
+        console.log(err);
+    }
 })
 
 module.exports = router;

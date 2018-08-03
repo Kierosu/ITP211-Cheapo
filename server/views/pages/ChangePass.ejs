@@ -14,12 +14,14 @@
 <body>
     <% include ../partials/header %>
 
-        <div class="sidenav" id="sidenav">
-            <a href="/profile/<%= locals.loginuser.username %>">Profile</a>
-            <a href="/edit/profile">Edit Profile</a>
-            <a href="/changePassword">Change Password</a>
-            <a href="/2FA">2-Factor Authentication</a>
-        </div>
+    <span class="openSideNav" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+    <div class="sidenav" id="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="/profile/<%= locals.loginuser.username %>">Profile</a>
+        <a href="/edit/profile">Edit Profile</a>
+        <a href="/changePassword">Change Password</a>
+        <a href="/2FA">2-Factor Authentication</a>
+    </div>
 
         <div class="body">
             <div class="warningmsg" id="warningmsg">
@@ -63,7 +65,7 @@
                 </div>
                 <button class="btn" type="submit" id="changepass">Change Password</button>
             </form>
-            <button class="btn" id="cancelpass" type="button">Cancel</button>
+            <button class="btn" id="cancel" type="button">Cancel</button>
         </div>
         <!-- Modal for verification -->
         <div class="modal fade" id="verificationModal" role="dialog">
@@ -274,6 +276,12 @@
             $("#cancelpass").click(() => {
                 location.href = "/edit/profile";
             })
+            function openNav() {
+                $("#sidenav").css("width", "242px")
+            }
+            function closeNav() {
+                $("#sidenav").css("width", "0")
+            }    
         </script>
         <% include ../partials/footer %>
 </body>

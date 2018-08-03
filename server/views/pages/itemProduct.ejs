@@ -24,19 +24,36 @@
 	<div class="section">
 		<!-- container -->
 		<div class="container">
-			<!-- row -->
+			<!-- row -->			
 			<div class="row" style="margin:auto;">
 				<div class="col-lg-4"> 
-					<img src = "../images/<%= productImage %>" style="height:300px; width: 300px;"></img> 
+					<img src = "../images/<%= productImage %>" style="height:300px; width: 300px;">
 				</div>
+				<div class="col-lg-5">
 					<input type="hidden" class="productIMG" value="../images/<%= productImage %>">
-					<div class="col-lg-8"> <h2 class="title"> <%= productTitle %> </h2> </div>
-					<div class="col-lg-8"> <h3 class="price"> S$<%= productPrice %> </h3> </div>
-					<div class="col-lg-8"> <h3 class="brand"> Brand: <%= productBrand %> </h3> </div>
-					<div class="col-lg-8"> <h4 class="prodDesc"> Description: <%= productDesc %> </h4> </div>
-					<div class="col-lg-6"> <h3 style="float: left;"> By: <%= ownerName %> </div>
-				</div>				
-				<div class="row" style="margin:auto;">
+					<div> <h2 class="title"> <%= productTitle %> </h2> </div>
+					<div> <h3 class="price"> S$<%= productPrice %> </h3> </div>
+					<div> <h3 class="brand"> Brand: <%= productBrand %> </h3> </div>
+					<div> <h4 class="prodDesc"> Description: <%= productDesc %> </h4> </div>
+					<div> <h3 style="float: left;"> By: <%= ownerName %></h3> </div>
+				</div>	
+				<div class="col-lg-3" style="height: 210px;display: flex;font-family: calibri;font-size: 18px;border: 1px solid grey;border-radius: 7px;">
+					<div style="height: 95%;width: 95%;;margin: auto;overflow-y: auto;">
+						<div style="height: 10%;width: 100%;text-align: center;"><h4>Reviews</h4></div>
+						<% if (review.length > 0) { %>
+							<% review.forEach(function(review){ %>
+								<div style="height: 10%;width: 100%;">
+									<h4>
+										<% reviewUser.forEach(function(reviewUser){ %> 
+											<% if (reviewUser.userID == review.userID){%> <%= reviewUser.username %> <%}%>
+										<% }) %>
+									: <%= review.itemReview %></h4></div>
+								<% }); } else { %>
+								No review, make one!
+						<% } %>  
+					</div>
+				</div>			
+				<div class="row" style="margin:0 auto;">
 					<div class="col-lg-4"></div>
 					<div class="col-lg-8">
 						<button type="submit" onclick=addToWish() class="btn" id="inputGone"> Save to Wishlist</button> 
@@ -175,8 +192,8 @@
                     
                 }
             })
-        }
-
+		}
+		
         function discardAdd() {
             location.href = ""
         }

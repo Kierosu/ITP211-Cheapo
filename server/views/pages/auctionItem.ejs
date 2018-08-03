@@ -8,6 +8,7 @@
     <title>Cheapo</title>
     <!-- css -->
     <% include ../partials/stylesheet %>
+    <% include ../partials/javascript %>
 </head>
 
 <body>
@@ -51,7 +52,7 @@
             <div style="float: right;width: 70%;height: 550px;display: flex;">
                 <div style="height: 95%;width: 85%;margin: auto;border: 1px solid gainsboro;">
                     <div style="height: 75%;width: 100%;background-color: azure;">
-                        <img onload="dTimer(this)" data-timer="<%= auction.endDate %>" data-countD="<%= auction.auctionID %>" style="height: 100%;width: 100%;" src="/itemImg/<%= item.itemPic %>" alt="lol">
+                        <img onload="dTimer(this)" data-timer="<%= auction.endDate %>" data-countD="<%= auction.auctionID %>" style="height: 100%;width: 100%;" src="/images/<%= item.itemPic %>" alt="<%= item.itemPic %>">
                     </div>
                     <div style="height: 25%;width: 100%;font-size: 32px;font-family: calibri;padding-left: 15px;">
                         <div style="height: 50%;width: 100%;display: flex;">
@@ -64,9 +65,7 @@
                 </div>
             </div>
         </div>
-        <% include ../partials/footer %>
-        <!-- jQuery Plugins -->
-        <% include ../partials/javascript %>
+        <% include ../partials/footer %>        
 </body>
 
 </html>

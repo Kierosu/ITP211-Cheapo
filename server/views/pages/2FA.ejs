@@ -10,12 +10,14 @@
 <body>
     <% include ../partials/header %>
 
-        <div class="sidenav">
-            <a href="/profile/<%= locals.loginuser.username %>">Profile</a>
-            <a href="/edit/profile">Edit Profile</a>
-            <a href="/changePassword">Change Password</a>
-            <a href="/2FA">2-Factor Authentication</a>
-        </div>
+    <span class="openSideNav" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+    <div class="sidenav" id="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="/profile/<%= locals.loginuser.username %>">Profile</a>
+        <a href="/edit/profile">Edit Profile</a>
+        <a href="/changePassword">Change Password</a>
+        <a href="/2FA">2-Factor Authentication</a>
+    </div>
 
     <div class="body">
         <form class="form-signin form-horizontal" action="/updateProfile" method="post" enctype="multipart/form-data">
@@ -47,8 +49,6 @@
                 <p>1. Download the Google Authenticator from the app store on your mobile device. Select an option to setup a new account and follow the instructions given to you in your app.</p>
                 <p>2. Use the app to scan the barcode below</p>
                 <img src="<%= qrcode %>">
-                <p>Or enter the secret key below: </p>
-                <p style="color: green; font-size: 18px;"><%= secretkey %></p>
                 <p>3. Enter the verification code on the Google Authenticator app to complete setup</p>
                 <label for="token"></label>
                 <input type="text" name="token" id="token" placeholder="6-digit verification code">
@@ -151,8 +151,6 @@
                 $("#modalbodyGoogleAuth").html("<p>1. Download the Google Authenticator from the app store on your mobile device. Select an option to setup a new account and follow the instructions given to you in your app.</p>" +
                 "<p>2. Use the app to scan the barcode below</p>" +
                 "<img src=\"<%= qrcode %>\">" +
-                "<p>Or enter the secret key below: </p>" +
-                "<p style=\"color: green; font-size: 18px;\"><%= secretkey %></p>" +
                 "<p>3. Enter the verification code on the Google Authenticator app to complete setup</p>" +
                 "<label for=\"token\"></label>" +
                 "<input type=\"text\" name=\"token\" id=\"token\" placeholder=\"6-digit verification code\">")
@@ -217,6 +215,12 @@
                 }
             });
         })
+        function openNav() {
+            $("#sidenav").css("width", "242px")
+        }
+        function closeNav() {
+            $("#sidenav").css("width", "0")
+        }    
 
     </script>
     <% include ../partials/footer %>
