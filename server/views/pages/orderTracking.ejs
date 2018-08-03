@@ -165,14 +165,14 @@ socket.on('receiveMoney', function(sellerMoney) {
 
 
 		var tempStringName = "";
-		var tempStringMoney = "";
+		// var tempStringMoney = "";
 		for(uAccIndex in uniqueAcc){
-			tempStringName += "Seller's Name: " + uniqueAcc[uAccIndex]["SellerName"];
-			tempStringMoney += "\nMoney Received: $" + uniqueAcc[uAccIndex]["Money"];
+			tempStringName += "<table>" + '<tr>' + '<th>' + "Seller's Name" + '</th>' + '<th>' + '&nbsp&nbsp&nbsp' + "Amount Received" + '</th>' + '<tr>' + '<td>' + uniqueAcc[uAccIndex]["SellerName"] + '</td>' + '<td>' + '&nbsp&nbsp&nbsp' + '$' + uniqueAcc[uAccIndex]["Money"] + '</td>' +'</tr>';
+			// tempStringMoney += "\n Money Received: $" + uniqueAcc[uAccIndex]["Money"] + '<br>';
 		}
 
 
-	$(".listOfSellers").html(tempStringName + '<br>' + tempStringMoney);
+	$(".listOfSellers").html(tempStringName);
 	uniqueAcc = [];
 
 	$(".sellermoney").removeClass("hidden");

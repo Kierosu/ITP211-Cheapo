@@ -68,21 +68,23 @@ display: none;
   background-color:#5cb85c;
   border-color:#5cb85c;
   color: white;
-  padding: 6px 400px;
+  padding: 10px 0;
   font-size: 20px;
-  margin: 0 0 20px 0;
+  width: 25%;
+  margin: 0 0 10px 0;
   position: relative;
-  left:350px;
+  left: 38.4%;
 }
 #changepass{
   background-color:#5cb85c;
   border-color:#5cb85c;
   color: white;
-  padding: 6px 350px;
+  margin: 30px 0 10px 0;
+  padding: 10px 0;
   font-size: 20px;
-  margin: 30px 0 30px 0;
+  width: 25%;
   position: relative;
-  left:350px;
+  left: 38.4%;
 }
 #enableGoogleAuth, #disableTFA, #verifyOTP{
   background-color:#5cb85c;
@@ -94,21 +96,12 @@ display: none;
   background-color:#d9534f;
   border-color:#d9534f;
   color: white;
-  padding: 6px 391.8px;
+  padding: 10px 0;
   font-size: 20px;
-  margin: 0 0 90px 0;
+  width: 25%;
+  margin: 0 0 100px 0;
   position: relative;
-  left:350px;
-}
-#cancelpass{
-  background-color:#d9534f;
-  border-color:#d9534f;
-  color: white;
-  padding: 6px 397.5px;
-  font-size: 20px;
-  margin: 0 0 90px 0;
-  position: relative;
-  left:350px;
+  left: 38.4%;
 }
 .closeModal{
   background-color:#d9534f;
@@ -136,7 +129,7 @@ display: none;
   margin: 25px 0 25px 0;
 }
 #signupButton:hover, #loginButton:hover, #createProfile:hover, #editprofile:hover, #uploadBtn:hover, #saveChanges:hover, #cancel:hover,
-#resetPass:hover, #back:hover, #findUsername:hover, #changepass:hover, #cancelpass:hover, #save2FA:hover, 
+#resetPass:hover, #back:hover, #findUsername:hover, #changepass:hover, #save2FA:hover, 
 .closeModal:hover, #disableTFA:hover, #comfirmOTP:hover, #verifyOTP:hover, #enableGoogleAuth:hover, .googlelogin:hover{
   background-color: white;
   color: black;
@@ -232,29 +225,47 @@ display: none;
   left: 470px;
 }
 
-/*side navbar*/
-.sidenav {
-  width: 155px;
+/* Side NavBar */
+.openSideNav{
+  width: 100%;
   position: absolute;
   z-index: 1;
-  top: 220px;
-  left: 150px;
-  background: #eee;
+  top: 200px;
+  left: 100px;
   overflow-x: hidden;
-  padding: 8px 0;
-
+}
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #fc502e;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
 }
 
 .sidenav a {
-  padding: 8px 10px 8px 14px;
+  padding: 8px 8px 8px 32px;
   text-decoration: none;
-  font-size: 18px;
-  color: #2196F3;
+  font-size: 25px;
+  color: white;
   display: block;
+  transition: 0.3s;
 }
 
 .sidenav a:hover {
   color: #064579;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
 }
 
 
