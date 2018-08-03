@@ -148,7 +148,13 @@ hr {
 
 .primary-btn {
   color: #FFF;
-  background-color: #F8694A;
+  background-color: #F8694A; 
+}
+
+#chatbutton {
+  position: fixed;
+  right:0;
+  bottom:0;
 }
 
 .primary-btn:hover, .primary-btn:focus {
@@ -361,7 +367,7 @@ textarea.input {
 }
 
 .header-search>form .search-input {
-  padding-left: 150px;
+  padding-left: 20px;
   padding-right: 5px;
 }
 
