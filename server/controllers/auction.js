@@ -77,7 +77,7 @@ router.get('/:aucId/:itemId', (req, res) => {
             Auction.findOne({ where: { auctionID: req.params.aucId, itemAuctionID: req.params.itemId } }).then((auctionExist) => {
                 if (auctionExist) {
                     Auction.findOne({ where: { auctionID: req.params.aucId } }).then((auction) => {
-                        ItemPost.findOne({ where: { itemID: req.params.itemId } }).then((itemPost) => {
+                        ItemPost.findOne({ where: { id: req.params.itemId } }).then((itemPost) => {
                             res.render('auctionItem', {
                                 item: itemPost,
                                 auction: auction,
