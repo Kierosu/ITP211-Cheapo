@@ -19,7 +19,7 @@ var UserModel = require('../models/user');
 var { raysonCart } = require('./otherFunc')
 exports.list = function (req, res) {
     if (req.user) {
-        sequelize.query('select * from itemPosts', { model: itemPostModel }).then((itemPost) => {
+        sequelize.query('select * from itemPosts where status=\'Active\'', { model: itemPostModel }).then((itemPost) => {
             raysonCart(req.user).then((obj) => {
                 res.render('itemPosted', {
                     title: 'Images Gallery',
@@ -37,7 +37,7 @@ exports.list = function (req, res) {
         })
     }
     else {
-        sequelize.query('select * from itemPosts', { model: itemPostModel }).then((itemPost) => {
+        sequelize.query('select * from itemPosts where status=\'Active\'', { model: itemPostModel }).then((itemPost) => {
             res.render('itemPosted', {
                 itemPost: itemPost,
                 urlPath: req.protocol + "://" + req.get("host") + req.url,
