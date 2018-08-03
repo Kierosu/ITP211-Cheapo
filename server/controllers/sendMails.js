@@ -1,6 +1,5 @@
 var ItemPost = require('../models/itemPost');
 var Auction = require('../models/auction');
-var Item = require('../models/item');
 var Mail = require('../models/mail');
 var User = require('../models/user');
 
@@ -166,7 +165,6 @@ module.exports = {
                     console.log(err);
                 }
             }
-
             if (action == 'deleteItem') {
                 var warnUser = {
                     sender: 1,

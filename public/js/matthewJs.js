@@ -31,14 +31,22 @@ function showMail(from, message, mID) {
 
 function followingU() {
     var follower = document.getElementById("followerUsers");
-    var following = document.getElementById("followingUsers");   
+    var following = document.getElementById("followingUsers");
+    var btnFollowing = document.getElementById("btnFollowing");
+    var btnFollower = document.getElementById("btnFollower");
+    btnFollowing.style.backgroundColor = "#f69679";
+    btnFollower.style.backgroundColor = "#5bc0de";
     following.style.display = "block";
     follower.style.display = "none";
 }
 
 function followerU() {
     var follower = document.getElementById("followerUsers");
-    var following = document.getElementById("followingUsers");   
+    var following = document.getElementById("followingUsers");
+    var btnFollowing = document.getElementById("btnFollowing");
+    var btnFollower = document.getElementById("btnFollower");
+    btnFollowing.style.backgroundColor = "#5bc0de";
+    btnFollower.style.backgroundColor = "#f69679";
     follower.style.display = "block";
     following.style.display = "none";
 }

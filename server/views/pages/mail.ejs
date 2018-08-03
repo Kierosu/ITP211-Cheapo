@@ -18,7 +18,7 @@
             <div style="height: 400px;width: 100%;margin: auto;font-family: calibri;">
                 <div style="height: 100%;width: 25%;float: left;">
                     <div style="height: 15%;width: 100%;background-color: rgb(219, 233, 198);display: flex;font-size: 35px;">
-                        <p style="margin: auto;">Cheap mail</p>
+                        <p style="margin: auto;">Notifications</p>
                     </div>
                     <div style="height: 85%;width: 100%;background-color: rgb(238, 235, 235);overflow-y: auto;font-size: 23px;">
                         <% mail.forEach(function(mail){ %>
@@ -60,10 +60,10 @@
                         <div style="height: 100%;width: 100%;background-color: pink;">
                             <div style="height: 15%;background-color: rgb(167, 161, 166);font-size: 20px;">
                                 <div style="height: 100%;width: 50%;float: left;display: flex;">
-                                    <button onclick="followingU()" style="height: 30px;width: 130px;float: left;margin: auto;" class="btn btn-sm btn-info">Following</button>
+                                    <button id="btnFollowing" onclick="followingU()" style="height: 30px;width: 130px;float: left;margin: auto;background-color: #f69679;" class="btn btn-sm btn-info">Following</button>
                                 </div>
                                 <div style="height: 100%;width: 50%;float: left;display: flex;">
-                                    <button onclick="followerU()" style="height: 30px;width: 130px;float: left;margin: auto;" class="btn btn-sm btn-info">Followers</button>
+                                    <button id="btnFollower" onclick="followerU()" style="height: 30px;width: 130px;float: left;margin: auto;" class="btn btn-sm btn-info">Followers</button>
                                 </div>
                             </div>
                             <div id="followingUsers" style="height: 85%;width: 100%;overflow-y: auto;">
