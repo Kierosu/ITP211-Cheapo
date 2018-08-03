@@ -1,11 +1,8 @@
 var { auctionEXP } = require('./sendMails');
 var { raysonCart } = require('./otherFunc');
-var Product = require('../models/products');
 var Flist = require('../models/friendList');
 var Mail = require('../models/mail');
 var User = require('../models/user');
-var database = require('./database');
-var sequelize = database.sequelize;
 var express = require('express');
 var auth = require('./profile');
 var router = express.Router();
@@ -49,21 +46,23 @@ router.post('/deleteMail', auth.isLoggedIn, (req, res) => {
 })
 
 router.post('/social/:id', (req, res) => {
-    var socialMailInfo = {
-        sender: req.user.userID,
-        receiver: req.params.id,
-        title: 'New mail!',
-        message: req.body.mailInfo,
-        status: 'notSeen'
-    }
-    try {
-        Mail.create(socialMailInfo).then(() => {
-            req.flash('message', 'Item successfully added');
-            res.redirect('/mail');
-        })
-    } catch (err) {
-        console.log(err);
-    }
+    User.findOne({ where: { userID: req.user.userID } }).then((user) => {
+        var socialMailInfo = {
+            sender: req.user.userID,
+            receiver: req.params.id,
+            title: 'New mail from ' + user.username,
+            message: req.body.mailInfo,
+            status: 'notSeen'
+        }
+        try {
+            Mail.create(socialMailInfo).then(() => {
+                req.flash('message', 'Item successfully added');
+                res.redirect('/mail');
+            })
+        } catch (err) {
+            console.log(err);
+        }
+    })    
 })
 
 module.exports = router;

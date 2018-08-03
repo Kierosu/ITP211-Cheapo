@@ -73,7 +73,8 @@ exports.logout = function (req, res) {
 exports.isLoggedIn = function (req, res, next) {
     if (req.isAuthenticated()) {
         return next();
-    }
+    }    
+    req.flash('loginMessage', 'Please login first');
     res.redirect('/login');
 };
 exports.isLoggedInV2 = function (req, res, next) {

@@ -30,7 +30,7 @@ const Mail = sequelize.define('Mail', {
     }
 });
 
-Mail.sync({ force: false, logging: console.log }).then(() => {
+Mail.sync({ force: true, logging: console.log }).then(() => {
     console.log("Mail table synced");
 });
 

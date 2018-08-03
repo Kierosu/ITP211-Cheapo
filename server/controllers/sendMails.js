@@ -41,14 +41,14 @@ function mailSoldAuc(aucID, buyerID, price) {
                     sender: 1,
                     receiver: item.sellerID,
                     title: 'Auction expired',
-                    message: 'Auction, ' + item.name + ' has ended being bought from buyer, ' + user.username + ' at $' + price,
+                    message: 'Auction, ' + item.title + ' has ended being bought from buyer, ' + user.username + ' at $' + price,
                     status: 'notSeen'
                 }
                 var soldAucBuyer = {
                     sender: 1,
                     receiver: buyerID,
                     title: 'Auction Won',
-                    message: 'You have won Auction, ' + item.name + ' . Please click the following link to pay $' + price + ' to complete the auction. <br><a style="color:green;" href="#">Click ME</a>',
+                    message: 'You have won Auction, ' + item.title + ' at $' + price + '. You should <a id="otk" onclick="addToCartFromMail(' + buyerID + ',' + item.sellerID + ',' + price + ',' + item.id + ')" data-title="' + item.title + '" data-desc="' + item.prodDesc + '" data-iPic="' + item.itemPic + '" style="color:green;" href="#">ADD</a> to cart to claim it.',
                     status: 'notSeen'
                 }
                 try {
@@ -62,6 +62,7 @@ function mailSoldAuc(aucID, buyerID, price) {
             })
         })
     })
+
 }
 
 module.exports = {

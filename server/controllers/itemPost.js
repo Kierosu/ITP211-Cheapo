@@ -51,6 +51,7 @@ exports.list = function (req, res) {
         });
     };
 };
+
 exports.show = function (req, res) {
     Auction.findAll({}).then((auction) => {
         if (req.user.userType === 'Admin') {
@@ -199,6 +200,7 @@ exports.delete = function (req, res) {
                 message: "error"
             });
         }
+        
         res.status(200).send({ message: "Deleted Items: " + item_num });
     })
 }

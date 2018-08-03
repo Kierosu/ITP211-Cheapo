@@ -1,11 +1,7 @@
-var Product = require('../models/products');
 var ItemPost = require('../models/itemPost');
 var { auctionEXP } = require('./sendMails');
 var { raysonCart } = require('./otherFunc');
 var Auction = require('../models/auction');
-var database = require('./database');
-var Item = require('../models/item');
-var sequelize = database.sequelize;
 var express = require('express');
 var auth = require('./profile');
 var router = express.Router();
