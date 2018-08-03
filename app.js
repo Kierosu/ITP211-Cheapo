@@ -70,14 +70,16 @@ app.use((req, res, next) => {
 var auctions = require('./server/controllers/auction');
 var reviews = require('./server/controllers/review');
 var reports = require('./server/controllers/report');
+var social = require('./server/controllers/social');
 var items = require('./server/controllers/items');
 var mail = require('./server/controllers/mail');
 
-app.use('/items', items)
-app.use('/reviews', reviews)
-app.use('/reports', reports)
-app.use('/auctions', auctions)
-app.use('/mail', mail)
+app.use('/items', items);
+app.use('/reviews', reviews);
+app.use('/reports', reports);
+app.use('/auctions', auctions);
+app.use('/mail', mail);
+app.use('/social', social)
 
 //Eugene's code
 // Logout Page
@@ -96,7 +98,7 @@ app.post('/verifyOTP', auth.verifyOTP)
 
 app.get('/signup', auth.isLoggedInV2, auth.signup);
 app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/logout',
+    successRedirect: '/',
     failureRedirect: '/signup',
     failureFlash: true
 }));

@@ -17,14 +17,34 @@ function dTimer(aucD) {
     })
 }
 
-function goBackToItems(){
+function goBackToItems() {
     window.location.assign("/userItems");
 }
 
-function showMail(from,message,mID){
-    $('#deleteMail').data('aID',mID); //setter
+function showMail(from, message, mID) {
+    $('#deleteMail').data('aID', mID); //setter
     var fromText = document.getElementById("fromText");
-    var messageText = document.getElementById("messageText");    
+    var messageText = document.getElementById("messageText");
     fromText.innerHTML = from;
     messageText.innerHTML = message;
 }
+
+function followingU() {
+    var follower = document.getElementById("followerUsers");
+    var following = document.getElementById("followingUsers");   
+    following.style.display = "block";
+    follower.style.display = "none";
+}
+
+function followerU() {
+    var follower = document.getElementById("followerUsers");
+    var following = document.getElementById("followingUsers");   
+    follower.style.display = "block";
+    following.style.display = "none";
+}
+
+$(".sList").hover(function () {
+    $(this).css("background-color", "rgb(229, 233, 229)");
+}, function () {
+    $(this).css("background-color", "transparent");
+});

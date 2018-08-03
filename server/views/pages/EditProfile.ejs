@@ -15,7 +15,9 @@
     <% include ../partials/header %>
         <div class="body">
 
-            <div class="sidenav">
+            <span class="openSideNav" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+            <div class="sidenav" id="sidenav">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                 <a href="/profile/<%= locals.loginuser.username %>">Profile</a>
                 <a href="/edit/profile">Edit Profile</a>
                 <a href="/changePassword">Change Password</a>
@@ -137,7 +139,10 @@
                             uploaded = 1;
                         },
                         error: function (result) {
-                            alert('There is an error uploading');
+                            $('.progress-bar').width('0%')
+                            $("#done").html("Error");
+                            $("#messageModal").modal("show");
+                            $("#msg").html('There is an error uploading');
                         }
                     });
                 });
@@ -186,6 +191,12 @@
         $('#cancel').click(()=>{
             location.href = "/profile/<%= locals.loginuser.username %>";
         })
+        function openNav() {
+            $("#sidenav").css("width", "242px")
+        }
+        function closeNav() {
+            $("#sidenav").css("width", "0")
+        }    
 
-            </script>
+    </script>
 </body>

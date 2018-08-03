@@ -32,9 +32,9 @@ Reports.sync({force: false, logging: console.log}).then(()=>{
     console.log("Reports table synced");
     Reports.upsert({
         reportID:1,
-        reportDetails:'I dont like the picture',
+        reportDetails:'Router was damaged',
         itemID: 5,
-        userID:8
+        userID:7
     });
 });
 

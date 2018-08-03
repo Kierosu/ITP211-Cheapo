@@ -1,8 +1,9 @@
 const passport = require('passport');
-var ItemPost = require('../models/itemPost');
+const ItemPost = require('../models/itemPost');
 const fs = require('fs');
 const UserModel = require('../models/user');
 const Product = require('../models/products');
+const itemPostModel = require('../models/itemPost');
 const myDatabase = require('./database');
 const sequelizeInstance = myDatabase.sequelizeInstance;
 const generatePassword = require('password-generator');
@@ -40,15 +41,18 @@ exports.signin = function (req, res) {
 exports.profilepage = function (req, res) {
     var username = req.params.username;
     raysonCart(req.user).then((obj) => {
-        UserModel.findOne({ where: { username: username } }).then(function (userprofile) {
-            res.render('Profile', {
-                user: userprofile,
-                products: obj.products,
-                total: obj.total,
-                shippingFee: obj.shippingFee,
-                subtotal: obj.subtotal,
-                realQuantity: obj.realQuantity,
-                urlPath: req.protocol + "://" + req.get('host') + req.url
+        sequelize.query('select * from itemPosts where sellerID = ' + req.user.userID, { model: itemPostModel }).then((itemPost) => {
+            UserModel.findOne({ where: { username: username } }).then(function (userprofile) {
+                res.render('Profile', {
+                    user: userprofile,
+                    products: obj.products,
+                    total: obj.total,
+                    shippingFee: obj.shippingFee,
+                    subtotal: obj.subtotal,
+                    realQuantity: obj.realQuantity,
+                    urlPath: req.protocol + "://" + req.get('host') + req.url,
+                    itemPost: itemPost,
+                });
             });
         }).catch((err) => {
             return res.status(400).send({
@@ -336,7 +340,6 @@ exports.TwoFactorAuth = (req, res) => {
             res.render('2FA', {
                 title: "Two-Factor Authentication",
                 qrcode: data_url,
-                secretkey: "Something idk",
                 Select2FA: req.user.TwoFA,
                 products: obj.products,
                 total: obj.total,
