@@ -287,7 +287,7 @@ function initMap(){
 			if (permission === "granted") {
 				notify();
 			}
-			});
+			}); 
 		}
   
 		function notify() {
@@ -322,7 +322,7 @@ function initMap(){
 		function notify2() {
 			var notification = new Notification('Delivery for <%= username %>', {
 			icon: 'https://preview.ibb.co/dpUkUy/toh_Hai_Ji_Face_png.jpg',
-			body: "Uncle Toh: Just reached Jurong East! Sorry caught up in a traffic jam and was mopping the table!",
+			body: "Uncle Toh: Sorry caught up in a traffic jam.",
 			});
 
 			notification.onclick = function () {
@@ -351,7 +351,7 @@ function initMap(){
 		function notify3() {
 			var notification = new Notification('Delivery for <%= username %>', {
 			icon: 'https://preview.ibb.co/dpUkUy/toh_Hai_Ji_Face_png.jpg',
-			body: "Uncle Toh: My apologies, table too hard to mop. Im reaching soon!",
+			body: "Uncle Toh: My apologies, Im reaching soon!",
 			});
 
 			notification.onclick = function () {
