@@ -76,19 +76,19 @@ function register_popup(id, name)
     var element = '<div class="popup-box chat-popup" id="'+ id +'">';
     
     element = element + '<div class="popup-head">';
-    element = element + '<div class="popup-head-left"><i class="fa fa-circle text-success" aria-hidden="true"></i>  '+ name +'</div>';
+    element = element + '<div class="popup-head-left">  '+ name +'</div>';
     element = element + '<div class="popup-head-right"><a href="javascript:close_popup(\''+ id +'\');">&#10005;</a></div>';
     element = element + '<div class="chat-content"><div class="col-md-12 chats border"><ul class="p-0">';
     element = element + '<div class="col-md-12 message-box border pl-2 pr-2 border-top-0">';
-    element = element + '<section id="chatroom">   <section id="feedback"></section> </section>';
+    element = element + '<section id="chatroom"> <section id="feedback"></section> </section>';
     element = element + '<input id= "message" class= "vertical-align" type= "text" required/>';
-    element = element + '<button onclick="alert(\'test\');" id= "send_message" class= "vertical-align" type= "submit">Send</button>';
+    element = element + '<button id= "send_message" class= "vertical-align" type= "submit">Send</button>';
     element = element + '<div class="tools"><i class="fa fa-picture-o" aria-hidden="true"></i><i class="fa fa-meh-o" aria-hidden="true"></i><i class="fa fa-folder" aria-hidden="true"></i><i class="fa fa-thumbs-o-up m-0" aria-hidden="true"></i>';
     element = element + '</div></div>';
     element = element + '<div style="clear: both"></div></div><div class="popup-messages"></div></div>';
     
     
-    
+    //onclick="alert(\''+ id + '\');"
     document.getElementsByTagName("body")[0].innerHTML = document.getElementsByTagName("body")[0].innerHTML + element;  
 
     popups.unshift(id);
@@ -118,5 +118,13 @@ function calculate_popups()
 
 //recalculate when window is loaded and also when window is resized.
 window.addEventListener("resize", calculate_popups);
-window.addEventListener("load", calculate_popups);
+window.addEventListener("load", calculate_popups); 
 
+ 
+ 
+function GetElementInsideContainer(containerID, childID) {
+    var elm = document.getElementById(childID);
+    var parent = elm ? elm.parentNode : {};
+    return (parent.id && parent.id === containerID) ? elm : {};
+}
+ 
