@@ -23,6 +23,7 @@ router.get('/', auth.isLoggedIn, auctionEXP, (req, res) => {
                             shippingFee: obj.shippingFee,
                             subtotal: obj.subtotal,
                             realQuantity: obj.realQuantity,
+                            hostPath: req.protocol + "://" + req.get("host"),
                             msg: req.flash('message')
                         });
                     })
@@ -32,16 +33,10 @@ router.get('/', auth.isLoggedIn, auctionEXP, (req, res) => {
     })
 })
 
-router.post('/deleteMail', auth.isLoggedIn, (req, res) => {
-    Mail.destroy({ where: { mailID: req.body.mailID } }).then(() => {
-        Mail.findAll({ where: { receiver: req.user.userID } }).then((mail) => {
-            User.findAll({}).then((user) => {
-                res.render('test', {
-                    mail: mail,
-                    user: user
-                });
-            })
-        })
+router.get('/delAucMail/:id', auth.isLoggedIn, (req, res) => {
+    Mail.destroy({ where: { mailExtraF: req.params.id } }).then(() => {
+        req.flash('message', 'Item successfully added to cart');
+        res.redirect('/mail');
     })
 })
 
@@ -56,13 +51,13 @@ router.post('/social/:id', (req, res) => {
         }
         try {
             Mail.create(socialMailInfo).then(() => {
-                req.flash('message', 'Item successfully added');
+                req.flash('message', 'Message successfully send');
                 res.redirect('/mail');
             })
         } catch (err) {
             console.log(err);
         }
-    })    
+    })
 })
 
 module.exports = router;

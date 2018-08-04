@@ -27,7 +27,10 @@ const Mail = sequelize.define('Mail', {
     status: {
         type: Sequelize.STRING,
         allowNull: false
-    }
+    },
+    mailExtraF: {
+        type: Sequelize.STRING
+    },
 });
 
 Mail.sync({ force: true, logging: console.log }).then(() => {

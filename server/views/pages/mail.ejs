@@ -10,6 +10,11 @@
     <% include ../partials/stylesheet %>
     <% include ../partials/javascript %>
     <link type="text/css" rel="stylesheet" href="/css/raysonStyle.css" />
+    <style>
+        .hiddenMailInfo{
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
@@ -28,7 +33,7 @@
                                 if(user.userID == mail.sender){ %>
                                    '<%= user.email %>'
                             <% }}) %>
-                            ,'<%= mail.message %>','<%= mail.mailID %>');" style="height: 90%;width: 80%;margin: auto;background-color: rgb(228, 196, 189);border-radius: 7px;display: flex;cursor: pointer;overflow: hidden;">
+                            ,'<%= mail.message %>','<%= mail.mailID %>','<%= mail.status %>');" style="height: 90%;width: 80%;margin: auto;background-color: rgb(228, 196, 189);border-radius: 7px;display: flex;cursor: pointer;overflow: hidden;">
                                 <p style="margin: auto 0;padding-left: 5px;"><%= mail.title %></p>
                             </div>
                         </div>
@@ -132,12 +137,12 @@
         <!-- jQuery Plugins -->
         
         <script>
-            function showMailT(from,message,mID){
+            function showMailT(from,message,mID,status){
                 $('#deleteMail').attr("data-aID",mID);
                 var fromText = document.getElementById("fromText");
                 var messageText = document.getElementById("messageText");    
                 fromText.innerHTML = from;
-                messageText.innerHTML = message;
+                messageText.innerHTML = message + status;
             }
 
             $("#deleteMail").click(function(){
@@ -164,11 +169,32 @@
                 document.getElementById("socailMailForm").action = "/mail/social/" + sID;
             }
             
-            function addToCartFromMail(buyerID, sellerID, price,dataIDs){                   
-                var currentLink = "otk" + dataIDs;
-                var dTitle = document.getElementById("otk").getAttribute("data-title"); 
-                var dDesc = document.getElementById("otk").getAttribute("data-desc"); 
-                alert(dDesc);                                
+            function addToCartFromMail(buyerID, sellerID, price){  
+                var products = {
+                    UserId: buyerID,
+                    sellerId: sellerID,
+                    ProductName:  document.getElementById("sM").getAttribute("data-title"),
+                    ProductPrice: price,
+                    ProductDescription: document.getElementById("hM").getAttribute("data-desc"),
+                    ProductImage: '../images/' + document.getElementById("sM").getAttribute("data-iPic")
+			    }
+                
+                var delFlashMail =  document.getElementById("hM").getAttribute("data-delident");
+                
+                $.ajax({
+                    url: "<%=hostPath%>/item/macbook",
+                    type: "POST",
+                    data: JSON.stringify(products),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function(result){
+                        location.href="/mail/delAucMail/" + delFlashMail;
+                    },
+                    error: function(result){
+                        alert("Error Posting Item");
+                        discardAdd();
+                    }				
+                })
             }
         </script>
 </body>

@@ -22,7 +22,7 @@ function goBackToItems() {
 }
 
 function showMail(from, message, mID) {
-    $('#deleteMail').data('aID', mID); //setter
+    $('#deleteMail').data('aID', mID);
     var fromText = document.getElementById("fromText");
     var messageText = document.getElementById("messageText");
     fromText.innerHTML = from;

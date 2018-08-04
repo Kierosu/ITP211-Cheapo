@@ -37,19 +37,21 @@ function mailSoldAuc(aucID, buyerID, price) {
     Auction.findOne({ where: { auctionID: aucID } }).then((auction) => {
         ItemPost.findOne({ where: { id: auction.itemAuctionID } }).then((item) => {
             User.findOne({ where: { userID: buyerID } }).then((user) => {
+                var delIdent = aucID+buyerID+item.id+user.username;
                 var soldAucSeller = {
                     sender: 1,
                     receiver: item.sellerID,
                     title: 'Auction expired',
-                    message: 'Auction, ' + item.title + ' has ended being bought from buyer, ' + user.username + ' at $' + price,
-                    status: 'notSeen'
+                    message: 'Auction, ' + item.title + ' has ended being bought from buyer ' + user.username + ' at $' + price,
+                    status: ''
                 }
-                var soldAucBuyer = {
+                var soldAucBuyer = {                    
                     sender: 1,
                     receiver: buyerID,
                     title: 'Auction Won',
-                    message: 'You have won Auction, ' + item.title + ' at $' + price + '. You should <a id="otk" onclick="addToCartFromMail(' + buyerID + ',' + item.sellerID + ',' + price + ',' + item.id + ')" data-title="' + item.title + '" data-desc="' + item.prodDesc + '" data-iPic="' + item.itemPic + '" style="color:green;" href="#">ADD</a> to cart to claim it.',
-                    status: 'notSeen'
+                    message: 'You have won Auction, ' + item.title + ' at $' + price + '. You should <a id="sM" onclick="addToCartFromMail(' + buyerID + ',' + item.sellerID + ',' + price + ')" data-title="' + item.title + '" data-iPic="' + item.itemPic + '" style="color:green;" href="#">ADD</a> to cart to claim it.',
+                    status: '<p id="hM" data-desc="' + item.prodDesc + '" data-delIdent="' + delIdent + '" class="hiddenMailInfo"></p>',
+                    mailExtraF: delIdent              
                 }
                 try {
                     Mail.create(soldAucSeller);
@@ -72,7 +74,7 @@ module.exports = {
             receiver: user,
             title: 'Welcome',
             message: 'Welcome to Cheapo, where we home cheapos',
-            status: 'notSeen'
+            status: ''
         }
         try {
             Mail.create(newUser)
@@ -86,7 +88,7 @@ module.exports = {
             receiver: user,
             title: 'New item posted',
             message: 'You have posted a new item: ' + item,
-            status: 'notSeen'
+            status: ''
         }
         try {
             Mail.create(newItemMail)
@@ -100,7 +102,7 @@ module.exports = {
             receiver: user,
             title: 'New auction posted',
             message: 'You have posted a new auction: ' + auctionName,
-            status: 'notSeen'
+            status: ''
         }
         try {
             Mail.create(newAuc)
@@ -128,7 +130,7 @@ module.exports = {
                     receiver: item.sellerID,
                     title: 'First item warning',
                     message: 'Your item, ' + item.title + ' has been flagged. Please change it. You have 2 more chances',
-                    status: 'notSeen'
+                    status: ''
                 }
                 try {
                     Mail.create(warnUser)
@@ -143,7 +145,7 @@ module.exports = {
                     receiver: item.sellerID,
                     title: 'Second item warning',
                     message: 'Your item, ' + item.title + ' has been flagged. Please change it. You have 1 more chances',
-                    status: 'notSeen'
+                    status: ''
                 }
                 try {
                     Mail.create(warnUser)
@@ -158,7 +160,7 @@ module.exports = {
                     receiver: item.sellerID,
                     title: 'Third item warning',
                     message: 'Your item, ' + item.title + ' has been suspended',
-                    status: 'notSeen'
+                    status: ''
                 }
                 try {
                     Mail.create(warnUser)
@@ -172,7 +174,7 @@ module.exports = {
                     receiver: item.sellerID,
                     title: 'First item warning',
                     message: 'Your item, ' + item.title + ' has been deleted from being flagged to many times',
-                    status: 'notSeen'
+                    status: ''
                 }
                 try {
                     Mail.create(warnUser)

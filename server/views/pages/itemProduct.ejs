@@ -150,7 +150,7 @@
                 ProductPrice: "<%= productPrice %>",
                 ProductDescription: prodDesc,
                 ProductImage: $(".productIMG").val()
-            }
+			}
             $.ajax({
                 url: url,
                 type: "POST",
@@ -163,8 +163,9 @@
                 error: function(result){
                     alert("Error Posting Item");
                     discardAdd();
-                }
-            })
+				}
+				
+			})		
         }
 		function addToWish() {
 			var title = "<%= productTitle %>"
@@ -191,7 +192,7 @@
                     alert("Error Posting Item");
                     
                 }
-            })
+			})
 		}
 		
         function discardAdd() {
