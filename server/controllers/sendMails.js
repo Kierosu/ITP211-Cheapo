@@ -1,4 +1,5 @@
 var ItemPost = require('../models/itemPost');
+var FList = require('../models/friendList');
 var Auction = require('../models/auction');
 var Mail = require('../models/mail');
 var User = require('../models/user');
@@ -19,13 +20,12 @@ function mailExpAuc(auctionID, itemID) {
                 receiver: item.sellID,
                 title: 'Auction expired',
                 message: 'Auction ' + item.name + ' has expired',
-                status: 'notSeen'
+                status: ''
             }
             try {
                 item.status = 'Active';
                 item.save();
                 Mail.create(alertExpAuction);
-                console.log('An act has expired')
             } catch (err) {
                 console.log(err);
             }
@@ -37,7 +37,7 @@ function mailSoldAuc(aucID, buyerID, price) {
     Auction.findOne({ where: { auctionID: aucID } }).then((auction) => {
         ItemPost.findOne({ where: { id: auction.itemAuctionID } }).then((item) => {
             User.findOne({ where: { userID: buyerID } }).then((user) => {
-                var delIdent = aucID+buyerID+item.id+user.username;
+                var delIdent = aucID + buyerID + item.id + user.username;
                 var soldAucSeller = {
                     sender: 1,
                     receiver: item.sellerID,
@@ -45,13 +45,13 @@ function mailSoldAuc(aucID, buyerID, price) {
                     message: 'Auction, ' + item.title + ' has ended being bought from buyer ' + user.username + ' at $' + price,
                     status: ''
                 }
-                var soldAucBuyer = {                    
+                var soldAucBuyer = {
                     sender: 1,
                     receiver: buyerID,
                     title: 'Auction Won',
                     message: 'You have won Auction, ' + item.title + ' at $' + price + '. You should <a id="sM" onclick="addToCartFromMail(' + buyerID + ',' + item.sellerID + ',' + price + ')" data-title="' + item.title + '" data-iPic="' + item.itemPic + '" style="color:green;" href="#">ADD</a> to cart to claim it.',
                     status: '<p id="hM" data-desc="' + item.prodDesc + '" data-delIdent="' + delIdent + '" class="hiddenMailInfo"></p>',
-                    mailExtraF: delIdent              
+                    mailExtraF: delIdent
                 }
                 try {
                     Mail.create(soldAucSeller);
@@ -65,6 +65,46 @@ function mailSoldAuc(aucID, buyerID, price) {
         })
     })
 
+}
+
+function alterOthers(userID, followerID, itemID) {
+    User.findOne({ where: { userID: userID } }).then((dUser) => {
+        ItemPost.findOne({ where: { id: itemID } }).then((dItem) => {
+            var msgFollowers = {
+                sender: userID,
+                receiver: followerID,
+                title: dUser.username + ' has posted a new item',
+                message: dUser.username + ' has posted a new item, <a style="color:blue;" href="/itemProduct/' + dItem.id + '">' + dItem.title + '</a>.<br> Thank you for following me!',
+                status: ''
+            }
+            try {
+                Mail.create(msgFollowers)
+            } catch (err) {
+                console.log(err);
+            }
+        })
+    })
+}
+
+function alterAucOthers(userID, followerID, itemID) {
+    User.findOne({ where: { userID: userID } }).then((dUser) => {
+        ItemPost.findOne({ where: { id: itemID } }).then((dItem) => {
+            Auction.findOne({ where: { itemAuctionID: itemID } }).then((dauction) => {
+                var msgFollowers = {
+                    sender: userID,
+                    receiver: followerID,
+                    title: dUser.username + ' has posted a new Auction',
+                    message: dUser.username + ' has posted a new Auction, <a style="color:blue;" href="/auctions/' + dauction.auctionID + '/' + dauction.itemAuctionID + '">' + dItem.title + '</a>.<br> Thank you for following me!',
+                    status: ''
+                }
+                try {
+                    Mail.create(msgFollowers)
+                } catch (err) {
+                    console.log(err);
+                }
+            })
+        })
+    })
 }
 
 module.exports = {
@@ -82,33 +122,51 @@ module.exports = {
             console.log(err);
         }
     },
-    mailNewItem: (user, item) => {
-        var newItemMail = {
-            sender: 1,
-            receiver: user,
-            title: 'New item posted',
-            message: 'You have posted a new item: ' + item,
-            status: ''
-        }
-        try {
-            Mail.create(newItemMail)
-        } catch (err) {
-            console.log(err);
-        }
+    mailNewItem: (user, itemID) => {
+        ItemPost.findOne({ where: { id: itemID } }).then((dItem) => {
+            var newItemMail = {
+                sender: 1,
+                receiver: user,
+                title: 'New item posted',
+                message: 'You have posted a new item: ' + dItem.title + ' at $' + dItem.price,
+                status: ''
+            }
+
+            FList.findAll({ where: { following: user }, raw: true }).then((notifyOthers) => {
+                for (var i = 0; i < notifyOthers.length; i++) {
+                    alterOthers(user, notifyOthers[i].follower, itemID);
+                }
+            })
+
+            try {
+                Mail.create(newItemMail)
+            } catch (err) {
+                console.log(err);
+            }
+        })
     },
-    newAuction: (user, auctionName) => {
-        var newAuc = {
-            sender: 1,
-            receiver: user,
-            title: 'New auction posted',
-            message: 'You have posted a new auction: ' + auctionName,
-            status: ''
-        }
-        try {
-            Mail.create(newAuc)
-        } catch (err) {
-            console.log(err);
-        }
+    newAuction: (user, aucItemID) => {
+        ItemPost.findOne({ where: { id: aucItemID } }).then((dItem) => {
+            var newAuc = {
+                sender: 1,
+                receiver: user,
+                title: 'New auction posted',
+                message: 'You have posted a new auction: ' + dItem.title,
+                status: ''
+            }
+
+            FList.findAll({ where: { following: user }, raw: true }).then((notifyOthers) => {
+                for (var i = 0; i < notifyOthers.length; i++) {
+                    alterAucOthers(user, notifyOthers[i].follower, aucItemID);
+                }
+            })
+
+            try {
+                Mail.create(newAuc)
+            } catch (err) {
+                console.log(err);
+            }
+        })
     },
     auctionEXP: (req, res, next) => {
         Auction.findAll({ where: { endDate: { lte: timeNow() } }, raw: true }).then((expAuc) => {

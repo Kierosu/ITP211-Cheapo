@@ -238,60 +238,6 @@ router.get('/reactivate/:id', auth.isLoggedIn, (req, res) => {
     }))
 })
 
-// Item details
-router.get('/list/:id', (req, res) => {
-    if (isNaN(req.params.id)) {
-        req.flash('message', 'Item does not exist');
-        res.redirect('/')
-    } else {
-        if (req.user) {
-            Item.findOne({ where: { itemID: req.params.id } }).then((item) => {
-                if (item) {
-                    Review.findAll({ where: { itemID: req.params.id } }).then((review => {
-                        raysonCart(req.user).then((obj) => {
-                            res.render('productpage', {
-                                item: item,
-                                review: review,
-                                products: obj.products,
-                                total: obj.total,
-                                shippingFee: obj.shippingFee,
-                                subtotal: obj.subtotal,
-                                realQuantity: obj.realQuantity
-                            })
-                        })
-                    }))
-                }
-                if (!item) {
-                    req.flash('message', 'Item does not exist');
-                    res.redirect('/')
-                }
-            })
-        } else {
-            Item.findOne({ where: { itemID: req.params.id } }).then((item) => {
-                if (item) {
-                    Review.findAll({ where: { itemID: req.params.id } }).then((review => {
-                        raysonCart(req.user).then((obj) => {
-                            res.render('productpage', {
-                                item: item,
-                                review: review,
-                                products: obj.products,
-                                total: obj.total,
-                                shippingFee: obj.shippingFee,
-                                subtotal: obj.subtotal,
-                                realQuantity: obj.realQuantity
-                            })
-                        })
-                    }))
-                }
-                if (!item) {
-                    req.flash('message', 'Item does not exist');
-                    res.redirect('/')
-                }
-            })
-        }
-    }
-})
-
 // Auction item page
 router.get('/auction/:id', auth.isLoggedIn, (req, res) => {
     ItemPost.findOne({ where: { id: req.params.id } }).then((item => {
@@ -359,7 +305,7 @@ router.post('/auction/:id', auth.isLoggedIn, (req, res) => {
                     ItemPost.findOne({ where: { id: req.params.id } }).then((item => {
                         item.status = 'Auction';
                         item.save().then(() => {
-                            newAuction(req.user.userID, item.title);
+                            newAuction(req.user.userID, item.id);
                             req.flash('message', 'Item Auction successfully');
                             res.redirect('/userItems')
                         })
@@ -481,7 +427,7 @@ router.get('/editUser/:id', auth.isLoggedIn, (req, res) => {
     })
 })
 
-router.post('/editUser/:id', (req, res) => {
+router.post('/editUser/:id', auth.isLoggedIn, (req, res) => {
     if (req.user.userType === 'Admin') {
         User.findOne({ where: { userID: req.params.id } }).then((user) => {
             if (req.body.password == '' & req.body.passwordCMF == '') {
@@ -521,7 +467,7 @@ router.post('/editUser/:id', (req, res) => {
     }
 })
 
-router.get('/deleteUser/:id', (req, res) => {
+router.get('/deleteUser/:id', auth.isLoggedIn, (req, res) => {
     if (req.user.userType === 'Admin') {
         User.destroy({ where: { userID: req.params.id } })
         req.flash('message', 'User removed successfully');

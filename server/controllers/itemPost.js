@@ -184,7 +184,7 @@ exports.create = function (req, res) {
                     message: "error"
                 });
             }
-            mailNewItem(req.user.userID, itemPostData.title);
+            mailNewItem(req.user.userID, newItem.id);
             res.redirect('userItems');
         })
     });
