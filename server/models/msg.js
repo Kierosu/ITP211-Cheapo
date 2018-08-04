@@ -26,7 +26,10 @@ const Msg = sequelize.define('Msg', {
 Msg.sync({force: false, logging: console.log}).then(()=>{
     console.log("Msg table synced");
     Msg.upsert({
-         
+         msgID : 1 ,
+         msg : "message works!" ,
+         sentby:  "zuko" ,
+         sentto: "Toh",
     });
 });
 
