@@ -1946,4 +1946,17 @@ button#send_message{
 }
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}   
+
+#blocker { 
+  color: blue;
 } 
+  
+
+.deleteBtn { 
+  width: 32px;
+  height: 32px;
+  vertical-align:middle; 
+  position: relative;  
+  top: -33px;
+}
