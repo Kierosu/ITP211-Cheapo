@@ -1854,10 +1854,19 @@ img {
   vertical-align: middle;
 }
 .cart .items .cartSection .itemNumber {
-  font-size: 0.75em;
+  font-size: 1em;
   color: #777;
   margin-bottom: 0.5em;
 }
+
+.itemNumber:hover {
+  color: orange;
+}
+
+.itemNumber:visited {
+  color: green;
+}
+
 .cart .items .cartSection h3 {
   font-size: 1em;
   font-family: 'Montserrat', sans-serif;

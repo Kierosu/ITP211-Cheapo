@@ -113,7 +113,7 @@
                                                                 <%= products.ProductDescription %>
                                                             </p>
                                                             <br>
-                                                            <p class="itemNumber stockStatus">Uploaded By: <%= products.dataValues.sellerName %></p>
+                                                            <a class="itemNumber stockStatus" target="_blank" href="http://localhost:3000/profile/<%= products.dataValues.sellerName %>">Uploaded By: <%= products.dataValues.sellerName %></a>
                                                             <br> 
                                                             <p class="stockStatus"> In Stock</p>
                                                         </div>

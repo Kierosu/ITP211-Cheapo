@@ -14,13 +14,13 @@ var EventEmitter = require('events').EventEmitter;
 var eventExample = new EventEmitter;
 var where = require('node-where');
 var NodeGeocoder = require('node-geocoder');
-//api back up key: , AIzaSyAG6WZ3rbxvBIZqxm0CGXKI1W996iv92JA
+//api back up key:, AIzaSyA9GFp2FDEVh9tMfnEaAvECgoP9fOWeiIk, AIzaSyD_SDR0bIPaK4ZUzkdUsEQ5XpWvRB4xqaE,
 var options = {
   provider: 'google',
 
     // Optional depending on the providers
     httpAdapter: 'https', // Default
-    apiKey: 'AIzaSyA9GFp2FDEVh9tMfnEaAvECgoP9fOWeiIk', // for Mapquest, OpenCage, Google Premier
+    apiKey: 'AIzaSyAV7pDs1ltMMhTvifmAI3i_HL_qWgsXqq8',
     formatter: null         // 'gpx', 'string', ...
   
 };
