@@ -10,7 +10,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>  
         <script src='/js/popups.js'></script> 
         <script src='/js/chat.js'></script>  
-        <script src='/js/shafieextra.js'></script>
+         
     <% include ../partials/stylesheet %>
     <% include ../partials/eugenecss %>
     <title>Cheapo</title>
@@ -28,18 +28,48 @@
                                  
                                 <img width="30" height="30" src="<%= user.profilePic %>" /> 
                                 <i class="fa fa-circle text-success" aria-hidden="true"></i>
-                                <span><%= user.username %></span> 
+                                <span><%= user.username %> (You)</span> 
                              
                             </a>
                         </div> 
-                        <% } else { %>
-                    <div class="sidebar-name"> 
+                        <% } else { %> 
+                        <% blockList.forEach(function(block){%>    
+                        <% if(locals.loginuser.username === block.blockedby) { %>   
+                            <% if(user.username === block.blockeduser) { %>  
+                                <div class="sidebar-name"> 
                
-                        <a href="javascript:register_popup('<%= user.username %>', '<%= user.username %>');">
-                            <img width="30" height="30" src="<%= user.profilePic %>" />
-                            <span><%= user.username %></span>
-                        </a>
-                    </div> 
+                                    <a > 
+                                        <img width="30" height="30" src="<%= user.profilePic %>" />
+                                        <span class="tooltip"><%= user.username %></span>  
+                                        <span class="tooltiptext"><%= user.username %> has blocked you.</span>
+                                        ⛔
+                                    </a>
+                                </div>  
+                                 
+                                <% } else { %>   
+                                    <% if(user.userType === "Admin") { %>  
+                                    <div class="sidebar-name"> 
+               
+                                        <a href="javascript:register_popup('<%= user.username %>', '<%= user.username %>');">
+                                            <img width="30" height="30" src="<%= user.profilePic %>" />
+                                            <span>👨 <%= user.username %></span>
+                                        </a>
+                                    </div>  
+                                    <% } else { %>   
+                                        <div class="sidebar-name"> 
+               
+                                            <a href="javascript:register_popup('<%= user.username %>', '<%= user.username %>');">
+                                                <img width="30" height="30" src="<%= user.profilePic %>" />
+                                                <span> <%= user.username %></span>
+                                            </a>
+                                        </div>  
+                                        <% } %>
+                                    <% } %>
+                        <% } else { %>   
+                            
+                        <% } %> 
+                        <% }) %>
+                     
                     <% } %>
                     
                 <% }) %>
@@ -82,6 +112,7 @@
             </script>
             <% } else { %> 
                 <% } %>
-    <% }) %>
+    <% }) %> 
+    <script src='/js/shafieextra.js'></script>
 </body>
 </html>
