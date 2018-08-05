@@ -27,11 +27,14 @@
             <div class="media-left">
                 <img src="http://localhost:3000/img/<%= user.profilePic %>" alt="Profile Picture" width="160px" height="160px" style="border: 3px solid black; border-radius: 2px;">
             </div>
-            <div class="media-body" style="position: relative;left:50px; font-size: 17px">
+            <div class="media-body" style="position: relative;left:50px; font-size: 17px;">
                 <p style="font-size: 22px"><strong value=""><%= user.username %></strong></p>
                 <p><strong>Email</strong>: <%= user.email %><br></p>
                 <p><strong>Date Joined</strong>: <%= user.joinDate %></p>
                 <p><strong>Type (Member/Admin)</strong>: <%= user.userType %></p>
+                <%if (yOn == 1){ %><strong style="padding-left: 30px;"> <button id="btnUnFollow" style="height: 50%;" class="btn">Following</button> </strong>
+                <% } else { %>
+                    <strong style="padding-left: 30px;"> <button id="btnFollow" style="height: 50%;" class="btn">Follow</button> </strong> <% } %>       
             </div>
         </div>
         <p style="text-align: center; position: relative; font-weight: bold; font-size: 20px;color: black; margin: 50px 0 20px 0;">Items Posted</p>
@@ -74,6 +77,21 @@
 				}
 			})
         })
+
+        $('#btnFollow').click(function() {
+			$.ajax({
+				url: '/mail/follow/<%= user.userID %>',
+				type: 'GET'
+			})
+        })
+
+        $('#btnUnFollow').click(function() {
+			$.ajax({
+				url: '/mail/unFollow/<%= user.userID %>',
+				type: 'GET'
+			})
+        })
+
         function openNav() {
             $("#sidenav").css("width", "242px")
         }

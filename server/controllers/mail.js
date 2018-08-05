@@ -60,4 +60,18 @@ router.post('/social/:id', (req, res) => {
     })
 })
 
+router.get('/follow/:id', (req, res) => {
+    var fInfo = {
+        follower: req.user.userID,
+        following: req.params.id
+    }
+    Flist.create(fInfo).then(() => {
+        
+    })
+})
+
+router.get('/unFollow/:id', (req, res) => {
+    console.log(req.params.id);
+})
+
 module.exports = router;

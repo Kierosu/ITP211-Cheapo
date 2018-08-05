@@ -1,6 +1,7 @@
 const passport = require('passport');
 const ItemPost = require('../models/itemPost');
 const fs = require('fs');
+const Flist = require('../models/friendList');
 const UserModel = require('../models/user');
 const Product = require('../models/products');
 const itemPostModel = require('../models/itemPost');
@@ -41,22 +42,41 @@ exports.signin = function (req, res) {
 exports.profilepage = function (req, res) {
     var username = req.params.username;
     raysonCart(req.user).then((obj) => {
-        sequelize.query('select * from itemPosts where ownerName = \'' + username + '\' and status=\'Active\'', { model: itemPostModel }).then((itemPost) => {
-            UserModel.findOne({ where: { username: username } }).then(function (userprofile) {
-                res.render('Profile', {
-                    user: userprofile,
-                    products: obj.products,
-                    total: obj.total,
-                    shippingFee: obj.shippingFee,
-                    subtotal: obj.subtotal,
-                    realQuantity: obj.realQuantity,
-                    urlPath: req.protocol + "://" + req.get('host') + req.url,
-                    itemPost: itemPost,
+        UserModel.findOne({ where: { username: username } }).then(function (userprofile) {
+            Flist.findAll({ where: { follower: req.user.userID, following: userprofile.userID } }).then((fList) => {
+                sequelize.query('select * from itemPosts where ownerName = \'' + username + '\' and status=\'Active\'', { model: itemPostModel }).then((itemPost) => {
+                    if (req.user.userID == userprofile.userID) {
+                        var yOn = 1;
+                        res.render('Profile', {
+                            yOn: yOn,
+                            user: userprofile,
+                            products: obj.products,
+                            total: obj.total,
+                            shippingFee: obj.shippingFee,
+                            subtotal: obj.subtotal,
+                            realQuantity: obj.realQuantity,
+                            urlPath: req.protocol + "://" + req.get('host') + req.url,
+                            itemPost: itemPost,
+                        });
+                    } else {
+                        var yOn = fList.length;
+                        res.render('Profile', {
+                            yOn: yOn,
+                            user: userprofile,
+                            products: obj.products,
+                            total: obj.total,
+                            shippingFee: obj.shippingFee,
+                            subtotal: obj.subtotal,
+                            realQuantity: obj.realQuantity,
+                            urlPath: req.protocol + "://" + req.get('host') + req.url,
+                            itemPost: itemPost,
+                        });
+                    }
+                }).catch((err) => {
+                    return res.status(400).send({
+                        message: err
+                    });
                 });
-            });
-        }).catch((err) => {
-            return res.status(400).send({
-                message: err
             });
         });
     });
@@ -73,7 +93,7 @@ exports.logout = function (req, res) {
 exports.isLoggedIn = function (req, res, next) {
     if (req.isAuthenticated()) {
         return next();
-    }    
+    }
     req.flash('loginMessage', 'Please login first');
     res.redirect('/login');
 };
@@ -430,7 +450,7 @@ exports.noLoginVerifyOTP = function (req, res) {
         else {
             res.status(400).send("Wrong verification code!")
         }
-    }) 
+    })
 }
 
 exports.checkTFA = (req, res) => {
