@@ -1945,3 +1945,6 @@ button#send_message{
   right:    0;
   bottom:   0;
 }
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+} 
