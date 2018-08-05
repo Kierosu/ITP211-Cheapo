@@ -117,6 +117,10 @@
 async defer>
 </script>
 <script>
+
+		$("#backToShopping").click(function(){
+		location.replace("http://localhost:3000/itemPosted");
+	});
 var socket = io('http://localhost:3000');
 var uniqueAcc = [];
 socket.on('receiveMoney', function(sellerMoney) {

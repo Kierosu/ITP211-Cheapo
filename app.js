@@ -221,7 +221,7 @@ app.get('/', auth.index);
  
  
  
-app.get('/chat', user.list) 
+// app.get('/chat', user.list) //Comment out ltr
  
 io.sockets.on('connection', function(socket)  { 
     
