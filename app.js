@@ -246,7 +246,7 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
-app.post('/chat', function (req, res) {
+app.post('/chat',user.create, function (req, res) {
     var chatData = {
         username: req.body.username,
         message: req.body.message,
@@ -262,7 +262,8 @@ app.post('/chat', function (req, res) {
         io.to(connectedUsers[sentto]).emit('message', req.body)
         res.sendStatus(200)
     })
-});
+}); 
+app.delete('/chat/:block_id', user.delete);
 // Teh Yang's code
 
 // Import Item Posting controller
