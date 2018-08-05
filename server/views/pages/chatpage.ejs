@@ -69,8 +69,22 @@
                                         </div>  
                                         <% } %>
                                     <% } %>
-                        <% } else { %>   
-                            
+                        <% } else { %>    
+                            <% if (user.username === block.blockedby) { %>
+                            <% if (locals.loginuser.username === block.blockeduser) { %>  
+                                <div class="sidebar-name"> 
+                                         <a > 
+                                        <img width="30" height="30" src="<%= user.profilePic %>" /> 
+                                        🚫
+                                        <span class="tooltip"><%= user.username %></span>  
+                                        <span class="tooltiptext"> <%= user.username %> blocked you.</span>
+                                          
+                                    </a>
+                                </div>  
+                                <% } else { %> 
+                                    <% } %>  
+                                    <% } else { %> 
+                                        <% } %>
                         <% } %> 
                         <% }) %>
                      
