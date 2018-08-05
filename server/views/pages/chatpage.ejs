@@ -21,7 +21,8 @@
              <a href="javascript:void(0)" class="closebtn" onclick="ShowChatButton()">&times;</a>
            <div class="chat-sidebar">
                  <% userList.forEach(function(user){%>  
-                    <% if(locals.loginuser.username === user.username) { %>
+                    <% if(locals.loginuser.username === user.username) { %>  
+                          
                         <div class="sidebar-name">
                             <a style="font-weight:bold">  
                                  
@@ -38,10 +39,14 @@
                                 <div class="sidebar-name"> 
                
                                     <a > 
-                                        <img width="30" height="30" src="/img/<%= user.profilePic %>" />
+                                        <img width="30" height="30" src="<%= user.profilePic %>" />
                                         <span class="tooltip"><%= user.username %></span>  
-                                        <span class="tooltiptext"><%= user.username %> has blocked you.</span>
-                                        ⛔
+                                        <span class="tooltiptext">You blocked <%= user.username %> .</span>
+                                        ⛔ 
+                                        <form action="/chat" method="delete">  
+             
+                                            <button class="btn btn-secondary pull-right deleteBtn" type="button" data-id="<%= block.BlockID%>">Unblock</button> 
+                                            </form>
                                     </a>
                                 </div>  
                                  
@@ -75,8 +80,14 @@
                
                 
                  
-           </div> 
-
+           </div>  
+           <form method="post"> 
+            <input id="blockuser"  type="text" placeholder="Username..." name="blockuser"   required> 
+            <small> <button type="submit" id="blockpls"  >Block</button></small> 
+             
+           </form> 
+            
+            
         </div> 
     
          
@@ -84,14 +95,36 @@
     <% include ../partials/_index/slider %>
 
     <!-- collections -->
-    <% include ../partials/_index/collections %>	
+    <% include ../partials/_index/collections %>
+
+  	
+ 
 
     <!-- FOOTER -->
     <% include ../partials/footer %>
 
     <!-- JS -->
     <% include ../partials/javascript %> 
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script> 
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>  
+    <script>
+        $('.deleteBtn').click(function() {
+            var block_id = $(this).data('id');      
+            $.ajax({
+                    url: '<%-urlPath%>'+'/'+block_id,
+                    type: 'DELETE',
+                    success: function(result) {
+                        console.log(result.message);
+                        var BlockToRemove = '.list-group-item[data-id='+block_id+']';
+                        $(BlockToRemove).remove();
+                    },
+                    error: function(result){
+                        alert("Unable to remove block.");
+                        console.log(result.message);
+                    } 
+                });  
+        });
+       
+    </script>
     <% messageList.forEach(function(msg){%> 
         <% if(locals.loginuser.username === msg.sentby) { %>  
             <script> 
