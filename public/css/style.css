@@ -1940,7 +1940,6 @@ button#send_message{
   background-color: #30323A;
 }
 #chat {  
-  display:none;
   position: fixed;
   right:    0;
   bottom:   0;

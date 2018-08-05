@@ -21,8 +21,7 @@
              <a href="javascript:void(0)" class="closebtn" onclick="ShowChatButton()">&times;</a>
            <div class="chat-sidebar">
                  <% userList.forEach(function(user){%>  
-                    <% if(locals.loginuser.username === user.username) { %>  
-                          
+                    <% if(locals.loginuser.username === user.username) { %>
                         <div class="sidebar-name">
                             <a style="font-weight:bold">  
                                  
@@ -39,7 +38,7 @@
                                 <div class="sidebar-name"> 
                
                                     <a > 
-                                        <img width="30" height="30" src="<%= user.profilePic %>" />
+                                        <img width="30" height="30" src="/img/<%= user.profilePic %>" />
                                         <span class="tooltip"><%= user.username %></span>  
                                         <span class="tooltiptext"><%= user.username %> has blocked you.</span>
                                         ⛔
@@ -85,10 +84,7 @@
     <% include ../partials/_index/slider %>
 
     <!-- collections -->
-    <% include ../partials/_index/collections %>
-
-  	
- 
+    <% include ../partials/_index/collections %>	
 
     <!-- FOOTER -->
     <% include ../partials/footer %>
