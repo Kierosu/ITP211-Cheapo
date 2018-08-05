@@ -76,7 +76,7 @@ function register_popup(id, name)
     var element = '<div class="popup-box chat-popup" id="'+ id +'">';
     
     element = element + '<div class="popup-head">';
-    element = element + '<div class="popup-head-left">  '+ name +'</div>';
+    element = element + '<div class="popup-head-left">  '+ name +' </div><i id= "blocker" class="fa fa-times hide-chat-box" aria-hidden="true" onclick="Hide();alert(\' You have blocked ' + id + '\');"></i>';
     element = element + '<div class="popup-head-right"><a href="javascript:close_popup(\''+ id +'\');">&#10005;</a></div>';
     element = element + '<div class="chat-content"><div class="col-md-12 chats border"><ul class="p-0">';
     element = element + '<div class="col-md-12 message-box border pl-2 pr-2 border-top-0">';
@@ -127,4 +127,5 @@ function GetElementInsideContainer(containerID, childID) {
     var parent = elm ? elm.parentNode : {};
     return (parent.id && parent.id === containerID) ? elm : {};
 }
+ 
  
