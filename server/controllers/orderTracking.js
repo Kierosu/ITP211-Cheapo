@@ -14,13 +14,13 @@ var EventEmitter = require('events').EventEmitter;
 var eventExample = new EventEmitter;
 var where = require('node-where');
 var NodeGeocoder = require('node-geocoder');
-//api back up key:, AIzaSyA9GFp2FDEVh9tMfnEaAvECgoP9fOWeiIk, AIzaSyD_SDR0bIPaK4ZUzkdUsEQ5XpWvRB4xqaE,
+//api back up key:, AIzaSyA9GFp2FDEVh9tMfnEaAvECgoP9fOWeiIk, AIzaSyD_SDR0bIPaK4ZUzkdUsEQ5XpWvRB4xqaE, AIzaSyAV7pDs1ltMMhTvifmAI3i_HL_qWgsXqq8 
 var options = {
   provider: 'google',
 
     // Optional depending on the providers
     httpAdapter: 'https', // Default
-    apiKey: 'AIzaSyAV7pDs1ltMMhTvifmAI3i_HL_qWgsXqq8',
+    apiKey: 'AIzaSyBrgDB3A08nKoyoqWM3K9xNRjQkxUq7Vxo',
     formatter: null         // 'gpx', 'string', ...
   
 };
@@ -103,7 +103,10 @@ exports.feedback = function (req,res){
     }
 exports.show = function (req, res){
     //List all the products
-    var coords = {};
+    var coords = {
+        shippingAddressLongitude : 103.7470,
+        shippingAddressLatitude : 1.3840
+    };
     sequelize.query("select p.ProductID, p.ProductName, p.ProductDescription, p.ProductPrice, p.ProductImage, p.UserId from products p left outer join Users u on p.UserId = u.userID where p.UserId = " + req.user.userID, {model: Product}).then((products) => {     
         //sending money socket io
         ioCheck.on('connection', function (socket) {
@@ -136,6 +139,7 @@ exports.show = function (req, res){
         //     console.log('City: ' + result.get('city'));
         //     console.log('Country: ' + result.get('country'));
         //     console.log('Country Code: ' + result.get('countryCode'));
+        //     console.log('latitude: ' + result.get('lat'))
         //     coords.shippingAddressLatitude = result.get('lat');
         //     coords.shippingAddressLongitude = result.get('lng');
         // }
@@ -156,6 +160,10 @@ exports.show = function (req, res){
         })
         .catch(function(err) {
             console.log(err);
+        });
+        ioCheck.on('connection', function (socket) {
+            console.log("Sending Longitude and Lati")
+            socket.emit('sendingCoords', coords);
         });
     });
 
