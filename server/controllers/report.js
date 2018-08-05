@@ -1,6 +1,5 @@
 var ItemPost = require('../models/itemPost');
 var reports = require('../models/report');
-var Items = require('../models/item');
 var database = require('./database');
 var sequelize = database.sequelize;
 var express = require('express');
@@ -8,18 +7,25 @@ var auth = require('./profile');
 var router = express.Router();
 
 router.post('/add/:id', auth.isLoggedIn, (req, res) => {
-    var reportData = {
-        itemID: req.params.id,
-        reportDetails: req.body.itemReport,
-        userID: req.user.userID
-    }
-    reports.create(reportData).then(() => {
-        req.flash('message', 'Report is made');
-        res.redirect('/itemProduct/' + reportData.itemID);
-    }).catch((err) => {
-        console.log(err);
-        return;
-    });
+    ItemPost.findOne({ where: { id: req.params.id } }).then((dItem) => {
+        var reportData = {
+            itemID: req.params.id,
+            reportDetails: req.body.itemReport,
+            userID: req.user.userID
+        }
+        if (dItem.sellerID == req.user.userID) {
+            req.flash('message', 'Unable to report your own item');
+            res.redirect('/itemProduct/' + reportData.itemID);
+        } else {            
+            reports.create(reportData).then(() => {
+                req.flash('message', 'Report is made');
+                res.redirect('/itemProduct/' + reportData.itemID);
+            }).catch((err) => {
+                console.log(err);
+                return;
+            });
+        }
+    })
 })
 
 var { itemWarnings } = require('./sendMails');

@@ -353,7 +353,7 @@
 											</p>
 										</div>
 										<div style="height: 33%;width: 100%;display: flex;">
-											<p style="margin: auto 0;">Status:
+											<p style="margin: auto 0;<%if(itemPost.status == 'Deactivated'){%>color:orange;<%}%>">Status:
 												<b><%= itemPost.status %></b>
 											</p>
 										</div>
@@ -362,6 +362,18 @@
 										<p style="height: 90%;width: 90%;margin: auto;text-align: justify;overflow-y: auto;border: 1px solid grey;border-radius: 7px;"><%= itemPost.prodDesc %></p>
 									</div>
 								</div>
+								<%if(itemPost.status == 'Deactivated'){%>
+									<div style="height: 100%;width: 15%;float: right;">
+										<div style="height: 100%; width: 100%;">
+											<div style="height: 64%;width: 100%;display: flex;">
+												<p style="margin: auto;font-size: 23px">Please contact support</p>
+											</div>												
+											<div style="height: 33%;width: 100%;display: flex">
+												<a href="#" data-id="<%= itemPost.id %>" style="margin: auto;width: 100%;text-align: center;" class="btn btn-primary btn-sm deleteBtn">Delete</a>
+											</div>
+										</div>												
+									</div>	
+								<%}else{%>
 								<div style="height: 100%;width: 15%;float: right;">
 									<div style="height: 100%; width: 100%;">
 										<div style="height: 33%;width: 100%;display: flex">
@@ -375,6 +387,7 @@
 										</div>
 									</div>
 								</div>
+								<% } %>
 							</div>
 						</div>
 					<% } %>					

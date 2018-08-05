@@ -230,8 +230,8 @@ module.exports = {
                 var warnUser = {
                     sender: 1,
                     receiver: item.sellerID,
-                    title: 'First item warning',
-                    message: 'Your item, ' + item.title + ' has been deleted from being flagged to many times',
+                    title: 'Item Removal',
+                    message: 'Your item has been deleted from being flagged to many times',
                     status: ''
                 }
                 try {

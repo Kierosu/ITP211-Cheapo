@@ -200,7 +200,7 @@ exports.delete = function (req, res) {
                 message: "error"
             });
         }
-        
+
         res.status(200).send({ message: "Deleted Items: " + item_num });
     })
 }
@@ -212,41 +212,46 @@ exports.showitem = function (req, res) {
         Review.findAll({ where: { itemID: idCheck } }).then((review => {
             itemPostModel.findOne({ where: { id: idCheck } }).then(productDetails => {
                 User.findAll({}).then((reviewUser) => {
-                    var id = req.params.userID;
-                    UserModel.findById(id).then(function () {
-                        res.render("itemProduct", {
-                            reviewUser: reviewUser,
-                            review: review,
-                            productImage: productDetails.itemPic,
-                            productTitle: productDetails.title,
-                            productPrice: productDetails.price,
-                            productBrand: productDetails.brand,
-                            productDesc: productDetails.prodDesc,
-                            productID: productDetails.id,
-                            avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
-                            username: req.user.username,
-                            email: req.user.email,
-                            userID: req.user.userID,
-                            sellerID: productDetails.sellerID,
-                            dateJoined: req.user.joinDate,
-                            type: req.user.userType,
-                            membership: req.user.membership,
-                            req: req,
-                            hostPath: req.protocol + "://" + req.get("host"),
-                            ownerName: productDetails.ownerName,
-                            products: obj.products,
-                            total: obj.total,
-                            shippingFee: obj.shippingFee,
-                            subtotal: obj.subtotal,
-                            realQuantity: obj.realQuantity,
-                            urlPath: req.protocol + "://" + req.get('host') + req.url,
-                            msg: req.flash('message')
+                    if (productDetails.status == 'Active') {
+                        var id = req.params.userID;
+                        UserModel.findById(id).then(function () {
+                            res.render("itemProduct", {
+                                reviewUser: reviewUser,
+                                review: review,
+                                productImage: productDetails.itemPic,
+                                productTitle: productDetails.title,
+                                productPrice: productDetails.price,
+                                productBrand: productDetails.brand,
+                                productDesc: productDetails.prodDesc,
+                                productID: productDetails.id,
+                                avatar: req.protocol + "://" + req.get("host") + '/img/' + req.user.profilePic,
+                                username: req.user.username,
+                                email: req.user.email,
+                                userID: req.user.userID,
+                                sellerID: productDetails.sellerID,
+                                dateJoined: req.user.joinDate,
+                                type: req.user.userType,
+                                membership: req.user.membership,
+                                req: req,
+                                hostPath: req.protocol + "://" + req.get("host"),
+                                ownerName: productDetails.ownerName,
+                                products: obj.products,
+                                total: obj.total,
+                                shippingFee: obj.shippingFee,
+                                subtotal: obj.subtotal,
+                                realQuantity: obj.realQuantity,
+                                urlPath: req.protocol + "://" + req.get('host') + req.url,
+                                msg: req.flash('message')
+                            });
+                        }).catch((err) => {
+                            return res.status(400).send({
+                                message: err
+                            });
                         });
-                    }).catch((err) => {
-                        return res.status(400).send({
-                            message: err
-                        });
-                    });
+                    } else {
+                        req.flash('message', 'Item does not exist');
+                        res.redirect('/itemPosted')
+                    }
                 });
             });
         }));
