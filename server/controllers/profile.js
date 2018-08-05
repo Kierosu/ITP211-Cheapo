@@ -46,7 +46,7 @@ exports.profilepage = function (req, res) {
             Flist.findAll({ where: { follower: req.user.userID, following: userprofile.userID } }).then((fList) => {
                 sequelize.query('select * from itemPosts where ownerName = \'' + username + '\' and status=\'Active\'', { model: itemPostModel }).then((itemPost) => {
                     if (req.user.userID == userprofile.userID) {
-                        var yOn = 1;
+                        var yOn = 3;
                         res.render('Profile', {
                             yOn: yOn,
                             user: userprofile,

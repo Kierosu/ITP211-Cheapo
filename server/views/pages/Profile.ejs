@@ -33,8 +33,9 @@
                 <p><strong>Date Joined</strong>: <%= user.joinDate %></p>
                 <p><strong>Type (Member/Admin)</strong>: <%= user.userType %></p>
                 <%if (yOn == 1){ %><strong style="padding-left: 30px;"> <button id="btnUnFollow" style="height: 50%;" class="btn">Following</button> </strong>
-                <% } else { %>
-                    <strong style="padding-left: 30px;"> <button id="btnFollow" style="height: 50%;" class="btn">Follow</button> </strong> <% } %>       
+                <% } else if (yOn == 0) { %>
+                    <strong style="padding-left: 30px;"> <button id="btnFollow" style="height: 50%;" class="btn">Follow</button> </strong> 
+                <% } else { %> <% } %>       
             </div>
         </div>
         <p style="text-align: center; position: relative; font-weight: bold; font-size: 20px;color: black; margin: 50px 0 20px 0;">Items Posted</p>
@@ -81,14 +82,22 @@
         $('#btnFollow').click(function() {
 			$.ajax({
 				url: '/mail/follow/<%= user.userID %>',
-				type: 'GET'
+                type: 'GET',
+                success: function(result){                    
+                    window.location.href = "/profile/" + "<%= user.username %>";
+                    alert('You are now following <%= user.username %>')
+				}
 			})
         })
 
         $('#btnUnFollow').click(function() {
 			$.ajax({
 				url: '/mail/unFollow/<%= user.userID %>',
-				type: 'GET'
+                type: 'GET',
+                success: function(result){
+					window.location.href = "/profile/" + "<%= user.username %>";
+                    alert('You stop following <%= user.username %>')
+				}
 			})
         })
 

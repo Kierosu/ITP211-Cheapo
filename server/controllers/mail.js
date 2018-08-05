@@ -65,13 +65,23 @@ router.get('/follow/:id', (req, res) => {
         follower: req.user.userID,
         following: req.params.id
     }
-    Flist.create(fInfo).then(() => {
-        
+    User.findOne({ where: { userID: fInfo.following } }).then((dUser) => {
+        Flist.create(fInfo).then(() => {
+            res.redirect('/profile/' + dUser.username)
+        })
     })
 })
 
 router.get('/unFollow/:id', (req, res) => {
-    console.log(req.params.id);
+    var fInfo = {
+        follower: req.user.userID,
+        following: req.params.id
+    }
+    Flist.destroy({ where: { follower: req.user.userID, following: fInfo.following } }).then(() => {
+        User.findOne({ where: { userID: fInfo.following } }).then((dUser) => {
+            res.redirect('/profile/' + dUser.username)
+        })
+    })
 })
 
 module.exports = router;

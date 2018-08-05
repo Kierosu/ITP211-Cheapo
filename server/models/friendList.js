@@ -20,7 +20,7 @@ const FList = sequelize.define('FList', {
     }
 });
 
-FList.sync({ force: false, logging: console.log }).then(() => {
+FList.sync({ force: true, logging: console.log }).then(() => {
     console.log("FList table synced");
     FList.upsert({
         fListID: 1,
