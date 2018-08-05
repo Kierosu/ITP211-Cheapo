@@ -6,7 +6,11 @@ const bodyParser = require("body-parser");
 const multer = require('multer');
 const app = express();
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+const io = require('socket.io')(server); 
+var Msg = require('./server/models/msg'); 
+var user = require("./server/controllers/usercontroller")
+var connectedUsers = {};
+var dict = [];
 exports.ioExports = io;
 
 const upload = multer({ dest: './public/uploads/', limits: { fileSize: 1000000, files: 1 } });
@@ -214,47 +218,51 @@ app.get('/order-tracking', auth.isLoggedIn, orderTracking.show)
 app.post('/feedback', auth.isLoggedIn, orderTracking.feedback)
 
 app.get('/', auth.index);  
-// shafie's code, will change later, so i comment for now.
-//var user = require("./server/controllers/usercontroller") 
-
-// app.get('/', user.list); 
-  
-// io.on('connection', function(socket)  { 
-//     chatConnections++;   
-//      //auto get username when button clicked
-//     socket.on('chat', (data) => {
-//         socket.username = data.username
-//     })
-//     console.log('New user connected. Username: ' + socket.username + 'SocketID: ' + socket.id);  
-//     // store user info to be used when private messaging
-//     dict.push({
-//         key:   socket.id,
-//         value: socket.username
-//     });  
-//      // remove user info when disconnect to prevent duplicates
-//     socket.on('disconnect', function()  { 
-//         chatConnections--; 
-//         delete dict[socket.id];
-//      });
-// });
+// shafie's code, will change later, so i comment for now. 
  
-// app.post('/', function (req, res)  { 
-//     var chatData  = { 
-//         username : req.body.username, 
-//         message : req.body.message, 
-//         sentby : req.body.username, 
-//         sentto : req.body.sentto, 
-//     }   
-//     Msg.create(chatData).then((newMessage) =>{ 
-//         if (!newMessage){ 
-//             sendStatus(500);
-//         } 
-//         io.to(dict[username]).emit('message', req.body) 
-//         io.to(dict[sentto]).emit('message', req.body) 
-//         res.sendStatus(200)
-//     })
-// });
-
+ 
+ 
+app.get('/chat', user.list) //Comment out ltr
+ 
+io.sockets.on('connection', function(socket)  { 
+    
+     //auto get username when button clicked 
+    socket.on('new_message', function(data)   {
+        // feedback.html('');
+        // message.val(''); 
+        io.sockets.emit('messagenew', {msg: data})
+        
+    })
+    socket.on('chat', (data) => {
+        socket.username = data.username
+    }) 
+    connectedUsers[socket.username] = socket;
+    console.log('New user connected. Username: ' + socket.username + 'SocketID: ' + socket.id);  
+     
+     // remove user info when disconnect to prevent duplicates
+    socket.on('disconnect', function()  { 
+         
+        delete connectedUsers[socket.id];
+     });
+});
+ 
+app.post('/chat', function (req, res)  { 
+    var chatData  = { 
+        username : req.body.username, 
+        message : req.body.message, 
+        sentby : req.body.username, 
+        sentto : req.body.sentto, 
+    }    
+    
+    Msg.create(chatData).then((newMessage) =>{ 
+        if (!newMessage){ 
+            sendStatus(500);
+        } 
+        io.to(connectedUsers[username]).emit('message', req.body) 
+        io.to(connectedUsers[sentto]).emit('message', req.body) 
+        res.sendStatus(200)
+    })
+});
 // Teh Yang's code
 
 // Import Item Posting controller
