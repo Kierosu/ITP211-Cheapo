@@ -23,7 +23,7 @@ const Reviews = sequelize.define('Reviews', {
     }
 });
 
-Reviews.sync({force: false, logging: console.log}).then(()=>{
+Reviews.sync({force: true, logging: console.log}).then(()=>{
     console.log("Item table synced");
     Reviews.upsert({
         itemReviewID: 1,

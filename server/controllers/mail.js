@@ -40,6 +40,12 @@ router.get('/delAucMail/:id', auth.isLoggedIn, (req, res) => {
     })
 })
 
+router.post('/deleteMail', (req, res) => {
+    Mail.destroy({ where: { mailID: req.body.mailID } }).then(() => {
+        console.log('Mail deleted');
+    })
+})
+
 router.post('/social/:id', (req, res) => {
     User.findOne({ where: { userID: req.user.userID } }).then((user) => {
         var socialMailInfo = {
