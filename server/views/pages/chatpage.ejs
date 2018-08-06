@@ -103,19 +103,11 @@
             
             
         </div> 
-    
+        <button id="returnhome" type="button" class="primary-btn" onclick="location.href='http://localhost:5000/';">Home</button>  
+        <button id="gotopopup" type="button" class="primary-btn" onclick="location.href='http://localhost:5000/popup';">Popup</button> 
+        <button id="chatbutton" type="button" class="primary-btn"  onclick="getElementById('chat').style.display = 'block'; this.style.display = 'none'" >Chat</button> 
          
-    <!-- slider -->
-    <% include ../partials/_index/slider %>
-
-    <!-- collections -->
-    <% include ../partials/_index/collections %>
-
-  	
- 
-
-    <!-- FOOTER -->
-    <% include ../partials/footer %>
+     
 
     <!-- JS -->
     <% include ../partials/javascript %> 
