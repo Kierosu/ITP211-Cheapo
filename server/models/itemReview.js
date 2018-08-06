@@ -23,7 +23,7 @@ const Reviews = sequelize.define('Reviews', {
     }
 });
 
-Reviews.sync({force: false, logging: console.log}).then(()=>{
+Reviews.sync({force: true, logging: console.log}).then(()=>{
     console.log("Item table synced");
     Reviews.upsert({
         itemReviewID: 1,
@@ -33,19 +33,19 @@ Reviews.sync({force: false, logging: console.log}).then(()=>{
     });
     Reviews.upsert({
         itemReviewID: 2,
-        itemReview: "Smells nice",
+        itemReview: "Smooth and fluent clicking motion",
         itemID: 6,
         userID: 8
     });
     Reviews.upsert({
         itemReviewID: 3,
-        itemReview: "Taste nice",
+        itemReview: "Amazing sound quality",
         itemID: 7,
         userID: 9
     });
     Reviews.upsert({
         itemReviewID: 4,
-        itemReview: "Feels nice",
+        itemReview: "Comfortable design, value for money!",
         itemID: 8,
         userID: 10
     });
