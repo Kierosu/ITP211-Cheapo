@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" const="text/html;charset=UTF-8" />
+    <link href="http://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/css/shafie.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <title>Popup</title>
+  </head>
+
+  <body>
+    <header> 
+      <h1>Popup Simulation</h1> 
+      <button id="returnhome" type="button" class="primary-btn" onclick="location.href='http://localhost:5000/chat';">Chat</button> 
+       
+    </header>
+
+    <section>
+      
+            <% userList.forEach(function(user){%>  
+                <% if(locals.loginuser.username === user.username) { %>  
+                    <p>You are logged in as<strong>  <%= user.username %>  </strong></p>  
+                    <% } else { %> 
+                        <% } %> 
+             <% }) %>
+                
+                <p>Popup of : <strong>zuko</strong></p>
+              
+               
+    </section>
+
+    <section id="chatroom"> 
+            <% messageList.forEach(function(message){%>  
+                <% if(locals.loginuser.username === message.sentto) { %>  
+                    <p1><%= message.sentby %> : <%= message.msg %></p1>  
+                    <br> 
+                    <% } else { %>  
+                        <% if(locals.loginuser.username === message.sentby) { %>  
+                            <p2> <%= message.sentby %> : <%= message.msg %></p2>   
+                            <br>
+                            <% } else { %> 
+                                <% } %> 
+                        <% } %> 
+             <% }) %>
+      <section id="feedback"></section>
+    </section>
+
+    
+
+    <section id="input_zone"> 
+      <input id="message" class="vertical-align" type="text" />
+      <button id="send_message" class="vertical-align" type="button">Send</button>
+    </section>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src ="js/chat.js"></script>
+  </body>
+</html>
