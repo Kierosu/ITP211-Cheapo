@@ -28,7 +28,7 @@ const Reports = sequelize.define('Reports', {
     }
 });
 
-Reports.sync({force: false, logging: console.log}).then(()=>{
+Reports.sync({force: true, logging: console.log}).then(()=>{
     console.log("Reports table synced");
     Reports.upsert({
         reportID:1,
