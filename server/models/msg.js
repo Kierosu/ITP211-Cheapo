@@ -30,7 +30,19 @@ Msg.sync({force: true, logging: console.log}).then(()=>{
          msg : "message works!" ,
          sentby:  "zuko" ,
          sentto: "Toh",
-    });
+    }); 
+     Msg.upsert({
+        msgID : 2 ,
+        msg : "hey toph!!" ,
+        sentby:  "zuko" ,
+        sentto: "toph",
+    }); 
+    Msg.upsert({
+        msgID : 3 ,
+        msg : "whts up zuko!!" ,
+        sentby:  "toph" ,
+        sentto: "zuko",
+    }); 
 });
 
 module.exports = sequelize.model('Msg', Msg);
