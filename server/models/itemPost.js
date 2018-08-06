@@ -47,7 +47,7 @@ const itemPost = sequelize.define('itemPost', {
 });
 
 // force: true will drop the table if it already exists
-itemPost.sync({ force: false, logging: console.log}).then(() => {
+itemPost.sync({ force: true, logging: console.log}).then(() => {
     // Table created
     console.log("Item Posting table synced");
     itemPost.upsert({

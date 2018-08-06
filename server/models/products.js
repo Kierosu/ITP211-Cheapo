@@ -43,7 +43,7 @@ const products = sequelize.define('products', {
     });
 
 // force: true will drop the table if it already exists
-products.sync({ force: false, logging: console.log }).then(() => {
+products.sync({ force: true, logging: console.log }).then(() => {
     // Table created
     console.log("Products table synced");
 });

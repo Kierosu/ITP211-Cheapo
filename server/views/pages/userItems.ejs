@@ -144,8 +144,8 @@
 										<div style="height: 34%;width: 100%;display: flex;">
 											<a href="#" style="margin: auto;width: 100%;text-align: center" class="btn btn-primary btn-sm editBtn" data-id="<%= itemPost.id%>">Edit</a>
 										</div>
-										<div style="height: 33%;width: 100%;display: flex">
-											<a href="#" data-id="<%= itemPost.id %>" style="margin: auto;width: 100%;" class="btn btn-primary btn-sm deleteBtn">Delete</a>
+										<div style="height: 33%;width: 100%;display: flex;">
+											<a href="#" data-id="<%= itemPost.id %>" style="margin: auto;width: 100%;" class="btn btn-primary btn-sm deleteBtns">Delete</a>
 										</div>
 									</div>
 								</div>
@@ -369,7 +369,7 @@
 												<p style="margin: auto;font-size: 23px">Please contact support</p>
 											</div>												
 											<div style="height: 33%;width: 100%;display: flex">
-												<a href="#" data-id="<%= itemPost.id %>" style="margin: auto;width: 100%;text-align: center;" class="btn btn-primary btn-sm deleteBtn">Delete</a>
+												<a href="#" data-id="<%= itemPost.id %>" style="margin: auto;width: 100%;text-align: center;" class="btn btn-primary btn-sm deleteBtns">Delete</a>
 											</div>
 										</div>												
 									</div>	
@@ -383,7 +383,7 @@
 											<a href="#" style="margin: auto;width: 100%;text-align: center;" class="btn btn-primary btn-sm editBtn" data-id="<%= itemPost.id%>">Edit</a>
 										</div>
 										<div style="height: 33%;width: 100%;display: flex">
-											<a href="#" data-id="<%= itemPost.id %>" style="margin: auto;width: 100%;text-align: center;" class="btn btn-primary btn-sm deleteBtn">Delete</a>
+											<a href="#" data-id="<%= itemPost.id %>" style="margin: auto;width: 100%;text-align: center;" class="btn btn-primary btn-sm deleteBtns">Delete</a>
 										</div>
 									</div>
 								</div>
@@ -434,7 +434,7 @@
 				redBtn.href = "items/userAdd";
 				redBtn.style.display = 'block';
 			}
-				$('.deleteBtn').click(function () {
+				$('.deleteBtns').click(function () {
 					var item_id = $(this).data('id');
 					$.ajax({
 						url: 'http://localhost:3000/itemPosted/' + item_id,

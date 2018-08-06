@@ -1,6 +1,7 @@
+
 $(function () {
     //make connection
-    var socket = io.connect('http://localhost:4000/chat');
+    var socket = io.connect('http://localhost:3000/chat');
 
     //buttons and inputs
     var message = $("#message");
@@ -11,10 +12,9 @@ $(function () {
     var chatroom = $("#chatroom");
     var feedback = $("#feedback");
 
-
-
     //Emit message
     send_message.click(function () {
+        alert("testing")
         socket.emit('new_message', message.val())
         mssage.val('');
     })

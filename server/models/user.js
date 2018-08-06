@@ -55,7 +55,7 @@ const User = sequelize.define('User', {
 });
 
 
-User.sync({force: false, logging: console.log}).then(()=>{
+User.sync({force: true, logging: console.log}).then(()=>{
     console.log("User table synced");
     User.upsert({
         userID: 1,
