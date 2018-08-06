@@ -28,7 +28,7 @@
                 <span class="checkmark"></span>
             </label>
             <label class="radioContainer">
-                <input type="radio" name="Select2FA" value="GoogleAuth" data-toggle="modal" data-target="#googleAuthModal" id="GoogleAuth">Google Authenticator
+                <input type="radio" name="Select2FA" value="GoogleAuth" data-toggle="modal" data-target="#googleAuthModal" id="GoogleAuth">Authenticator Application
                 <span class="checkmark"></span>
             </label>
             </div>
@@ -43,13 +43,13 @@
             <div class="modal-content">
             <div class="modal-header" style="background-color: #F8694A;">
                 <button type="button" class="close" data-dismiss="modal" >&times;</button>
-                <h4 class="modal-title" style="color: white;">Enable Google Authenticator</h4>
+                <h4 class="modal-title" style="color: white;">Enable Authenticator Application</h4>
             </div>
             <div class="modal-body" style="font-size: 18px;" id="modalbodyGoogleAuth">    
-                <p>1. Download the Google Authenticator from the app store on your mobile device. Select an option to setup a new account and follow the instructions given to you in your app.</p>
+                <p>1. Download any authenticator application (eg. Google Authenticator/Authy) from the app store on your mobile device. Select an option to setup a new account and follow the instructions given to you in your app.</p>
                 <p>2. Use the app to scan the barcode below</p>
                 <img src="<%= qrcode %>">
-                <p>3. Enter the verification code on the Google Authenticator app to complete setup</p>
+                <p>3. Enter the verification code on the authenticator app to complete setup</p>
                 <label for="token"></label>
                 <input type="text" name="token" id="token" placeholder="6-digit verification code">
             </div>
@@ -144,14 +144,14 @@
         
         $("#GoogleAuth").click(()=>{
             if("<%= Select2FA %>" == "GoogleAuth"){
-                $("#modalbodyGoogleAuth").html("<p>You are already using Google Authenticator for your Two-Factor Authentication!</p>");
+                $("#modalbodyGoogleAuth").html("<p>You are already using an authenticator application for your Two-Factor Authentication!</p>");
                 $("#modalfooterGoogleAuth").html("<button type='button' class='btn btn-default closeModal' data-dismiss='modal'>Close</button>")
             }
             else if("<%= Select2FA %>" != "GoogleAuth"){
-                $("#modalbodyGoogleAuth").html("<p>1. Download the Google Authenticator from the app store on your mobile device. Select an option to setup a new account and follow the instructions given to you in your app.</p>" +
+                $("#modalbodyGoogleAuth").html("<p>1. Download any authenticator application (eg. Google Authenticator/Authy)  from the app store on your mobile device. Select an option to setup a new account and follow the instructions given to you in your app.</p>" +
                 "<p>2. Use the app to scan the barcode below</p>" +
                 "<img src=\"<%= qrcode %>\">" +
-                "<p>3. Enter the verification code on the Google Authenticator app to complete setup</p>" +
+                "<p>3. Enter the verification code on the authenticator app to complete setup</p>" +
                 "<label for=\"token\"></label>" +
                 "<input type=\"text\" name=\"token\" id=\"token\" placeholder=\"6-digit verification code\">")
                 $("#modalfooterGoogleAuth").html("<button type=\"button\" class=\"btn btn-default closeModal\" data-dismiss=\"modal\">Close</button>" +

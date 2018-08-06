@@ -19,7 +19,7 @@ const Block = sequelize.define('Block', {
     }
 });
 
-Block.sync({force: false, logging: console.log}).then(()=>{
+Block.sync({force: true, logging: console.log}).then(()=>{
     console.log("Block table synced");
     Block.upsert({
          BlockID : 1 ,
