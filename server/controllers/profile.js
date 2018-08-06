@@ -15,6 +15,7 @@ var Item = require('../models/item');
 var Auction = require('../models/auction');
 var sequelize = myDatabase.sequelize;
 var { raysonCart } = require('./otherFunc');
+var bList = require('../models/block');
 
 // set images file types
 var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
@@ -38,6 +39,7 @@ exports.signin = function (req, res) {
         message: req.flash('loginMessage')
     });
 };
+//wdawd wdaw
 // Profile 
 exports.profilepage = function (req, res) {
     var username = req.params.username;
@@ -45,38 +47,55 @@ exports.profilepage = function (req, res) {
         UserModel.findOne({ where: { username: username } }).then(function (userprofile) {
             Flist.findAll({ where: { follower: req.user.userID, following: userprofile.userID } }).then((fList) => {
                 sequelize.query('select * from itemPosts where ownerName = \'' + username + '\' and status=\'Active\'', { model: itemPostModel }).then((itemPost) => {
-                    if (req.user.userID == userprofile.userID) {
-                        var yOn = 3;
-                        res.render('Profile', {
-                            yOn: yOn,
-                            user: userprofile,
-                            products: obj.products,
-                            total: obj.total,
-                            shippingFee: obj.shippingFee,
-                            subtotal: obj.subtotal,
-                            realQuantity: obj.realQuantity,
-                            urlPath: req.protocol + "://" + req.get('host') + req.url,
-                            itemPost: itemPost,
+                    bList.findAll({ where: { blockedby: req.user.username, blockeduser: username } }).then((block) => {
+                        if (req.user.userID == userprofile.userID) {
+                            var yOn = 3;
+                            res.render('Profile', {
+                                yOn: yOn,
+                                user: userprofile,
+                                products: obj.products,
+                                total: obj.total,
+                                shippingFee: obj.shippingFee,
+                                subtotal: obj.subtotal,
+                                realQuantity: obj.realQuantity,
+                                urlPath: req.protocol + "://" + req.get('host') + req.url,
+                                itemPost: itemPost,
+                            });
+                        } else {
+                            if (block.length > 0) {
+                                var yOn = fList.length;
+                                res.render('Profile', {
+                                    yOn: yOn,
+                                    user: userprofile,
+                                    products: obj.products,
+                                    total: obj.total,
+                                    shippingFee: obj.shippingFee,
+                                    subtotal: obj.subtotal,
+                                    realQuantity: obj.realQuantity,
+                                    urlPath: req.protocol + "://" + req.get('host') + req.url,
+                                    itemPost: itemPost,
+                                });
+                            } else {
+                                var yOn = fList.length;
+                                res.render('Profile', {
+                                    yOn: yOn,
+                                    user: userprofile,
+                                    products: obj.products,
+                                    total: obj.total,
+                                    shippingFee: obj.shippingFee,
+                                    subtotal: obj.subtotal,
+                                    realQuantity: obj.realQuantity,
+                                    urlPath: req.protocol + "://" + req.get('host') + req.url,
+                                    itemPost: itemPost,
+                                });
+                            }
+                        }
+                    }).catch((err) => {
+                        return res.status(404).send({
+                            message: err
                         });
-                    } else {
-                        var yOn = fList.length;
-                        res.render('Profile', {
-                            yOn: yOn,
-                            user: userprofile,
-                            products: obj.products,
-                            total: obj.total,
-                            shippingFee: obj.shippingFee,
-                            subtotal: obj.subtotal,
-                            realQuantity: obj.realQuantity,
-                            urlPath: req.protocol + "://" + req.get('host') + req.url,
-                            itemPost: itemPost,
-                        });
-                    }
-                }).catch((err) => {
-                    return res.status(404).send({
-                        message: err
                     });
-                });
+                })
             });
         }).catch((err) => {
             return res.status(404).send(

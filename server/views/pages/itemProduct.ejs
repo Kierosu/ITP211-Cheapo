@@ -42,12 +42,14 @@
 						<div style="height: 10%;width: 100%;text-align: center;"><h4>Reviews</h4></div>
 						<% if (review.length > 0) { %>
 							<% review.forEach(function(review){ %>
-								<div style="height: 10%;width: 100%;">
+								<div style="margin-top: 7px;width: 100%;">
 									<h4>
 										<% reviewUser.forEach(function(reviewUser){ %> 
 											<% if (reviewUser.userID == review.userID){%> <%= reviewUser.username %> <%}%>
 										<% }) %>
-									: <%= review.itemReview %></h4></div>
+									: <%= review.itemReview %>
+									</h4>
+								</div>
 								<% }); } else { %>
 								No review, make one!
 						<% } %>  
