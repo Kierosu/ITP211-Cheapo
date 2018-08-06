@@ -56,4 +56,23 @@ exports.delete = function(req,res){
         res.status(200).send({message: "Removed block :" + block_num}); 
         res.redirect('/chat')
     })
-}
+} 
+exports.messagelist = function(req,res){  
+    User.findAll({}).then((Users) => {
+        msg.findAll({}).then((msgs) => { 
+            block.findAll({}).then((blocks) => {
+                res.render('popup', {
+                    userList : Users,
+                    messageList : msgs,
+                    blockList : blocks, 
+                    urlPath: req.protocol + "://" + req.get("host") + req.url
+                }); 
+            }).catch((err) =>{ 
+                return res.status(400).send({ 
+                    message : err
+                });
+            });
+        })
+    })
+     
+}; 
