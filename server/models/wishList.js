@@ -43,7 +43,7 @@ const wishList = sequelize.define('wishList', {
     });
 
 // force: true will drop the table if it already exists
-wishList.sync({ force: false, logging: console.log }).then(() => {
+wishList.sync({ force: true, logging: console.log }).then(() => {
     // Table created
     console.log("Wish List table synced");
 });

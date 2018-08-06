@@ -41,7 +41,7 @@ const driver = sequelize.define('driver', {
         underscored: true
     });
 // force: true will drop the table if it already exists
-driver.sync({ force: false, logging: console.log }).then(() => {
+driver.sync({ force: true, logging: console.log }).then(() => {
     // Table created
     console.log("Completed Items table synced");
 });

@@ -49,7 +49,7 @@ const cardDetails = sequelize.define('cardDetails', {
     });
 
 // force: true will drop the table if it already exists
-cardDetails.sync({ force: false, logging: console.log }).then(() => {
+cardDetails.sync({ force: true, logging: console.log }).then(() => {
     // Table created
     console.log("User Information Details table synced");
 });
