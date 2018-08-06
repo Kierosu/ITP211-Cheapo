@@ -17,9 +17,9 @@ function mailExpAuc(auctionID, itemID) {
         ItemPost.findOne({ where: { id: itemID } }).then((item) => {
             var alertExpAuction = {
                 sender: 1,
-                receiver: item.sellID,
+                receiver: item.sellerID,
                 title: 'Auction expired',
-                message: 'Auction ' + item.name + ' has expired',
+                message: 'Auction ' + item.title + ' has expired',
                 status: ''
             }
             try {
