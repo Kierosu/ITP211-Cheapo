@@ -82,7 +82,7 @@ function register_popup(id, name)
     element = element + '<div class="col-md-12 message-box border pl-2 pr-2 border-top-0">';
     element = element + '<section id="chatroom"> <section id="feedback"></section> </section>';
     element = element + '<input id= "message" class= "vertical-align" type= "text" required/>';
-    element = element + '<button id= "send_message" class= "vertical-align" type= "submit">Send</button>';
+    element = element + '<button id= "send_message" class= "vertical-align" onclick="test" type= "submit">Send</button>';
     element = element + '<div class="tools"><i class="fa fa-picture-o" aria-hidden="true"></i><i class="fa fa-meh-o" aria-hidden="true"></i><i class="fa fa-folder" aria-hidden="true"></i><i class="fa fa-thumbs-o-up m-0" aria-hidden="true"></i>';
     element = element + '</div></div>';
     element = element + '<div style="clear: both"></div></div><div class="popup-messages"></div></div>';
