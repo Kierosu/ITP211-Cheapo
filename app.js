@@ -222,7 +222,8 @@ app.get('/', auth.index);
 
 
 
-app.get('/chat', user.list) //Comment out ltr
+app.get('/chat', user.list)  
+app.get('/popup', user.messagelist)
 
 io.sockets.on('connection', function (socket) {
 
