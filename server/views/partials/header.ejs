@@ -331,13 +331,16 @@
                                     <a href="/mail">Inbox</a>
                             </li>
                             <li>
+                                <a href="/chat">Chat</a>
+                            </li>  
+                            <li>
                             <% if(locals.loginuser.userType === 'Admin') { %>
                                     <a href="/userItems">Managements</a>
                                 <% } else { %>
                                     <a href="/userItems">My Products</a>
                                 <% } %>
                             <% } %>
-                            </li>
+                            </li>                                          
                         </ul>
                     </div>
                     <!-- menu nav -->

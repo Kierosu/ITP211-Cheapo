@@ -26,7 +26,7 @@
                         <div class="sidebar-name">
                             <a style="font-weight:bold">  
                                  
-                                <img width="30" height="30" src="<%= user.profilePic %>" /> 
+                                <img width="30" height="30" src="/img/<%= user.profilePic %>" /> 
                                 <i class="fa fa-circle text-success" aria-hidden="true"></i>
                                 <span><%= user.username %> (You)</span> 
                              
@@ -39,13 +39,13 @@
                                 <div class="sidebar-name"> 
                
                                     <a > 
-                                        <img width="30" height="30" src="<%= user.profilePic %>" />
+                                        <img width="30" height="30" src="/img/<%= user.profilePic %>" />
                                         <span class="tooltip"><%= user.username %></span>  
                                         <span class="tooltiptext">You blocked <%= user.username %> .</span>
                                         ⛔ 
                                         <form action="/chat" method="delete">  
              
-                                            <button class="btn btn-secondary pull-right deleteBtn" type="button" data-id="<%= block.BlockID%>">Unblock</button> 
+                                            <button class="btn btn-secondary pull-right deleteBtn" type="button" data-id="<%= block.BlockID%>" onClick="window.location.reload()">✖</button> 
                                             </form>
                                     </a>
                                 </div>  
@@ -55,7 +55,7 @@
                                     <div class="sidebar-name"> 
                
                                         <a href="javascript:register_popup('<%= user.username %>', '<%= user.username %>');">
-                                            <img width="30" height="30" src="<%= user.profilePic %>" />
+                                            <img width="30" height="30" src="/img/<%= user.profilePic %>" />
                                             <span>👨 <%= user.username %></span>
                                         </a>
                                     </div>  
@@ -63,7 +63,7 @@
                                         <div class="sidebar-name"> 
                
                                             <a href="javascript:register_popup('<%= user.username %>', '<%= user.username %>');">
-                                                <img width="30" height="30" src="<%= user.profilePic %>" />
+                                                <img width="30" height="30" src="/img/<%= user.profilePic %>" />
                                                 <span> <%= user.username %></span>
                                             </a>
                                         </div>  
@@ -74,7 +74,7 @@
                             <% if (locals.loginuser.username === block.blockeduser) { %>  
                                 <div class="sidebar-name"> 
                                          <a > 
-                                        <img width="30" height="30" src="<%= user.profilePic %>" /> 
+                                        <img width="30" height="30" src="/img/<%= user.profilePic %>" /> 
                                         🚫
                                         <span class="tooltip"><%= user.username %></span>  
                                         <span class="tooltiptext"> <%= user.username %> blocked you.</span>
@@ -95,7 +95,7 @@
                 
                  
            </div>  
-           <form method="post"> 
+           <form method="post" > 
             <input id="blockuser"  type="text" placeholder="Username..." name="blockuser"   required> 
             <small> <button type="submit" id="blockpls"  >Block</button></small> 
              
@@ -146,12 +146,10 @@
             //     var e = document.getElementById("Toh").getElementById("chatroom")[0];
             //     e.innerHTML = "fku"; 
             // };  
-            $(document).ready(function(){
-             $("sidebar-name").click(function(){
-                var e = document.getElementById("Toh").getElementById("chatroom")[0];
-                  e.innerHTML = "fku";
-               });
-              } );
+            
+                 
+                
+             
             </script>
             <% } else { %> 
                 <% } %>
