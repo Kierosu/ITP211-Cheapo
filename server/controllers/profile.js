@@ -73,11 +73,15 @@ exports.profilepage = function (req, res) {
                         });
                     }
                 }).catch((err) => {
-                    return res.status(400).send({
+                    return res.status(404).send({
                         message: err
                     });
                 });
             });
+        }).catch((err) => {
+            return res.status(404).send(
+                "Error 404: User not found"
+            )
         });
     });
 };
