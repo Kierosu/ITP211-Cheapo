@@ -76,3 +76,17 @@ exports.messagelist = function(req,res){
     })
      
 }; 
+exports.createmsg = function (req, res) {
+    var chatData = {
+        username: req.body.username,
+        message: req.body.message,
+        sentby: req.body.username,
+        sentto: req.body.sentto,
+    }
+
+    msg.create(chatData).then((newMessage) => {
+        if (!newMessage) {
+            sendStatus(500);
+        }
+    })
+}); 
