@@ -19,12 +19,12 @@
       
             <% userList.forEach(function(user){%>  
                 <% if(locals.loginuser.username === user.username) { %>  
-                    <p>You are logged in as<strong>  <%= user.username %>  </strong></p>  
+                    <p>You are logged in as<strong id="username">  <%= user.username %>  </strong></p>  
                     <% } else { %> 
                         <% } %> 
              <% }) %>
                 
-                <p>Popup of : <strong>zuko</strong></p>
+                <p>Popup of : <strong id="sentto">zuko</strong></p>
               
                
     </section>
@@ -46,11 +46,12 @@
     </section>
 
     
-
+    <form method="post">
     <section id="input_zone"> 
       <input id="message" class="vertical-align" type="text" />
-      <button id="send_message" class="vertical-align" type="button">Send</button>
+      <button type="submit" id="send_message" class="vertical-align" type="button">Send</button>
     </section>
+    </form>
 
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src ="js/chat.js"></script>
