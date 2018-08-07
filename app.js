@@ -224,6 +224,7 @@ app.get('/', auth.index);
 
 app.get('/chat', user.list)  
 app.get('/popup', user.messagelist)
+app.post('/popup', user.createmsg )
 
 io.sockets.on('connection', function (socket) {
 
